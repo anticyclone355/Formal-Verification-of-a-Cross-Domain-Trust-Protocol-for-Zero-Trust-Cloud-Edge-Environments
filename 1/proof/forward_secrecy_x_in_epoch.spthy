@@ -1,0 +1,1314 @@
+theory CrossDomainAccessControlnew2 begin
+
+// Function signature and definition of the equational theory E
+
+builtins: diffie-hellman, multiset, natural-numbers
+functions: PDec/2, PEnc/3, adec/2, aenc/2, fst/1, h/1, pair/2,
+           pk/1, ppk/1, sdec/2, senc/2, sign/2, snd/1, true/0, verify/3
+equations:
+    PDec(ppsk, PEnc(ppk(ppsk), k, r)) = k,
+    adec(aenc(x.1, pk(x.2)), x.2) = x.1,
+    fst(<x.1, x.2>) = x.1,
+    sdec(senc(x.1, x.2), x.2) = x.1,
+    snd(<x.1, x.2>) = x.2,
+    verify(sign(x.1, x.2), x.1, pk(x.2)) = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+restriction Equality:
+  "∀ x y #i. (Eq( x, y ) @ #i) ⇒ (x = y)"
+  // safety formula
+
+restriction unique_InitEpoch:
+  "∀ #i #j.
+    ((Epoch_init( 'epoch', %1 ) @ #i) ∧
+     (Epoch_init( 'epoch', %1 ) @ #j)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_EpochUpdate:
+  "∀ a b #i #j.
+    (((Update_epoch( 'epoch', (a%+%1) ) @ #i) ∧
+      (Update_epoch( 'epoch', (b%+%1) ) @ #j)) ∧
+     (a = b)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_InitDomain:
+  "∀ x y #i #j.
+    (((InitDomain( x, %1 ) @ #i) ∧ (InitDomain( y, %1 ) @ #j)) ∧
+     (x = y)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_Reconfig:
+  "∀ x y epoch #i #j.
+    (((Domain_Reconfig_Event( x, (epoch%+%1) ) @ #i) ∧
+      (Domain_Reconfig_Event( y, (epoch%+%1) ) @ #j)) ∧
+     (x = y)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction Reconfig_sequence:
+  "∀ x epoch #i.
+    (Domain_Reconfig_Event( x, epoch ) @ #i) ⇒
+    (¬(∃ #j. (Update_epoch( 'epoch', (epoch%+%1) ) @ #j) ∧ (#j < #i)))"
+  // safety formula
+
+restriction unique_Domain_Receive_Signature:
+  "∀ x y epoch #i #j.
+    (((Domain_Reconfig_Event( x, (epoch%+%1) ) @ #i) ∧
+      (Domain_Reconfig_Event( y, (epoch%+%1) ) @ #j)) ∧
+     (x = y)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction merkle_onlyOnce1:
+  "∀ A B mt_root #i #j.
+    ((Initial_mt_root_between_domain( A, B, mt_root ) @ #i) ∧
+     (Initial_mt_root_between_domain( A, B, mt_root ) @ #j)) ⇒
+    ((#i = #j) ∧ (¬(A = B)))"
+  // safety formula
+
+restriction unique_InitSubject:
+  "∀ x y n #i #j.
+    (((InitSubject( x, n ) @ #i) ∧ (InitSubject( y, n ) @ #j)) ∧
+     (x = y)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_SubjectKey:
+  "∀ x y n psk1 psk2 ppsk1 ppsk2 #i #j.
+    (((SubjectKey( x, n, psk1, ppsk1 ) @ #i) ∧
+      (SubjectKey( y, n, psk2, ppsk2 ) @ #j)) ∧
+     (¬(x = y))) ⇒
+    ((¬(psk1 = psk2)) ∧ (¬(ppsk1 = ppsk2)))"
+  // safety formula
+
+restriction unique_IssueCert:
+  "∀ S A B n gskA gskB #i #j.
+    ((IssueCert( A, S, n, gskA ) @ #i) ∧
+     (IssueCert( B, S, n, gskB ) @ #j)) ⇒
+    (((#i = #j) ∧ (A = B)) ∧ (gskA = gskB))"
+  // safety formula
+
+restriction Only_unregistered_can_submit:
+  "∀ S A n #i.
+    (Subject_Register( S, A, n ) @ #i) ⇒
+    (¬(∃ B gsk #j.
+        ((IssueCert( B, S, n, gsk ) @ #j) ∧ (¬(A = B))) ∧ (#j < #i)))"
+  // safety formula
+
+restriction unique_Policy_register:
+  "∀ S_a S_b n bit1 bit2 A B #i #j.
+    ((PolicyRegister( S_a, S_b, n, bit1, A, B ) @ #i) ∧
+     (PolicyRegister( S_a, S_b, n, bit2, A, B ) @ #j)) ⇒
+    ((#i = #j) ∧ (bit1 = bit2))"
+  // safety formula
+
+restriction Subject_before_PolicyRegister:
+  "∀ S_a S_b n bit A B #i.
+    (PolicyRegister( S_a, S_b, n, bit, A, B ) @ #i) ⇒
+    (∃ gskA gskB #j #k.
+      ((((IssueCert( A, S_a, n, gskA ) @ #j) ∧
+         (IssueCert( B, S_b, n, gskB ) @ #k)) ∧
+        (#j < #i)) ∧
+       (#k < #i)) ∧
+      (¬(A = B)))"
+
+restriction unique_ProcessPolicy:
+  "∀ B A n Pb1 Pb2 mt1 mt2 new_mt_root_B1 new_mt_root_B2 #i #j.
+    (((ProcessPolicy( A, B, n, Pb1, mt1, new_mt_root_B1 ) @ #i) ∧
+      (ProcessPolicy( A, B, n, Pb2, mt2, new_mt_root_B2 ) @ #j)) ∧
+     (Pb1 = Pb2)) ⇒
+    (((#i = #j) ∧ (mt1 = mt2)) ∧ (new_mt_root_B1 = new_mt_root_B2))"
+  // safety formula
+
+restriction 1:
+  "∀ A B n S_a S_b bit #i.
+    (PolicyRegister( S_a, S_b, n, bit, A, B ) @ #i) ⇒
+    (¬(∃ #j.
+        (PolicyRegisterEnd( S_a, S_b, n, bit, A, B ) @ #j) ∧ (#j < #i)))"
+  // safety formula
+
+restriction unique_AccessRequest:
+  "∀ S_a S_b n A B pska pskb gskA #i #j.
+    ((AccessRequest( S_a, S_b, n, A, B, pska, pskb, gskA ) @ #i) ∧
+     (AccessRequest( S_a, S_b, n, A, B, pska, pskb, gskA ) @ #j)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_AccessGranted:
+  "∀ S_a S_b n pka pkb bit #i #j.
+    ((AccessGranted( S_a, S_b, n, pka, pkb, bit ) @ #i) ∧
+     (AccessGranted( S_a, S_b, n, pka, pkb, bit ) @ #j)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_Datasend:
+  "∀ S_a S_b n1 n2 pskb ppka pka x k #i #j.
+    (((DataSent( S_b, S_a, n1, pskb, ppka, pka, x, k ) @ #i) ∧
+      (DataSent( S_b, S_a, n2, pskb, ppka, pka, x, k ) @ #j)) ∧
+     (n1 = n2)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction unique_DataReceive:
+  "∀ S_a S_b n1 n2 alpha beta pska pkb k x #i #j.
+    (((DataReceive( S_b, S_a, n1, alpha, beta, pska, pkb, k, x
+       ) @ #i) ∧
+      (DataReceive( S_b, S_a, n2, alpha, beta, pska, pkb, k, x ) @ #j)) ∧
+     (n1 = n2)) ⇒
+    (#i = #j)"
+  // safety formula
+
+restriction Domain_Reconfiguration_adversary1:
+  "∀ domain_id epoch #i.
+    (Domain_Reconfig_adversary( domain_id, (epoch%+%1) ) @ #i) ⇒
+    (¬(∃ #j. Domain_Reconfig_Event( domain_id, (epoch%+%1) ) @ #j))"
+  // safety formula
+
+rule (modulo E) epoch_Init:
+   [ ] --[ Epoch_init( 'epoch', %1 ) ]-> [ !Epoch( 'epoch', %1 ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) epoch_update[role=epoch_update]:
+   [ !Epoch( 'epoch', %n ) ]
+  --[ Update_epoch( 'epoch', (%n%+%1) ) ]->
+   [ !Epoch( 'epoch', (%n%+%1) ) ]
+
+  // loop breaker: [0]
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) initial_mt_root:
+   [ Fr( ~mt_root ) ] --> [ !Initial_merkle_root( ~mt_root ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Init:
+   [ Fr( ~gsk ) ]
+  --[ InitDomain( $I, %1 ), Domain1( $I, %1, ~gsk, pk(~gsk) ) ]->
+   [ !Domain( $I, %1, ~gsk, pk(~gsk) ), !Domain_id( $I ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Initial_mt_root_between_domain:
+   [
+   !Domain_id( $A ), !Domain_id( $B ), !Initial_merkle_root( mt_root )
+   ]
+  --[ Initial_mt_root_between_domain( $A, $B, mt_root ) ]->
+   [ MerkleRoot( $A, $B, mt_root ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Reconfiguration_PT_CDDS[role=Reconfiguration]:
+   [
+   !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) ),
+   !Epoch( 'epoch', %n ), Fr( ~new_gsk )
+   ]
+  --[
+  Domain_Reconfig_Event( $domain_id, (%epoch%+%1) ),
+  DDomain( $domain_id, %epoch ), Eq( (%epoch%+%1), %n )
+  ]->
+   [
+   !Domain( $domain_id, (%epoch%+%1), ~new_gsk, pk(~new_gsk) ),
+   Out( <pk(~new_gsk), sign(pk(~new_gsk), old_gsk), pk(old_gsk), 
+         'Update domain public key'>
+   )
+   ]
+
+  // loop breaker: [0]
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Reconfiguration_Receive_Signature[role=Reconfiguration]:
+   [
+   In( <Pkin, Pksign, OldPk, field> ),
+   !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) )
+   ]
+  --[
+  Eq( field, 'Update domain public key' ),
+  Eq( verify(Pksign, Pkin, OldPk), true ), Eq( OldPk, pk(old_gsk) ),
+  Domain_Pk_Trust( $domain_id, (%epoch%+%1), Pkin )
+  ]->
+   [ !Domain_Pk( $domain_id, (%epoch%+%1), Pkin ) ]
+
+  /*
+  rule (modulo AC) Domain_Reconfiguration_Receive_Signature[role=Reconfiguration]:
+     [
+     In( <Pkin, Pksign, OldPk, field> ),
+     !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) )
+     ]
+    --[
+    Eq( field, 'Update domain public key' ), Eq( z, true ),
+    Eq( OldPk, pk(old_gsk) ),
+    Domain_Pk_Trust( $domain_id, (%epoch%+%1), Pkin )
+    ]->
+     [ !Domain_Pk( $domain_id, (%epoch%+%1), Pkin ) ]
+    variants (modulo AC)
+    1. OldPk = OldPk.11
+       Pkin  = Pkin.12
+       Pksign
+             = Pksign.13
+       z     = verify(Pksign.13, Pkin.12, OldPk.11)
+    
+    2. OldPk = pk(x.19)
+       Pkin  = Pkin.12
+       Pksign
+             = sign(Pkin.12, x.19)
+       z     = true
+  */
+
+rule (modulo E) Subject_Init[role=Subject_Register]:
+   [ Fr( ~psk ), Fr( ~ppsk ), !Epoch( 'epoch', %n ) ]
+  --[ InitSubject( $S, %n ), SubjectKey( $S, %n, ~psk, ~ppsk ) ]->
+   [
+   Subject_NR( $S, %n, ~psk, ~ppsk, pk(~psk), ppk(~ppsk) ),
+   SubjectSKpari_NR( $S, %n, ~psk, ~ppsk ),
+   Out( <pk(~psk), ppk(~ppsk), %n, 'Subject Pk'> )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Subject_Register[role=Subject_Register]:
+   [
+   !Epoch( 'epoch', %n ), !Domain( $I, %n, gsk, gpk ),
+   Subject_NR( $S, %n, psk, ppsk, spk, sppk )
+   ]
+  --[ Subject_Register( $S, $I, %n ) ]->
+   [
+   Out( <<spk, sppk, %n>, sign(<spk, sppk, %n>, psk), 
+         'Subject Register'>
+   ),
+   Subject_Register_request( $S, $I, %n )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Register[role=Subject_Register]:
+   [
+   In( <spk, sppk, epochIn, field1> ),
+   In( <CertR, Sign_CertR, field2> ), !Domain( $I, %n, gsk, gpk ),
+   Subject_Register_request( $S, $I, %n ),
+   SubjectSKpari_NR( $S, %n, psk, ppsk )
+   ]
+  --[
+  Eq( field1, 'Subject Pk' ), Eq( spk, pk(psk) ),
+  Eq( sppk, ppk(ppsk) ), Eq( epochIn, %n ),
+  Eq( field2, 'Subject Register' ),
+  Eq( verify(Sign_CertR, CertR, spk), true ),
+  IssueCert( $I, $S, %n, gsk ),
+  Subject1( $S, $I, %n, psk, ppsk, spk, sppk )
+  ]->
+   [
+   Out( <<spk, sppk, %n>, sign(<spk, sppk, %n>, gsk), gpk, 
+         'SubjectCert'>
+   ),
+   !Subject( $S, $I, %n, psk, ppsk, spk, sppk )
+   ]
+
+  /*
+  rule (modulo AC) Domain_Register[role=Subject_Register]:
+     [
+     In( <spk, sppk, epochIn, field1> ),
+     In( <CertR, Sign_CertR, field2> ), !Domain( $I, %n, gsk, gpk ),
+     Subject_Register_request( $S, $I, %n ),
+     SubjectSKpari_NR( $S, %n, psk, ppsk )
+     ]
+    --[
+    Eq( field1, 'Subject Pk' ), Eq( spk, pk(psk) ),
+    Eq( sppk, ppk(ppsk) ), Eq( epochIn, %n ),
+    Eq( field2, 'Subject Register' ), Eq( z, true ),
+    IssueCert( $I, $S, %n, gsk ),
+    Subject1( $S, $I, %n, psk, ppsk, spk, sppk )
+    ]->
+     [
+     Out( <<spk, sppk, %n>, sign(<spk, sppk, %n>, gsk), gpk, 
+           'SubjectCert'>
+     ),
+     !Subject( $S, $I, %n, psk, ppsk, spk, sppk )
+     ]
+    variants (modulo AC)
+    1. CertR = CertR.29
+       Sign_CertR
+             = Sign_CertR.30
+       spk   = spk.38
+       z     = verify(Sign_CertR.30, CertR.29, spk.38)
+    
+    2. CertR = CertR.53
+       Sign_CertR
+             = sign(CertR.53, x.102)
+       spk   = pk(x.102)
+       z     = true
+  */
+
+rule (modulo E) Object_Policy_Creation[role=Policy_Register]:
+   [
+   !Domain( $A, %n, gskA, gpkA ), !Domain( $B, %n, gskB, gpkB ),
+   !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ),
+   MerkleRoot( $A, $B, mt_root1 ), MerkleRoot( $B, $A, mt_root1 ),
+   !Initial_merkle_root( mt_root )
+   ]
+  --[
+  PolicyRegister( $S_a, $S_b, %n, '1', $A, $B ),
+  Eq( mt_root1, mt_root ), Eq( '1', '1' )
+  ]->
+   [
+   Out( <<pka, pkb, '1', %n>, sign(<pka, pkb, '1', %n>, pskb), pkb, 
+         'PolicyRb'>
+   ),
+   Create_policy( $A, $B, gskB, gpkB, $S_a, $S_b, %n,
+                  <pka, pkb, '1', %n>, pka, pkb, '1', mt_root
+   )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) DomainB_Policy_Processing[role=Policy_Register]:
+   [
+   In( <PbIn, Pbsign, Pbpk, field> ),
+   Create_policy( $A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb,
+                  bit, mt_root
+   )
+   ]
+  --[
+  Eq( field, 'PolicyRb' ), Eq( Pbpk, pkb ),
+  Eq( verify(Pbsign, PbIn, pkb), true ), Eq( PbIn, Pb ),
+  ProcessPolicy( $A, $B, %n, PbIn, mt_root, h(<mt_root, PbIn>) )
+  ]->
+   [
+   Out( <<PbIn, h(<mt_root, PbIn>)>, 
+         sign(<PbIn, h(<mt_root, PbIn>)>, gskB), gpkB, 
+         'MerkleRoot certification'>
+   ),
+   B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                   mt_root, h(<mt_root, PbIn>)
+   )
+   ]
+
+  // loop breaker: [1]
+  /*
+  rule (modulo AC) DomainB_Policy_Processing[role=Policy_Register]:
+     [
+     In( <PbIn, Pbsign, Pbpk, field> ),
+     Create_policy( $A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb,
+                    bit, mt_root
+     )
+     ]
+    --[
+    Eq( field, 'PolicyRb' ), Eq( Pbpk, pkb ), Eq( z, true ),
+    Eq( PbIn, Pb ),
+    ProcessPolicy( $A, $B, %n, PbIn, mt_root, h(<mt_root, PbIn>) )
+    ]->
+     [
+     Out( <<PbIn, h(<mt_root, PbIn>)>, 
+           sign(<PbIn, h(<mt_root, PbIn>)>, gskB), gpkB, 
+           'MerkleRoot certification'>
+     ),
+     B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                     mt_root, h(<mt_root, PbIn>)
+     )
+     ]
+    variants (modulo AC)
+    1. PbIn  = PbIn.30
+       Pbsign
+             = Pbsign.32
+       pkb   = pkb.39
+       z     = verify(Pbsign.32, PbIn.30, pkb.39)
+    
+    2. PbIn  = PbIn.37
+       Pbsign
+             = sign(PbIn.37, x.67)
+       pkb   = pk(x.67)
+       z     = true
+    // loop breaker: [1]
+  */
+
+rule (modulo E) DomainA_Receive_Policy[role=Policy_Register]:
+   [
+   In( <mrba, mrbasign, mrbapk, field> ),
+   B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                   mt_root, new_mt_root_B
+   )
+   ]
+  --[
+  Eq( field, 'MerkleRoot certification' ), Eq( mrbapk, gpkB ),
+  Eq( verify(mrbasign, mrba, gpkB), true ), Eq( fst(mrba), Pb ),
+  Eq( snd(mrba), new_mt_root_B ),
+  Eq( new_mt_root_B, h(<mt_root, fst(mrba)>) ),
+  ProcessPolicyDomain( $A, $B, %n, Pb, mt_root, new_mt_root_B ),
+  PolicyRegisterEnd( $S_a, $S_b, %n, bit, $A, $B ),
+  New_MerkleRoot( $A, $B, %n, h(<mt_root, fst(mrba)>) ),
+  New_MerkleRoot( $B, $A, %n, new_mt_root_B )
+  ]->
+   [
+   MerkleRoot( $A, $B, h(<mt_root, fst(mrba)>) ),
+   MerkleRoot( $B, $A, new_mt_root_B ),
+   !Policy( $A, $B, %n, $S_a, $S_b, bit )
+   ]
+
+  /*
+  rule (modulo AC) DomainA_Receive_Policy[role=Policy_Register]:
+     [
+     In( <mrba, mrbasign, mrbapk, field> ),
+     B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                     mt_root, new_mt_root_B
+     )
+     ]
+    --[
+    Eq( field, 'MerkleRoot certification' ), Eq( mrbapk, gpkB ),
+    Eq( z.1, true ), Eq( z, Pb ), Eq( z.2, new_mt_root_B ),
+    Eq( new_mt_root_B, h(<mt_root, z>) ),
+    ProcessPolicyDomain( $A, $B, %n, Pb, mt_root, new_mt_root_B ),
+    PolicyRegisterEnd( $S_a, $S_b, %n, bit, $A, $B ),
+    New_MerkleRoot( $A, $B, %n, h(<mt_root, z>) ),
+    New_MerkleRoot( $B, $A, %n, new_mt_root_B )
+    ]->
+     [
+     MerkleRoot( $A, $B, h(<mt_root, z>) ),
+     MerkleRoot( $B, $A, new_mt_root_B ),
+     !Policy( $A, $B, %n, $S_a, $S_b, bit )
+     ]
+    variants (modulo AC)
+    1. gpkB  = gpkB.22
+       mrba  = mrba.23
+       mrbasign
+             = mrbasign.25
+       z     = fst(mrba.23)
+       z.1   = verify(mrbasign.25, mrba.23, gpkB.22)
+       z.2   = snd(mrba.23)
+    
+    2. gpkB  = gpkB.24
+       mrba  = <z.33, z.36>
+       mrbasign
+             = mrbasign.27
+       z     = z.33
+       z.1   = verify(mrbasign.27, <z.33, z.36>, gpkB.24)
+       z.2   = z.36
+    
+    3. gpkB  = pk(x.28)
+       mrba  = <z.24, z.27>
+       mrbasign
+             = sign(<z.24, z.27>, x.28)
+       z     = z.24
+       z.1   = true
+       z.2   = z.27
+    
+    4. gpkB  = pk(x.35)
+       mrba  = mrba.23
+       mrbasign
+             = sign(mrba.23, x.35)
+       z     = fst(mrba.23)
+       z.1   = true
+       z.2   = snd(mrba.23)
+  */
+
+rule (modulo E) Subject_Access_Request[role=Authentication_and_Data_Sharing]:
+   [
+   !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ),
+   !Domain( $A, %n, gskA, gpkA ), !Domain( $B, %n, gskB, gpkB ),
+   In( <CertA, CertaSign, SignPk, field> )
+   ]
+  --[
+  Eq( field, 'SubjectCert' ), Eq( SignPk, gpkA ),
+  Eq( verify(CertaSign, CertA, gpkA), true ), Eq( fst(CertA), pka ),
+  Eq( fst(snd(CertA)), ppka ), Eq( snd(snd(CertA)), %n ),
+  AccessRequest( $S_a, $S_b, %n, $A, $B, pska, pskb, gskA )
+  ]->
+   [
+   Out( <<<CertA, CertaSign, SignPk>, pkb, %n>, 
+         sign(<<CertA, CertaSign, SignPk>, pkb, %n>, pska), pka, 'AccessR_a'
+        >
+   ),
+   Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA,
+                gpkB, ppka
+   )
+   ]
+
+  /*
+  rule (modulo AC) Subject_Access_Request[role=Authentication_and_Data_Sharing]:
+     [
+     !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+     !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ),
+     !Domain( $A, %n, gskA, gpkA ), !Domain( $B, %n, gskB, gpkB ),
+     In( <CertA, CertaSign, SignPk, field> )
+     ]
+    --[
+    Eq( field, 'SubjectCert' ), Eq( SignPk, gpkA ), Eq( z, true ),
+    Eq( z.1, pka ), Eq( z.2, ppka ), Eq( z.3, %n ),
+    AccessRequest( $S_a, $S_b, %n, $A, $B, pska, pskb, gskA )
+    ]->
+     [
+     Out( <<<CertA, CertaSign, SignPk>, pkb, %n>, 
+           sign(<<CertA, CertaSign, SignPk>, pkb, %n>, pska), pka, 'AccessR_a'
+          >
+     ),
+     Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA,
+                  gpkB, ppka
+     )
+     ]
+    variants (modulo AC)
+    1. CertA = CertA.33
+       CertaSign
+             = CertaSign.34
+       gpkA  = gpkA.37
+       z     = verify(CertaSign.34, CertA.33, gpkA.37)
+       z.1   = fst(CertA.33)
+       z.2   = fst(snd(CertA.33))
+       z.3   = snd(snd(CertA.33))
+    
+    2. CertA = CertA.53
+       CertaSign
+             = sign(CertA.53, x.100)
+       gpkA  = pk(x.100)
+       z     = true
+       z.1   = fst(CertA.53)
+       z.2   = fst(snd(CertA.53))
+       z.3   = snd(snd(CertA.53))
+    
+    3. CertA = <z.34, x.41>
+       CertaSign
+             = sign(<z.34, x.41>, x.42)
+       gpkA  = pk(x.42)
+       z     = true
+       z.1   = z.34
+       z.2   = fst(x.41)
+       z.3   = snd(x.41)
+    
+    4. CertA = <z.35, z.36, z.37>
+       CertaSign
+             = sign(<z.35, z.36, z.37>, x.44)
+       gpkA  = pk(x.44)
+       z     = true
+       z.1   = z.35
+       z.2   = z.36
+       z.3   = z.37
+    
+    5. CertA = <z.69, z.70, z.71>
+       CertaSign
+             = CertaSign.50
+       gpkA  = gpkA.53
+       z     = verify(CertaSign.50, <z.69, z.70, z.71>, gpkA.53)
+       z.1   = z.69
+       z.2   = z.70
+       z.3   = z.71
+    
+    6. CertA = <z.71, x.97>
+       CertaSign
+             = CertaSign.52
+       gpkA  = gpkA.55
+       z     = verify(CertaSign.52, <z.71, x.97>, gpkA.55)
+       z.1   = z.71
+       z.2   = fst(x.97)
+       z.3   = snd(x.97)
+  */
+
+rule (modulo E) Domain_Access_Verification[role=Authentication_and_Data_Sharing]:
+   [
+   In( <AccessRa, AccesssSign, AccessPKa, field> ),
+   Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA,
+                gpkB, ppka
+   ),
+   !Policy( $A, $B, %n, $S_a, $S_b, bit ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb )
+   ]
+  --[
+  Eq( field, 'AccessR_a' ), Eq( pka, AccessPKa ),
+  Eq( verify(AccesssSign, AccessRa, pka), true ),
+  Eq( fst(snd(AccessRa)), pkb ), Eq( snd(snd(AccessRa)), %n ),
+  Eq( bit, '1' ), AccessGranted( $S_a, $S_b, %n, pka, pkb, bit )
+  ]->
+   [
+   Out( <h(<pka, pkb, %n>), sign(h(<pka, pkb, %n>), gskB), pk(gskB), 
+         'AccessCert_ab'>
+   ),
+   AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B,
+                    gpkA, gpkB
+   )
+   ]
+
+  /*
+  rule (modulo AC) Domain_Access_Verification[role=Authentication_and_Data_Sharing]:
+     [
+     In( <AccessRa, AccesssSign, AccessPKa, field> ),
+     Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA,
+                  gpkB, ppka
+     ),
+     !Policy( $A, $B, %n, $S_a, $S_b, bit ),
+     !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb )
+     ]
+    --[
+    Eq( field, 'AccessR_a' ), Eq( pka, AccessPKa ), Eq( z, true ),
+    Eq( z.1, pkb ), Eq( z.2, %n ), Eq( bit, '1' ),
+    AccessGranted( $S_a, $S_b, %n, pka, pkb, bit )
+    ]->
+     [
+     Out( <h(<pka, pkb, %n>), sign(h(<pka, pkb, %n>), gskB), pk(gskB), 
+           'AccessCert_ab'>
+     ),
+     AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B,
+                      gpkA, gpkB
+     )
+     ]
+    variants (modulo AC)
+    1. AccessRa
+             = AccessRa.35
+       AccesssSign
+             = AccesssSign.36
+       pka   = pka.43
+       z     = verify(AccesssSign.36, AccessRa.35, pka.43)
+       z.1   = fst(snd(AccessRa.35))
+       z.2   = snd(snd(AccessRa.35))
+    
+    2. AccessRa
+             = AccessRa.70
+       AccesssSign
+             = sign(AccessRa.70, x.133)
+       pka   = pk(x.133)
+       z     = true
+       z.1   = fst(snd(AccessRa.70))
+       z.2   = snd(snd(AccessRa.70))
+    
+    3. AccessRa
+             = <x.29, x.30>
+       AccesssSign
+             = sign(<x.29, x.30>, x.31)
+       pka   = pk(x.31)
+       z     = true
+       z.1   = fst(x.30)
+       z.2   = snd(x.30)
+    
+    4. AccessRa
+             = <x.44, z.36, z.37>
+       AccesssSign
+             = sign(<x.44, z.36, z.37>, x.47)
+       pka   = pk(x.47)
+       z     = true
+       z.1   = z.36
+       z.2   = z.37
+    
+    5. AccessRa
+             = <x.126, z.84, z.85>
+       AccesssSign
+             = AccesssSign.67
+       pka   = pka.74
+       z     = verify(AccesssSign.67, <x.126, z.84, z.85>, pka.74)
+       z.1   = z.84
+       z.2   = z.85
+    
+    6. AccessRa
+             = <x.127, x.128>
+       AccesssSign
+             = AccesssSign.68
+       pka   = pka.75
+       z     = verify(AccesssSign.68, <x.127, x.128>, pka.75)
+       z.1   = fst(x.128)
+       z.2   = snd(x.128)
+  */
+
+rule (modulo E) Object_Data_Encryption[role=Authentication_and_Data_Sharing]:
+   [
+   In( <Hash1, Hashsign, Hashpk, field> ),
+   AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B,
+                    gpkA, gpkB
+   ),
+   !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ), Fr( ~x ),
+   Fr( ~k ), Fr( ~v )
+   ]
+  --[
+  Eq( field, 'AccessCert_ab' ), Eq( gpkB, Hashpk ),
+  Eq( verify(Hashsign, Hash1, gpkB), true ),
+  Eq( Hash1, h(<pka, pkb, %n>) ),
+  DataSent( $S_b, $S_a, %n, pskb, ppka, pka, ~x, ~k ),
+  Secret( ~x, %n ), SessionKey( ~k, %n ), Honest( $S_a, %n ),
+  Honest( $S_b, %n )
+  ]->
+   [
+   Out( <PEnc(ppka, ~k, ~v), 
+         senc(<~x, sign(~x, pskb), pk(pskb)>, ~k), 'data'>
+   ),
+   X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska,
+           <~x, sign(~x, pskb), pk(pskb)>, ~x, ~k
+   )
+   ]
+
+  /*
+  rule (modulo AC) Object_Data_Encryption[role=Authentication_and_Data_Sharing]:
+     [
+     In( <Hash1, Hashsign, Hashpk, field> ),
+     AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B,
+                      gpkA, gpkB
+     ),
+     !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+     !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ), Fr( ~x ),
+     Fr( ~k ), Fr( ~v )
+     ]
+    --[
+    Eq( field, 'AccessCert_ab' ), Eq( gpkB, Hashpk ), Eq( z, true ),
+    Eq( Hash1, h(<pka, pkb, %n>) ),
+    DataSent( $S_b, $S_a, %n, pskb, ppka, pka, ~x, ~k ),
+    Secret( ~x, %n ), SessionKey( ~k, %n ), Honest( $S_a, %n ),
+    Honest( $S_b, %n )
+    ]->
+     [
+     Out( <PEnc(ppka, ~k, ~v), 
+           senc(<~x, sign(~x, pskb), pk(pskb)>, ~k), 'data'>
+     ),
+     X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska,
+             <~x, sign(~x, pskb), pk(pskb)>, ~x, ~k
+     )
+     ]
+    variants (modulo AC)
+    1. Hash1 = Hash1.32
+       Hashsign
+             = Hashsign.34
+       gpkB  = gpkB.37
+       z     = verify(Hashsign.34, Hash1.32, gpkB.37)
+    
+    2. Hash1 = Hash1.47
+       Hashsign
+             = sign(Hash1.47, x.85)
+       gpkB  = pk(x.85)
+       z     = true
+  */
+
+rule (modulo E) Subject_Data_Decryption[role=Authentication_and_Data_Sharing]:
+   [
+   In( <alpha, beta, field> ),
+   X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, x, k )
+   ]
+  --[
+  Eq( field, 'data' ), Eq( PDec(ppska, alpha), k ),
+  Eq( sdec(beta, PDec(ppska, alpha)), d ),
+  Eq( snd(snd(sdec(beta, PDec(ppska, alpha)))), pkb ),
+  Eq( verify(fst(snd(sdec(beta, PDec(ppska, alpha)))),
+             fst(sdec(beta, PDec(ppska, alpha))), pkb),
+      true
+  ),
+  Eq( fst(sdec(beta, PDec(ppska, alpha))), x ),
+  DataReceive( $S_b, $S_a, %n, alpha, beta, ppska, pkb, k, x )
+  ]->
+   [ !Plaintext( x ) ]
+
+  /*
+  rule (modulo AC) Subject_Data_Decryption[role=Authentication_and_Data_Sharing]:
+     [
+     In( <alpha, beta, field> ),
+     X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, x, k )
+     ]
+    --[
+    Eq( field, 'data' ), Eq( z, k ), Eq( z.1, d ), Eq( z.2, pkb ),
+    Eq( z.3, true ), Eq( z.4, x ),
+    DataReceive( $S_b, $S_a, %n, alpha, beta, ppska, pkb, k, x )
+    ]->
+     [ !Plaintext( x ) ]
+    variants (modulo AC)
+     1. alpha = alpha.22
+        beta  = beta.23
+        pkb   = pkb.27
+        ppska = ppska.28
+        z     = PDec(ppska.28, alpha.22)
+        z.1   = sdec(beta.23, PDec(ppska.28, alpha.22))
+        z.2   = snd(snd(sdec(beta.23, PDec(ppska.28, alpha.22))))
+        z.3   = verify(fst(snd(sdec(beta.23, PDec(ppska.28, alpha.22)))),
+                       fst(sdec(beta.23, PDec(ppska.28, alpha.22))), pkb.27)
+        z.4   = fst(sdec(beta.23, PDec(ppska.28, alpha.22)))
+    
+     2. alpha = alpha.25
+        beta  = senc(z.39, PDec(ppska.31, alpha.25))
+        pkb   = pkb.30
+        ppska = ppska.31
+        z     = PDec(ppska.31, alpha.25)
+        z.1   = z.39
+        z.2   = snd(snd(z.39))
+        z.3   = verify(fst(snd(z.39)), fst(z.39), pkb.30)
+        z.4   = fst(z.39)
+    
+     3. alpha = alpha.26
+        beta  = senc(<z.43, x.46>, PDec(ppska.32, alpha.26))
+        pkb   = pkb.31
+        ppska = ppska.32
+        z     = PDec(ppska.32, alpha.26)
+        z.1   = <z.43, x.46>
+        z.2   = snd(x.46)
+        z.3   = verify(fst(x.46), z.43, pkb.31)
+        z.4   = z.43
+    
+     4. alpha = alpha.26
+        beta  = senc(<z.43, sign(z.43, x.46), z.41>,
+                     PDec(ppska.32, alpha.26))
+        pkb   = pk(x.46)
+        ppska = ppska.32
+        z     = PDec(ppska.32, alpha.26)
+        z.1   = <z.43, sign(z.43, x.46), z.41>
+        z.2   = z.41
+        z.3   = true
+        z.4   = z.43
+    
+     5. alpha = alpha.27
+        beta  = senc(<z.44, x.47, z.42>, PDec(ppska.33, alpha.27))
+        pkb   = pkb.32
+        ppska = ppska.33
+        z     = PDec(ppska.33, alpha.27)
+        z.1   = <z.44, x.47, z.42>
+        z.2   = z.42
+        z.3   = verify(x.47, z.44, pkb.32)
+        z.4   = z.44
+    
+     6. alpha = PEnc(ppk(ppska.27), z.34, x.41)
+        beta  = senc(z.35, z.34)
+        pkb   = pkb.26
+        ppska = ppska.27
+        z     = z.34
+        z.1   = z.35
+        z.2   = snd(snd(z.35))
+        z.3   = verify(fst(snd(z.35)), fst(z.35), pkb.26)
+        z.4   = fst(z.35)
+    
+     7. alpha = PEnc(ppk(ppska.27), z.34, x.41)
+        beta  = senc(<z.38, sign(z.38, x.43), z.36>, z.34)
+        pkb   = pk(x.43)
+        ppska = ppska.27
+        z     = z.34
+        z.1   = <z.38, sign(z.38, x.43), z.36>
+        z.2   = z.36
+        z.3   = true
+        z.4   = z.38
+    
+     8. alpha = PEnc(ppk(ppska.28), z.35, x.42)
+        beta  = senc(<z.39, x.44>, z.35)
+        pkb   = pkb.27
+        ppska = ppska.28
+        z     = z.35
+        z.1   = <z.39, x.44>
+        z.2   = snd(x.44)
+        z.3   = verify(fst(x.44), z.39, pkb.27)
+        z.4   = z.39
+    
+     9. alpha = PEnc(ppk(ppska.29), z.36, x.43)
+        beta  = senc(<z.40, x.45, z.38>, z.36)
+        pkb   = pkb.28
+        ppska = ppska.29
+        z     = z.36
+        z.1   = <z.40, x.45, z.38>
+        z.2   = z.38
+        z.3   = verify(x.45, z.40, pkb.28)
+        z.4   = z.40
+    
+    10. alpha = PEnc(ppk(ppska.30), z.37, x.44)
+        beta  = beta.25
+        pkb   = pkb.29
+        ppska = ppska.30
+        z     = z.37
+        z.1   = sdec(beta.25, z.37)
+        z.2   = snd(snd(sdec(beta.25, z.37)))
+        z.3   = verify(fst(snd(sdec(beta.25, z.37))),
+                       fst(sdec(beta.25, z.37)), pkb.29)
+        z.4   = fst(sdec(beta.25, z.37))
+  */
+
+rule (modulo E) Reveal_Domain_sk[role=adversary]:
+   [ !Domain( $I, %n, gsk, pk(gsk) ) ]
+  --[ Reveal_Domain( $I, %n ) ]->
+   [ Out( gsk ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Reveal_Subject_psk[role=adversary]:
+   [ !Subject( $S, $I, %n, psk, ppsk, spk, sppk ) ]
+  --[ Reveal_Subject( $S, %n ) ]->
+   [ Out( <psk, ppsk, %n> ) ]
+
+  /* has exactly the trivial AC variant */
+
+lemma Executable:
+  exists-trace
+  "∃ S_a S_b alpha beta pska pkb k x #i.
+    (DataReceive( S_b, S_a, (%1%+%1), alpha, beta, pska, pkb, k, x
+     ) @ #i) ∧
+    (¬(S_a = S_b))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ S_a S_b alpha beta pska pkb k x #i.
+  (DataReceive( S_b, S_a, (%1%+%1), alpha, beta, pska, pkb, k, x
+   ) @ #i)
+ ∧
+  ¬(S_a = S_b)"
+*/
+by sorry
+
+lemma secrecy_session_key:
+  all-traces
+  "∀ k n #i.
+    (SessionKey( k, n ) @ #i) ⇒
+    ((¬(∃ #j. K( k ) @ #j)) ∨
+     (∃ S_b #r.
+       (Reveal_Subject( S_b, n ) @ #r) ∧ (Honest( S_b, n ) @ #i)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ k n #i.
+  (SessionKey( k, n ) @ #i)
+ ∧
+  (∃ #j. (K( k ) @ #j)) ∧
+  (∀ S_b #r.
+    (Reveal_Subject( S_b, n ) @ #r) ∧ (Honest( S_b, n ) @ #i) ⇒ ⊥)"
+*/
+by sorry
+
+lemma secrecy_x:
+  all-traces
+  "∀ x n #i.
+    (Secret( x, n ) @ #i) ⇒
+    ((¬(∃ #j. K( x ) @ #j)) ∨
+     (∃ S_b #r.
+       (Reveal_Subject( S_b, n ) @ #r) ∧ (Honest( S_b, n ) @ #i)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ x n #i.
+  (Secret( x, n ) @ #i)
+ ∧
+  (∃ #j. (K( x ) @ #j)) ∧
+  (∀ S_b #r.
+    (Reveal_Subject( S_b, n ) @ #r) ∧ (Honest( S_b, n ) @ #i) ⇒ ⊥)"
+*/
+by sorry
+
+lemma secrecy_subject_sk:
+  all-traces
+  "∀ S I n psk ppsk spk sppk #i.
+    (Subject1( S, I, n, psk, ppsk, spk, sppk ) @ #i) ⇒
+    ((¬(∃ #j. K( psk ) @ #j)) ∨ (∃ #r. Reveal_Subject( S, n ) @ #r))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S I n psk ppsk spk sppk #i.
+  (Subject1( S, I, n, psk, ppsk, spk, sppk ) @ #i)
+ ∧
+  (∃ #j. (K( psk ) @ #j)) ∧
+  (∀ #r. (Reveal_Subject( S, n ) @ #r) ⇒ ⊥)"
+*/
+by sorry
+
+lemma secrecy_domain_sk:
+  all-traces
+  "∀ I n gsk #i.
+    (Domain1( I, n, gsk, pk(gsk) ) @ #i) ⇒
+    ((¬(∃ #j. K( gsk ) @ #j)) ∨ (∃ #r. Reveal_Domain( I, n ) @ #r))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I n gsk #i.
+  (Domain1( I, n, gsk, pk(gsk) ) @ #i)
+ ∧
+  (∃ #j. (K( gsk ) @ #j)) ∧ (∀ #r. (Reveal_Domain( I, n ) @ #r) ⇒ ⊥)"
+*/
+by sorry
+
+lemma forward_secrecy_x_in_epoch:
+  all-traces
+  "∀ S_b S_a n pskb ppka pka x k #i #j.
+    ((DataSent( S_b, S_a, n, pskb, ppka, pka, x, k ) @ #i) ∧
+     (Reveal_Subject( S_a, n ) @ #j)) ⇒
+    (¬(∃ #k.1. (K( x ) @ #k.1) ∧ (#j < #k.1)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S_b S_a n pskb ppka pka x k #i #j.
+  (DataSent( S_b, S_a, n, pskb, ppka, pka, x, k ) @ #i) ∧
+  (Reveal_Subject( S_a, n ) @ #j)
+ ∧
+  ∃ #k.1. (K( x ) @ #k.1) ∧ #j < #k.1"
+*/
+by sorry
+
+lemma forward_secrecy_x_in_epoch2:
+  all-traces
+  "∀ S_b S_a pskb ppka pka x k #i #j.
+    ((DataSent( S_b, S_a, %1, pskb, ppka, pka, x, k ) @ #i) ∧
+     (Reveal_Subject( S_a, %1 ) @ #j)) ⇒
+    (¬(∃ #k.1. (K( x ) @ #k.1) ∧ (#j < #k.1)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S_b S_a pskb ppka pka x k #i #j.
+  (DataSent( S_b, S_a, %1, pskb, ppka, pka, x, k ) @ #i) ∧
+  (Reveal_Subject( S_a, %1 ) @ #j)
+ ∧
+  ∃ #k.1. (K( x ) @ #k.1) ∧ #j < #k.1"
+*/
+simplify
+solve( AccessCert_send( $S_a, $S_b, %1, pka, pkb, pskb, ppka, $A,
+                        $B, gpkA, pk(x)
+       ) ▶₁ #i )
+  case Domain_Access_Verification
+  solve( ($S_a = $S_b)  ∥
+         ((¬(~psk = ~psk.1)) ∧ (¬(~ppsk = ~ppsk.2))) )
+    case case_2
+    solve( ($S_b = $S_a)  ∥
+           ((¬(~psk.1 = ~psk)) ∧ (¬(~ppsk.2 = ~ppsk))) )
+      case case_2
+      solve( !Subject( $S_a, $A, %1, pska, ppska, pk(~psk), ppk(~ppsk)
+             ) ▶₂ #i )
+        case Domain_Register
+        solve( !Subject( $S_b, $B, %1, ~psk.1, ppskb, pk(~psk.1), ppkb
+               ) ▶₃ #i )
+          case Domain_Register
+          solve( !Subject( $S_a, $I, %1, psk.2, ppsk.2, spk, sppk ) ▶₀ #j )
+            case Domain_Register
+            solve( !KU( ~x ) @ #vk.7 )
+              case Object_Data_Encryption
+              solve( !KU( ~k ) @ #vk.59 )
+                case Object_Data_Encryption
+                solve( !KU( sign(<x.1, pk(~psk.1), %1>, ~psk) ) @ #vk.12 )
+                  case Subject_Access_Request
+                  solve( !KU( sign(CertR, ~psk.1) ) @ #vk.50 )
+                    case Subject_Register
+                    solve( !KU( sign(CertR, ~psk) ) @ #vk.56 )
+                      case Subject_Register
+                      solve( Create_policy( $A, $B, gskB, pk(x.1), $S_a, $S_b, %1, Pb,
+                                            pka, pk(x.2), '1', mt_root
+                             ) ▶₁ #vr.7 )
+                        case Object_Policy_Creation
+                        solve( !KU( ~ppsk ) @ #vk.61 )
+                          case Reveal_Subject_psk
+                          solve( !KU( sign(h(<pk(~psk), pk(~psk.1), %1>), ~gsk) ) @ #vk.15 )
+                            case Domain_Access_Verification
+                            solve( !KU( sign(<pk(~psk), ppk(~ppsk), %1>, ~gsk.1) ) @ #vk.48 )
+                              case Domain_Register
+                              solve( !KU( sign(<<pk(~psk), pk(~psk.1), '1', %1>, 
+                                                h(<~mt_root, pk(~psk), pk(~psk.1), '1', %1>)>,
+                                               ~gsk)
+                                     ) @ #vk.54 )
+                                case DomainB_Policy_Processing_case_1
+                                solve( !KU( sign(<pk(~psk), pk(~psk.1), '1', %1>, x.1) ) @ #vk.66 )
+                                  case Object_Policy_Creation
+                                  solve( Create_policy( $A.1, $B.1, ~gsk, gpkB, $S_a.1, $S_b.1, %n,
+                                                        <pk(~psk), pk(~psk.1), '1', %1>, pka,
+                                                        pk(~psk.1), bit, ~mt_root
+                                         ) ▶₁ #vr.36 )
+                                    case Object_Policy_Creation
+                                    solve( !KU( h(<pk(~psk), pk(~psk.1), %1>) ) @ #vk.27 )
+                                      case Domain_Access_Verification
+                                      solve( !KU( pk(~gsk) ) @ #vk.29 )
+                                        case Domain_Register
+                                        solve( ($S_b = $S)  ∥
+                                               ((¬(~psk.1 = ~psk.2)) ∧ (¬(~ppsk.1 = ~ppsk.2))) )
+                                          case case_1
+                                          solve( !KU( pk(~psk) ) @ #vk.33 )
+                                            case Subject_Init
+                                            solve( !KU( pk(~psk.1) ) @ #vk.40 )
+                                              case Subject_Init
+                                              solve( !KU( pk(~gsk.1) ) @ #vk.53 )
+                                                case c_pk
+                                                solve( !KU( ~gsk.1 ) @ #vk.63 )
+                                                  case Reveal_Domain_sk
+                                                  solve( !KU( ppk(~ppsk) ) @ #vk.56 )
+                                                    case Subject_Init
+                                                    solve( !KU( h(<~mt_root, pk(~psk), pk(~psk.1), 
+                                                                   '1', %1>)
+                                                           ) @ #vk.58 )
+                                                      case DomainB_Policy_Processing_case_1
+                                                      solve( !KU( sign(<pk(~psk), pk(~psk.1), '1', 
+                                                                        %1>,
+                                                                       x.1)
+                                                             ) @ #vk.67 )
+                                                        case Object_Policy_Creation
+                                                        solve( Create_policy( $A.1, $B.1, gskB,
+                                                                              gpkB, $S_a.1, $S_b,
+                                                                              %n,
+                                                                              <pk(~psk), 
+                                                                               pk(~psk.1), '1', %1>,
+                                                                              pka, pk(~psk.1), bit,
+                                                                              ~mt_root
+                                                               ) ▶₁ #vr.49 )
+                                                          case Object_Policy_Creation
+                                                          solve( !KU( ppk(~ppsk.1) ) @ #vk.59 )
+                                                            case Subject_Init
+                                                            SOLVED // trace found
+                                                          qed
+                                                        qed
+                                                      qed
+                                                    qed
+                                                  qed
+                                                qed
+                                              qed
+                                            qed
+                                          qed
+                                        qed
+                                      qed
+                                    qed
+                                  qed
+                                qed
+                              qed
+                            qed
+                          qed
+                        qed
+                      qed
+                    qed
+                  qed
+                qed
+              qed
+            qed
+          qed
+        qed
+      qed
+    qed
+  qed
+qed
+
+lemma forward_secrecy_x_between_epoch:
+  all-traces
+  "∀ S_b S_a pskb ppka pka x k #i #j.
+    ((DataSent( S_b, S_a, %1, pskb, ppka, pka, x, k ) @ #i) ∧
+     (Reveal_Subject( S_a, (%1%+%1) ) @ #j)) ⇒
+    (¬(∃ #k.1. (K( x ) @ #k.1) ∧ (#j < #k.1)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S_b S_a pskb ppka pka x k #i #j.
+  (DataSent( S_b, S_a, %1, pskb, ppka, pka, x, k ) @ #i) ∧
+  (Reveal_Subject( S_a, (%1%+%1) ) @ #j)
+ ∧
+  ∃ #k.1. (K( x ) @ #k.1) ∧ #j < #k.1"
+*/
+by sorry
+
+lemma authentication_registration:
+  all-traces
+  "∀ I S n gsk #i.
+    (IssueCert( I, S, n, gsk ) @ #i) ⇒
+    (∃ #j. (Subject_Register( S, I, n ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I S n gsk #i.
+  (IssueCert( I, S, n, gsk ) @ #i)
+ ∧
+  ∀ #j. (Subject_Register( S, I, n ) @ #j) ⇒ ¬(#j < #i)"
+*/
+by sorry
+
+lemma authentication_access_grant:
+  all-traces
+  "∀ S_a S_b n pka pkb bit #i.
+    (AccessGranted( S_a, S_b, n, pka, pkb, bit ) @ #i) ⇒
+    (∃ A B pska pskb gskA #j #k.
+      (((AccessRequest( S_a, S_b, n, A, B, pska, pskb, gskA ) @ #j) ∧
+        (#j < #i)) ∧
+       (PolicyRegisterEnd( S_a, S_b, n, bit, A, B ) @ #k)) ∧
+      (#k < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S_a S_b n pka pkb bit #i.
+  (AccessGranted( S_a, S_b, n, pka, pkb, bit ) @ #i)
+ ∧
+  ∀ A B pska pskb gskA #j #k.
+   (AccessRequest( S_a, S_b, n, A, B, pska, pskb, gskA ) @ #j) ∧
+   (PolicyRegisterEnd( S_a, S_b, n, bit, A, B ) @ #k)
+  ⇒
+   ((¬(#j < #i)) ∨ (¬(#k < #i)))"
+*/
+by sorry
+
+lemma authentication_data_cert:
+  all-traces
+  "∀ S_b S_a n pskb ppka ppska x k #i.
+    (DataSent( S_b, S_a, n, pskb, ppka, ppska, x, k ) @ #i) ⇒
+    (∃ pkb pka bit #j.
+      (AccessGranted( S_a, S_b, n, pka, pkb, bit ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S_b S_a n pskb ppka ppska x k #i.
+  (DataSent( S_b, S_a, n, pskb, ppka, ppska, x, k ) @ #i)
+ ∧
+  ∀ pkb pka bit #j.
+   (AccessGranted( S_a, S_b, n, pka, pkb, bit ) @ #j) ⇒ ¬(#j < #i)"
+*/
+by sorry
+
+lemma authentication_data_origin:
+  all-traces
+  "∀ S_b S_a n alpha beta ppska pkb k x #i.
+    (DataReceive( S_b, S_a, n, alpha, beta, ppska, pkb, k, x ) @ #i) ⇒
+    (∃ pskb ppka pka #j.
+      (DataSent( S_b, S_a, n, pskb, ppka, pka, x, k ) @ #j) ∧ (#j < #i))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ S_b S_a n alpha beta ppska pkb k x #i.
+  (DataReceive( S_b, S_a, n, alpha, beta, ppska, pkb, k, x ) @ #i)
+ ∧
+  ∀ pskb ppka pka #j.
+   (DataSent( S_b, S_a, n, pskb, ppka, pka, x, k ) @ #j) ⇒ ¬(#j < #i)"
+*/
+by sorry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+WARNING: the following wellformedness checks failed!
+
+Restriction actions
+===================
+
+  restriction `Domain_Reconfiguration_adversary1' references action 
+    fact "Domain_Reconfig_adversary" (arity 2, Linear) 
+  but no rule has such an action.
+
+Derivation Checks
+=================
+
+  Derivation checks timed out.
+  Use --derivcheck-timeout=INT to configure timeout.
+  Set to 0 to deactivate for no timeout.
+*/
+
+/*
+Generated from:
+Tamarin version 1.10.0
+Maude version 2.7.1
+Git revision: UNKNOWN, branch: UNKNOWN
+Compiled at: 2024-10-30 14:56:23.355649243 UTC
+*/
+
+end
