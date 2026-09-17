@@ -1,0 +1,1195 @@
+/* Cross-Domain Access Control Protocol */
+/* Full minimal-repair model for the HCC revision.                    */
+/* Base: 2026 CSCWD/code/PT_CDDS.spthy.                               */
+/* Registration, policy, Merkle, BFT, reconfiguration, and adversary */
+/* rules are retained. Only the four M1/M2/M3 data-path rules are     */
+/* changed to authenticate ephemeral DH and erase session secrets.    */
+//以下的群私钥均是由域运行各自的BFT协议生成的，群私钥为抽象概念
+//群公钥则为运行bft协议
+//此版本为1后面一版，用于添加针对域重构环节的攻击
+theory CDDS_AECDHE_repaired_full_v4
+begin
+
+/* Types and cryptographic primitives */
+builtins: hashing, signing, symmetric-encryption, diffie-hellman, asymmetric-encryption, multiset, natural-numbers
+
+/* Function symbols */
+functions: 
+  PEnc/3,     // PCE 加密函数（ppk, 明文, 随机数）
+  PDec/2,     // PCE 解密函数（psk, 密文）
+  ppk/1,      // Plaintext-Checkable Public Key（输入私钥，输出公钥）
+  kdf_data/2, // session data-key derivation
+  kdf_conf/2  // responder key-confirmation derivation
+
+/* Equation for plaintext checkable encryption */
+equations:
+    PDec(ppsk, PEnc(ppk(ppsk), k, r)) = k  // 保证解密准确性
+// equations:
+//     Enc(k, Dec(k, x)) = x  // 保证解密准确性
+restriction Equality:
+"All x y #i. Eq(x,y) @#i ==> x = y"
+restriction unique_InitEpoch://epoch初始化唯一性
+"All  #i #j. Epoch_init('epoch', %1) @#i & Epoch_init('epoch', %1) @#j ==> #i = #j"
+restriction unique_EpochUpdate://epoch更新唯一性
+"All a b  #i #j. Update_epoch('epoch', a %+ %1) @#i & Update_epoch('epoch', b %+ %1) @#j & a = b ==> #i = #j"
+restriction unique_InitDomain://域初始化的唯一性
+"All x y #i #j. InitDomain(x,%1) @#i & InitDomain(y,%1) @#j &(x = y) ==> #i = #j"
+restriction unique_Reconfig://域重配置唯一性
+"All x y epoch #i #j. Domain_Reconfig_Event(x, epoch %+ %1) @#i & Domain_Reconfig_Event(y, epoch %+ %1) @#j &(x = y) ==> #i = #j"
+restriction Reconfig_sequence://域重配置顺序
+"All x epoch #i. Domain_Reconfig_Event(x, epoch) @#i  ==> not(Ex #j. Update_epoch('epoch', epoch %+ %1)@#j & #j < #i)"
+restriction unique_Domain_Receive_Signature://域接受签名唯一性
+"All x y epoch #i #j. Domain_Reconfig_Event(x, epoch %+ %1) @#i & Domain_Reconfig_Event(y, epoch %+ %1) @#j &(x = y) ==> #i = #j"
+restriction merkle_onlyOnce1://merkle树初始化的唯一性
+"All A B mt_root #i #j.
+    Initial_mt_root_between_domain(A, B, mt_root) @#i & Initial_mt_root_between_domain(A, B, mt_root) @#j ==> #i = #j & not(A = B)"
+restriction unique_InitSubject://主体初始化的唯一性
+"All x y n #i #j. InitSubject(x, n) @#i & InitSubject(y, n) @#j &(x = y) ==> #i = #j"
+restriction unique_SubjectKey://主体初始化密钥不能相等
+"All x y n psk1 psk2 ppsk1 ppsk2 #i #j. SubjectKey(x, n, psk1, ppsk1) @#i & SubjectKey(y, n, psk2, ppsk2) @#j & not(x=y)==> ( (not(psk1 = psk2)) & (not(ppsk1 = ppsk2)))"
+restriction unique_IssueCert://主体只能在一个域中注册
+"All S A B n gskA gskB #i #j. IssueCert(A, S, n, gskA) @#i & IssueCert(B, S, n, gskB) @#j ==> (#i = #j & A = B & gskA = gskB)"
+restriction Only_unregistered_can_submit://没注册过的主体才能在域中注册
+"All S A n #i. Subject_Register(S,A,n) @#i ==> not (Ex B gsk #j.(IssueCert(B,S,n,gsk)@#j) & (not(A = B)) & (#j < #i))"//
+restriction unique_Policy_register://策略一致（不能出现相互矛盾的策略）
+"All S_a S_b n bit1 bit2 A B #i #j.
+    PolicyRegister(S_a, S_b, n, bit1, A, B) @ #i & PolicyRegister(S_a, S_b, n, bit2, A, B) @ #j ==> (#i = #j & bit1 = bit2)"
+restriction Subject_before_PolicyRegister://注册策略前主体已经在域中注册
+"All S_a S_b n bit A B #i.
+PolicyRegister(S_a, S_b, n, bit, A, B) @ #i 
+==>(Ex gskA gskB #j #k. 
+    IssueCert(A, S_a, n, gskA)@#j 
+    & IssueCert(B, S_b, n, gskB)@#k 
+    &(#j < #i) & (#k < #i)& not(A = B))"
+restriction unique_ProcessPolicy://策略注册独特性
+"All B A n Pb1 Pb2 mt1 mt2 new_mt_root_B1 new_mt_root_B2 #i #j.
+    ProcessPolicy(A, B, n, Pb1, mt1, new_mt_root_B1) @ #i & ProcessPolicy(A, B, n, Pb2, mt2, new_mt_root_B2) @ #j &(Pb1 = Pb2)==> (#i = #j & mt1 = mt2 & new_mt_root_B1 = new_mt_root_B2)"
+
+restriction 1://不能再次提出注册已有的策略请求
+"All A B n S_a S_b bit #i.PolicyRegister(S_a, S_b, n, bit, A, B)@#i 
+==>not(Ex #j. PolicyRegisterEnd(S_a, S_b, n, bit, A, B)@#j & #j < #i)"
+
+restriction unique_AccessRequest:
+"All S_a S_b n A B pska pskb gskA #i #j.
+    AccessRequest(S_a, S_b, n, A, B, pska, pskb, gskA)@#i & AccessRequest(S_a, S_b, n, A, B, pska, pskb, gskA)@#j ==> #i = #j"
+
+restriction unique_AccessGranted:
+"All S_a S_b n pka pkb bit #i #j.
+    AccessGranted(S_a, S_b, n, pka, pkb, bit) @#i & AccessGranted(S_a, S_b, n, pka, pkb, bit) @#j ==> #i = #j"
+
+restriction unique_Datasend:
+"All S_a S_b n1 n2 pskb ppka pka x k #i #j.
+    DataSent(S_b, S_a, n1, pskb, ppka, pka, x, k) @#i & DataSent(S_b, S_a, n2, pskb, ppka, pka, x, k) @#j & n1 = n2 ==> #i = #j"
+restriction unique_DataReceive: 
+"All S_a S_b n1 n2 alpha beta pska pkb k x #i #j.
+    DataReceive(S_b, S_a, n1, alpha, beta, pska, pkb, k, x) @#i & DataReceive(S_b, S_a, n2, alpha, beta, pska, pkb, k, x) @#j & n1 = n2 ==> #i = #j"
+// 攻击限制:域重构被抢先注册之后无法在被注册（信任链被窃取）
+restriction Domain_Reconfiguration_adversary1:
+"All domain_id epoch #i.
+    Domain_Reconfig_adversary(domain_id, epoch %+ %1) @#i  ==> not(Ex #j. Domain_Reconfig_Event(domain_id, epoch %+ %1) @#j)"
+// restriction Adversary_Only_Once://攻击一次就够了
+// "All domain_id epoch #i.Domain_Reconfig_adversary(domain_id, epoch %+ %1)@#i 
+// ==>not(Ex #j. Domain_Reconfig_adversary(domain_id, epoch %+ %1)@#j & #j < #i)"
+
+// restriction LessThan:
+//   "All x y #i. LessThan(x,y)@#i ==> x ⊏ y"
+
+/* ----------------------------第一部分：域以及主体初始化------------------------------------------- */
+//生成初始计时器
+rule epoch_Init:
+    [  ]
+    --[ Epoch_init('epoch', %1) ]->
+    [ !Epoch('epoch', %1) ]
+//计时器更新
+rule epoch_update[role="epoch_update"]:
+    [ !Epoch('epoch', %n) ]
+    --[ Update_epoch('epoch', %n %+ %1) ]->
+    [ !Epoch('epoch', %n %+ %1) ]
+
+//生成初始树根值
+rule initial_mt_root:
+    [ Fr(~mt_root) ]
+    --[  ]->
+    [ !Initial_merkle_root(~mt_root) ]
+// 域初始化
+rule Domain_Init:
+    [ 
+        Fr(~gsk)//域私钥
+    ]  
+    --[ 
+        InitDomain($I, %1) 
+        , Domain1($I, %1, ~gsk, pk(~gsk))
+    ]->
+    [ 
+        // MerkleRoot($I, mt_root)//初始化树
+        !Domain($I, %1, ~gsk, pk(~gsk))
+        , !Domain_id($I)
+    ]
+
+//初始化域间merkle树根节点
+rule Initial_mt_root_between_domain:
+    [ 
+        !Domain_id($A)
+        , !Domain_id($B)
+        , !Initial_merkle_root(mt_root)
+     ]
+    --[ Initial_mt_root_between_domain($A, $B, mt_root) ]->
+    [ 
+        MerkleRoot($A, $B, mt_root)//A的merkle树
+     ]
+
+// 规则：域重配置（PT-CDDS文献3.3节“BFT-based Domain Reconfiguration”）
+rule Domain_Reconfiguration[role="Reconfiguration"]:
+    [ 
+        !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+        , !Epoch('epoch', %n)
+        , Fr(~new_gsk)
+    ]
+    --[ 
+        Domain_Reconfig_Event($domain_id, %epoch %+ %1)
+        , DDomain($domain_id, %epoch)
+        , Eq(%epoch %+ %1, %n)
+     ]->  // 记录重配置事件
+    [ 
+        // 右侧：生成新域状态（替代旧状态，实现旧态逻辑消去）
+        !Domain($domain_id, %epoch %+ %1, ~new_gsk, pk(~new_gsk))
+        , Out(<pk(~new_gsk), sign(pk(~new_gsk), old_gsk), pk(old_gsk), 'Update domain public key'>)//旧私钥加密新公钥
+        // , Epoch('epoch', %n)
+    ]
+//其他域接收并验证签名
+rule Domain_Reconfiguration_Receive_Signature[role="Reconfiguration"]:
+    [ 
+        In(<Pkin, Pksign, OldPk, field>)
+        , !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+     ]
+    --[ 
+        Eq(field, 'Update domain public key')
+        , Eq(verify(Pksign, Pkin, OldPk), true)//验证旧私钥签名新公钥
+        , Eq(OldPk, pk(old_gsk))
+        , Domain_Pk_Trust($domain_id, %epoch %+ %1, Pkin)//记录接受验证新公钥签名行为
+     ]->
+    [ 
+        !Domain_Pk($domain_id, %epoch %+ %1, Pkin)//接受签名（不管是不是恶意）
+     ]
+
+lemma domain_initialization_feasibility:
+  exists-trace
+  "
+    (/* 1. 纪元成功初始化 */
+     Ex A B mt_root pk1  #i1 #i2 #i3 #i4 #i5 #i6 #i7. 
+     Epoch_init('epoch', %1)@#i1
+     /* 2. 至少两个域完成初始化 */
+     & InitDomain(A, %1)@#i2 & #i1 < #i2 
+     & InitDomain(B, %1)@#i3 & #i1 < #i3 & not(A = B)
+     & Initial_mt_root_between_domain(A, B, mt_root)@#i4 & #i2 < #i4 & #i3 < #i4   /* 3. 初始Merkle树根生成（在域初始化之后） */
+     & Update_epoch('epoch', %1 %+ %1) @#i5 & #i4 < #i5
+     & Domain_Reconfig_Event(A, %1 %+ %1)@#i6 & #i5 < #i6 & not(Ex #x1. DDomain(A, %1 %+ %1) @#x1 & #x1 < #i6) 
+     & Domain_Pk_Trust(A, %1 %+ %1, pk1) @#i7 
+    )"
+
+
+/* ---------------------------------------第二部分：主体在各自域内注册------------------------------------------- */
+
+rule Subject_Init[role="Subject_Register"]:
+    [ 
+        Fr(~psk)
+        , Fr(~ppsk)
+        , !Epoch('epoch', %n)
+    ]
+    --[ 
+        InitSubject($S, %n) 
+        , SubjectKey($S, %n, ~psk, ~ppsk)
+    ]->
+    [ 
+        Subject_NR($S, %n, ~psk, ~ppsk, pk(~psk),ppk(~ppsk))
+        // Subject_NR($S, pk(~psk),pk(~ppsk))
+        // , SubjectPrivateKey_NR($S, ~psk)
+        , SubjectSKpari_NR($S, %n, ~psk, ~ppsk)
+        , Out(<pk(~psk),ppk(~ppsk), %n, 'Subject Pk'>)
+     ]
+
+rule Subject_Register[role="Subject_Register"]:
+    let
+        info = 'user_info'
+        CertR = < spk, sppk, %n >
+    in
+    [ 
+        !Epoch('epoch', %n)
+        , !Domain($I, %n, gsk, gpk)
+        , Subject_NR($S, %n, psk, ppsk, spk, sppk)
+     ]
+    --[ 
+        Subject_Register($S, $I, %n)
+     ]->
+    [ 
+        Out(<CertR, sign(CertR, psk), 'Subject Register'>)//用主体私钥签名注册请求
+        , Subject_Register_request($S, $I, %n)//主体注册请求
+     ]
+
+rule Domain_Register[role="Subject_Register"]:
+    let
+        // spk = fst(SPKpair)//主体公钥
+        // sppk = fst(snd(SPKpair))
+        // epochIn = snd(snd(SPKpair))
+        SubjectCert = <spk, sppk, %n>
+    in
+    [ 
+        In(<spk, sppk, epochIn, field1>)
+        , In(<CertR, Sign_CertR, field2>)
+        // , !DomainPublicKey($I, gpk)//gpkA
+        // , !DomainPrivateKey($I, gsk)
+        , !Domain($I, %n, gsk, gpk)
+        , Subject_Register_request($S, $I, %n)
+        , SubjectSKpari_NR($S, %n, psk, ppsk)
+     ]
+    --[ 
+        Eq(field1, 'Subject Pk')
+        , Eq(spk,pk(psk))
+        , Eq(sppk, ppk(ppsk))
+        , Eq(epochIn, %n)
+        , Eq(field2, 'Subject Register')
+        , Eq(verify(Sign_CertR, CertR, spk), true)    //验证主体证书
+        , IssueCert($I, $S, %n, gsk)//记录域认证动作行为
+        , Subject1($S, $I, %n, psk, ppsk, spk, sppk)
+     ]->
+    [ 
+        Out(<SubjectCert, sign(SubjectCert, gsk), gpk, 'SubjectCert'>)//输出主体的证书，可信 SPKpair为主体的公钥对
+        , !Subject($S, $I, %n, psk, ppsk, spk, sppk)
+        // , !SubjectPrivateKey($S, psk, ppsk)
+    ]
+
+
+
+// rule rule_1:
+//     let
+//         epochIn = snd(snd(ACert))
+//         apk = fst(ACert)
+//         appk = fst(snd(ACert))
+//     in
+//     [ 
+//         In(<ACert, ACertsign, Agpk>)
+//         // , In(<Bpkpair, BCertsign, Bgpk>)
+//         , !Domain($A, %n, gskA, gpkA)
+//         // , !Domain($B, %n, gskB, gpkB)
+//         , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+//         // , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+//      ]
+//     --[ 
+//         Eq(Agpk,gpkA)
+//         , Eq(verify(ACertsign, ACert, gpkA), true)    //验证主体证书
+//         , Eq(epochIn, %n)
+//         , Eq(apk, pka)
+//         , Eq(appk, ppka)
+//         // , Eq(ACertsign, <pka, ppka, %n>)
+//         // , Eq(Bgpk,gpkB)
+//         // , Eq(verify(BCertsign, Bpkpair, gpkB), true)    //验证主体证书
+//         // , Eq(BCertsign, <pkb, ppkb, %n>)
+//         , VerifyCert($S_a, $A, %n)
+//      ]->
+//     [  ]
+
+// lemma lemma_1:
+// exists-trace
+// "Ex S_a A #i.
+//     VerifyCert(S_a, A, %1 %+ %1)@#i
+// "
+
+
+/* ----------------------------第三部分：策略注册------------------------------------------- */
+rule Object_Policy_Creation[role="Policy_Register"]:
+    let
+        bit = '1'
+        // bit = '0'
+        Pb = <pka, pkb, bit, %n>
+    in
+    [ 
+
+        // In(<Apkpair, ACertsign, Agpk>)
+        // , In(<Bpkpair, BCertsign, Bgpk>)
+        !Domain($A, %n, gskA, gpkA)
+        , !Domain($B, %n, gskB, gpkB)
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , MerkleRoot($A, $B, mt_root1)
+        , MerkleRoot($B, $A, mt_root1)
+        , !Initial_merkle_root(mt_root)
+
+    ]
+    --[
+        // Eq(Agpk,gpkA)
+        // , Eq(verify(ACertsign, Apkpair, gpkA), true)    //验证主体证书
+        // , Eq(ACertsign, <pka, ppka, %n>)
+        // , Eq(Bgpk,gpkB)
+        // , Eq(verify(BCertsign, Bpkpair, gpkB), true)    //验证主体证书
+        // , Eq(BCertsign, <pkb, ppkb, %n>)
+        PolicyRegister($S_a, $S_b, %n, bit, $A, $B)//提出策略注册请求
+        , Eq(mt_root1, mt_root)/////////////////////////////////////////////////////
+        , Eq(bit, '1')////////////////////////////////////////////////////////////////
+        // , Enter_Policy_Register($S_a, $S_b, $A, $B, count)//记录一个动作轨迹，在该轨迹结束之前，都不能有同样的行为发生
+    ]->
+    [ 
+        
+        Out(<Pb, sign(Pb, pskb), pkb, 'PolicyRb'>)//构造PolicyRb, 
+        , Create_policy($A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root)
+    ]
+
+
+
+rule DomainB_Policy_Processing[role="Policy_Register"]:
+    let
+        new_mt_root_B = h(<mt_root,PbIn>)
+        mrba = <PbIn, new_mt_root_B>
+    in
+    [ 
+        In(<PbIn, Pbsign, Pbpk, field>) 
+        , Create_policy($A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root)
+     ]
+    --[ 
+        Eq(field, 'PolicyRb')
+        , Eq(Pbpk, pkb)
+        , Eq(verify(Pbsign, PbIn, pkb), true)//验证签名
+        , Eq(PbIn, Pb)
+        , ProcessPolicy($A, $B, %n, PbIn, mt_root, new_mt_root_B)
+
+     ]->
+    [ 
+        Out(<mrba, sign(mrba, gskB), gpkB, 'MerkleRoot certification'>)
+        , B_Process_send($A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root, new_mt_root_B)
+     ]
+
+
+rule DomainA_Receive_Policy[role="Policy_Register"]:
+    let
+        PbIn = fst(mrba)
+        mtB = snd(mrba)
+        new_mt_root_A = h(<mt_root, PbIn>)
+        
+    in
+    [ 
+        In(<mrba, mrbasign, mrbapk, field>)
+        , B_Process_send($A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root, new_mt_root_B)
+    ]
+    --[ 
+        Eq(field, 'MerkleRoot certification')
+        , Eq(mrbapk, gpkB)
+        , Eq(verify(mrbasign, mrba, gpkB), true)
+        , Eq(PbIn, Pb)
+        , Eq(mtB, new_mt_root_B)
+        , Eq(new_mt_root_B, new_mt_root_A)
+        , ProcessPolicyDomain($A, $B, %n, Pb, mt_root, new_mt_root_B)
+        , PolicyRegisterEnd($S_a, $S_b, %n, bit, $A, $B)
+        , New_MerkleRoot($A, $B, %n, new_mt_root_A)
+        , New_MerkleRoot($B, $A, %n, new_mt_root_B)
+    ]->
+    [ 
+        MerkleRoot($A, $B, new_mt_root_A)
+        , MerkleRoot($B, $A, new_mt_root_B)
+        , !Policy($A, $B, %n, $S_a, $S_b, bit)
+    ]
+
+
+
+
+// // rule DomainB_Finalize_Policy:
+// //     [ 
+// //     In(<new_mt_root_a, domain_a_sig>)
+// //     , PolicyStoredDomainB($DomainB, policy, current_mt_root)
+// //     , !Domain($DomainA, gpk_a)
+// //     ]
+// //     --[ Eq(verify(new_mt_root_a, domain_a_sig, gpk_a), true)
+// //       , PolicyFinalized($DomainB, policy)
+// //     ]->
+// //     [ PolicyFinalizedSuccessfully($Subject, $Object, policy)
+// //     ]
+
+
+/* ----------------------------第四部分：数据认证与数据共享------------------------------------------- */
+
+/* Authentication and Data Sharing */
+/*主体a生成访问请求*/
+rule Subject_Access_Request[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = <CertA, CertaSign, SignPk>
+        X = 'g'^~a
+        AccessRa = <CertA_Pro, pkb, %n, ~sid, X>
+    in
+    [ 
+        !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , !Domain($A, %n, gskA, gpkA)
+        , !Domain($B, %n, gskB, gpkB)
+        , Fr(~sid)
+        , Fr(~a)
+        , In(<CertA, CertaSign, SignPk, field>)
+    ]
+    --[
+        Eq(field, 'SubjectCert')
+        , Eq(SignPk,gpkA)
+        , Eq(verify(CertaSign,CertA,gpkA),true)
+        // , Eq(CertA, <pka, ppka, %n>)
+        , Eq(fst(CertA), pka)
+        , Eq(fst(snd(CertA)), ppka)
+        , Eq(snd(snd(CertA)), %n)
+        , AccessRequest($S_a, $S_b, %n, $A, $B, pska, pskb, gskA)
+        , RepairAccessRequest($S_a,$S_b,$A,$B,%n,~sid,X)
+    ]->//(原文，签名，公钥)
+    [
+        //        /*-----------------------原文--------------------------------*//*-------------------------签名----------------------------------------*/ /*-公钥-*/
+        // Out(< < <pk_a, ppk_a, ta>, sign(<pk_a, ppk_a, ta>, gskA), pk(gskA)>, sign(< <pk_a, ppk_a, ta>, sign(<pk_a, ppk_a, ta>, gskA), pk(gskA)>, ska), pk(ska)>) //发送AccessR_a，并用主体自己的私钥签名
+        //                                                                            /*---嵌套原文----*/ /*-----------------嵌套签名-------------*//*嵌套公钥*/
+        // A_Access_request(<AccessRa,sign(AccessRa,pska),pka>)
+
+        Out(<AccessRa,sign(AccessRa,pska),pka, 'AccessR_a_fs'>)
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+        , St_Initiator_DH($S_a,$S_b,$A,$B,%n,~sid,~a,X,pka,ppka,pkb,'clean')
+    ]
+
+
+// // rule GetLastRoundSignature:
+// // [
+// //     Fr(~sigma_prev)//前一轮签名
+// //     , !Domain($B, gpkB, t0)
+// // ]-->
+// // [
+// //     !LastRoundSignature($B, ~sigma_prev)  
+// // ]
+
+
+/* 域B对a的访问请求进行验证*/
+rule Domain_Access_Verification[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = fst(AccessRa)
+        pkbIn = fst(snd(AccessRa))
+        Epoch_Access = fst(snd(snd(AccessRa)))
+        sid = fst(snd(snd(snd(AccessRa))))
+        X = snd(snd(snd(snd(AccessRa))))
+        GrantBody = <pka, pkb, %n, sid, X>
+        // CertA = fst(CertA_Pro)
+        // CertASign = fst(snd(CertA_Pro))
+        // CertAPk = snd(snd(CertA_Pro))
+    in
+    [ 
+        In(<AccessRa,AccesssSign,AccessPKa, field>)
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+        , !Policy($A, $B, %n, $S_a, $S_b, bit)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+    ]
+    --[
+        Eq(field, 'AccessR_a_fs')
+        , Eq(pka,AccessPKa)//公钥一致性
+        , Eq(verify(AccesssSign, AccessRa, pka), true)//对a的请求签名进行认证
+        , Eq(pkbIn,pkb)//验证是否访问域内节点
+        , Eq(Epoch_Access, %n)//是否在有效期内
+        // , Eq(CertAPk, gpkA)
+        // , Eq(verify(CertASign, CertA, gpkA),true)
+        // , Eq(fst(CertA), pka)
+        // , Eq(fst(snd(CertA)), ppka)
+        // , Eq(snd(snd(CertA)), %n)
+        // , Eq(CertA,<pka, ppka>)//对a的证书进行认证
+        , Eq(bit, '1')
+        , AccessGranted($S_a, $S_b, %n, pka, pkb, bit)                          //记录授权状态
+        , RepairAccessGranted($S_a,$S_b,$A,$B,%n,sid,X,h(GrantBody))
+    ]->
+    [ 
+        Out(<h(GrantBody), sign(h(GrantBody), gskB), pk(gskB), sid, X,
+             'AccessCert_ab_fs'>)    //域B签名绑定epoch、sid和发起方临时公钥X
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+    ]
+
+/*对象和对签名后对要发送的数据进行加密 */
+rule Object_Data_Encryption[role="Authentication_and_Data_Sharing"]:
+    let 
+        GrantBody = <pka, pkb, %n, sid, X>
+        Y = 'g'^~b
+        Z = X^~b
+        transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+                      sid,pka,pkb,X,Y,h(Hash1)>
+        kData = kdf_data(Z,transcript)
+        kConf = kdf_conf(Z,transcript)
+        d = <~x, sign(<~x,transcript>,pskb), pk(pskb)>
+        beta = senc(d,kData)
+        keyConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+    in
+    [ 
+        In(<Hash1,Hashsign,Hashpk,sid,X,field>)
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , Fr(~x)                                                // 要传输的数据x
+        , Fr(~b)                                                // 响应方临时DH指数
+    ]
+    --[
+        Eq(field, 'AccessCert_ab_fs')
+        , Eq(gpkB,Hashpk)
+        , Eq(verify(Hashsign, Hash1, gpkB), true)
+        , Eq(Hash1,h(GrantBody))
+        , DataSent($S_b, $S_a, %n, pskb, ppka, pka, ~x, kData)//保留原事件接口
+        , RepairDataSent($S_b,$S_a,$A,$B,%n,sid,~x,kData,transcript)
+        , RunningResponder($S_b,$S_a,$A,$B,%n,sid,~x,kData,transcript)
+        // , Secret(~k)//密钥k
+        , Secret(~x, %n)
+        , SessionKey(kData, %n)
+        , Honest($S_a, %n)
+        , Honest($S_b, %n)
+
+    ]->                                                     // Enc是对称加密，PEnc是明文可检查加密，用于安全封装对称密钥
+    [ 
+        Out(<sid,Y,beta,keyConfirm,Hash1,'data_fs'>)
+        , St_Responder_PreErase($S_a,$S_b,$A,$B,%n,sid,~b,kData,~x,transcript,'clean')
+        // , Data(~x)
+        // , SessionKey(~k)//密钥k
+    ]
+
+rule Subject_Data_Decryption[role="Authentication_and_Data_Sharing"]:
+let 
+    transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+                  sid,pka,pkb,X,Y,h(Hash1)>
+    Z = Y^a
+    k_in = kdf_data(Z,transcript)
+    kConf = kdf_conf(Z,transcript)
+    d_in = sdec(beta, k_in)
+    x_in = fst(d_in)
+    pk_in = snd(snd(d_in))
+    sign_x = fst(snd(d_in))
+    expectedConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+in
+[
+    In(<sid,Y,beta,keyConfirm,Hash1,field>)
+    , St_Initiator_DH($S_a,$S_b,$A,$B,%n,sid,a,X,pka,ppka,pkb,iExposure)
+    // , Data(x)
+    // , SessionKey(k)//密钥k
+]
+--[
+    Eq(field, 'data_fs')
+    , Eq(keyConfirm,expectedConfirm)
+    , Eq(pk_in, pkb)//公钥一致性
+    , Eq(verify(sign_x, <x_in,transcript>, pkb), true)
+    , DataReceive($S_b, $S_a, %n, Y, beta, ppka, pkb, k_in, x_in)
+    , RepairDataAccepted($S_a,$S_b,$A,$B,%n,sid,x_in,k_in,transcript)
+    , CommitInitiator($S_a,$S_b,$A,$B,%n,sid,x_in,k_in,transcript)
+    // , Decryption_k(alpha,ppska)
+    // , Decryption_d(beta,k)
+    // , Ver_sign_x(sign_x, x, pkb)
+]->
+[
+    !Plaintext(x_in)
+    , St_Initiator_PreErase($S_a,$S_b,$A,$B,%n,sid,a,k_in,x_in,transcript,iExposure)
+]
+
+/* Minimal explicit erasure state.  Erased facts retain only public session
+ * identifiers; the ephemeral exponents and derived key are consumed. */
+rule Initiator_Erase_Ephemeral[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase($S_a,$S_b,$A,$B,%n,sid,a,k,x,transcript,iExposure)
+]
+--[
+    InitiatorErased($S_a,$S_b,$A,$B,%n,sid)
+]->
+[
+    InitErased($S_a,$S_b,%n,sid)
+]
+
+rule Responder_Erase_Ephemeral[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase($S_a,$S_b,$A,$B,%n,sid,b,k,x,transcript,rExposure)
+]
+--[
+    ResponderErased($S_a,$S_b,$A,$B,%n,sid)
+]->
+[
+    RespErased($S_a,$S_b,%n,sid)
+]
+
+rule Close_Repair_Session_After_Erasure[role="Authentication_and_Data_Sharing"]:
+[
+    InitErased($S_a,$S_b,%n,sid)
+    , RespErased($S_a,$S_b,%n,sid)
+]
+--[
+    SessionErased($S_a,$S_b,%n,sid)
+]->
+[]
+
+/* Ephemeral compromise is possible only while the corresponding linear
+ * pre-erasure state still exists. */
+rule Reveal_Initiator_Ephemeral_Pending[role="adversary"]:
+[
+    St_Initiator_DH($S_a,$S_b,$A,$B,%n,sid,a,X,pka,ppka,pkb,'clean')
+]
+--[
+    RevealEphemeralI($S_a,$S_b,%n,sid,a)
+]->
+[
+    St_Initiator_DH($S_a,$S_b,$A,$B,%n,sid,a,X,pka,ppka,pkb,'revealed')
+    , Out(a)
+]
+
+rule Reveal_Initiator_Ephemeral_Accepted[role="adversary"]:
+[
+    St_Initiator_PreErase($S_a,$S_b,$A,$B,%n,sid,a,k,x,transcript,'clean')
+]
+--[
+    RevealEphemeralI($S_a,$S_b,%n,sid,a)
+]->
+[
+    St_Initiator_PreErase($S_a,$S_b,$A,$B,%n,sid,a,k,x,transcript,'revealed')
+    , Out(a)
+]
+
+rule Reveal_Responder_Ephemeral[role="adversary"]:
+[
+    St_Responder_PreErase($S_a,$S_b,$A,$B,%n,sid,b,k,x,transcript,'clean')
+]
+--[
+    RevealEphemeralR($S_a,$S_b,%n,sid,b)
+]->
+[
+    St_Responder_PreErase($S_a,$S_b,$A,$B,%n,sid,b,k,x,transcript,'revealed')
+    , Out(b)
+]
+
+/* ----------------------------攻击属性------------------------------------------- */
+rule Reveal_Domain_sk[role="adversary"]:
+[ !Domain($I, %n, gsk, pk(gsk)) ] --[ Reveal_Domain($I, %n) ]-> [ Out(gsk) ]
+rule Reveal_Subject_psk[role="adversary"]:
+[ !Subject($S, $I, %n, psk, ppsk, spk, sppk) ] --[ Reveal_Subject($S, %n) ]-> [ Out(<psk, ppsk, %n>) ]
+// rule Reveal_Subject_ppsk:
+// [ !Subject($S, $I, %n, psk, ppsk, spk, sppk) ] --[ Reveal_Subject_ppsk(A, %n) ]-> [ Out(ppsk) ]
+/* ----------------------------对域重构的攻击------------------------------------------ */
+//攻击思路1：信任链劫持攻击
+rule Domain_Reconfig_be_adversary[role="adversary"]:
+    [                                                   
+        !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+        , !Epoch('epoch', %n)
+        , Fr(~faker_gsk)
+    ]
+    --[ 
+        Domain_Reconfig_adversary($domain_id, %epoch %+ %1)
+        , DDomain($domain_id, %epoch)
+        , Eq(%epoch %+ %1, %n)
+        , Fakergsk_Reconfig_Broadcast($domain_id, %epoch %+ %1, ~faker_gsk)
+     ]->  
+     [
+        !Domain($domain_id, %epoch %+ %1, ~faker_gsk, pk(~faker_gsk))
+        , Out(<pk(~faker_gsk), sign(pk(~faker_gsk),old_gsk), pk(old_gsk), 'Update domain public key'>)//抢先使用旧密钥签名假公钥,并在合法重构前广播
+        // , Out(<~faker_gsk, pk(~faker_gsk)>)//等同于泄露密钥
+        // , Epoch('epoch', %n)
+    ]
+
+/* 引理1：信任链劫持攻击存在可行轨迹
+   目标：证明存在轨迹满足“敌手窃取SK_e→伪造签名→其他域接收恶意PK”
+*/
+lemma Adversary_TrustChain_Hijack_Feasibility:
+exists-trace  // 攻击只需存在一条成功轨迹即有效
+" 
+    (
+        Ex A faker_gsk #i1 #i2 #i3 #i4 #i5 #i6.
+        Epoch_init('epoch', %1)@ #i1
+        & InitDomain(A, %1) @ #i2
+        & Update_epoch('epoch', %1 %+ %1)@ #i3
+        // 1. 敌手窃取域D的纪元e私钥SK_e
+        & Domain_Reconfig_adversary(A, %1 %+ %1) @ #i4 & not(Ex #j.Domain_Reconfig_Event(A, %1 %+ %1)@ #j & #j < #i4)
+        & Fakergsk_Reconfig_Broadcast(A, %1 %+ %1, faker_gsk) @ #i5 
+        & Domain_Pk_Trust(A, %1 %+ %1, pk(faker_gsk)) @ #i6
+        & #i1 < #i2
+        & #i2 < #i3
+        & #i3 < #i4
+        & #i4 < #i6
+        & #i5 < #i6
+    )
+"
+/* 引理2：恶意PK被用于后续BFT决策（信任链彻底劫持）
+   目标：证明其他域用恶意PK验证BFT签名，攻击产生实际危害
+*/
+// lemma Malicious_PK_Used_In_BFT_Decision:
+//   exists-trace
+//   "
+//     Ex .
+//     // 1. 其他域A已信任恶意PK（引理1的结果）
+//     Domain_Pk_Trust(domain_id, epoch %+ %1, pk(faker_gsk)) @#i1
+//     // 2. 域D用恶意私钥SK_malicious生成BFT签名（如策略签名）
+    
+//     // 3. 其他域A用恶意PK验证签名，并接受策略（信任链劫持成功）
+//     Eq(Verify(malicious_bft_sign, policy, PK_malicious), true) @ #i3
+//     & !Domain_Policy($A, $D, %e+1, policy) @ #i4  // 策略被接受
+//     & #i1 < #i2 < #i3 < #i4
+//   "
+
+
+
+
+
+
+//攻击思路2：密钥生成过程污染攻击
+//敌手在分布式密钥生成过程中引入偏差，获得新私钥的优势信息,等同于域的私钥泄露
+// rule Domain_Reconfig_adversary[role="adversary"]:
+//     [ 
+//         !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+//         , !Epoch('epoch', %n)
+//         , Fr(~faker_gsk)
+//     ]
+//     --[ 
+//         Domain_Reconfig_adversary($domain_id, %epoch %+ %1)
+//     ]
+
+//
+
+//纪元边界状态分裂攻击
+// 利用重构期间的网络延迟，制造关于当前有效公钥的分歧
+// 攻击流程
+// 时机把握: 在重构消息广播期间执行
+// 网络分裂: Adversary.delay_messages(NodeGroup_A) 延迟部分节点接收新公钥
+// 状态分歧:
+// NodeGroup_A: 仍认为PK_e有效
+// NodeGroup_B: 已接受PK_{e+1}
+// 冲突激发: 向不同群体发送由不同密钥签名的冲突交易
+
+
+//签名复用：腐蚀f个节点，复用f个份额，伪造1个份额，达到2f+1份额
+
+
+
+
+// lemma lemma_:
+// "
+    
+// "
+/* ----------------------------可行性测试------------------------------------------- */
+
+
+    // lemma Init1:
+    // exists-trace
+    // "
+    //     Ex I #i1.
+    //     InitDomain(I, %1) @ #i1
+    // "
+    // lemma Init2:
+    // exists-trace
+    // "
+    //     Ex S #i2.
+    //     InitSubject(S, %1) @ #i2
+    // "
+
+    // An Quan 
+    // lemma RegisteredSubject1:
+    // exists-trace
+    // "
+    //    Ex S I #i1 #i2 #i3 #i4 #i5 #i6 .
+    //     Epoch_init('epoch', %1)@ #i1
+    //     & InitDomain(I, %1) @ #i2
+    //     & Update_epoch('epoch', %1 %+ %1)@ #i3
+    //     & Domain_Reconfig_Event(I, %1 %+ %1)@ #i4
+    //     & InitSubject(S, %1 %+ %1) @ #i5
+    //     & Subject_Register(S, I, %1 %+ %1) @ #i6
+    //     & #i1 < #i2
+    //     & #i2 < #i3
+    //     & #i3 < #i4
+    //     & #i4 < #i5
+    //     & #i5 < #i6
+    //     & not(Ex #j.DDomain(I, %1 %+ %1)@#j)
+    // "
+    // lemma RegisteredSubject2:
+    // exists-trace
+    // "
+    //     Ex S I gpk #i4.
+    //     IssueCert(I, S, %1 %+ %1, gpk) @ #i4
+    // "
+
+lemma RegisteredSubjectAll:
+exists-trace
+    "
+        Ex S I gpk #i1 #i2 #i3 #i4 #i5 #i6 #i7.
+        Epoch_init('epoch', %1)@ #i1
+        & InitDomain(I, %1) @ #i2
+        & Update_epoch('epoch', %1 %+ %1)@ #i3
+        & Domain_Reconfig_Event(I, %1 %+ %1)@ #i4
+        & InitSubject(S, %1 %+ %1) @ #i5
+        & Subject_Register(S, I, %1 %+ %1) @ #i6
+        & IssueCert(I, S, %1 %+ %1, gpk) @ #i7
+        & #i1 < #i2
+        & #i2 < #i3
+        & #i3 < #i4
+        & #i4 < #i5
+        & #i5 < #i6
+        & #i6 < #i7
+    "
+// 注册先遣性
+lemma Init_before_Register:
+"
+    All S n I #i.
+    Subject_Register(S, I, n) @i & (%1 %+ %1 << n)
+    ==>
+    (Ex #j #k #m.InitSubject(S, n) @j & j<i 
+    & InitDomain(I, %1) @k & k<i
+    & Domain_Reconfig_Event(I, n)@#m & m<i)
+"
+lemma RegisteredSubjectAllab:
+exists-trace
+"
+Ex S_a S_b A B gpkA gpkB #i1 #i2 #i3 #i4 #i5 #i6 #i7 #i8 #i9 #i10 #i11 #i12.
+        Epoch_init('epoch', %1)@ #i1
+        & InitDomain(A, %1) @ #i2
+        & Update_epoch('epoch', %1 %+ %1)@ #i3////////////////
+        & Domain_Reconfig_Event(A, %1 %+ %1)@ #i4
+        & InitSubject(S_a, %1 %+ %1) @ #i5
+        & Subject_Register(S_a, A, %1 %+ %1) @ #i6
+        & IssueCert(A, S_a, %1 %+ %1, gpkA) @ #i7
+        & #i1 < #i2
+        & #i2 < #i3
+        & #i3 < #i4
+        & #i4 < #i5
+        & #i5 < #i6
+        & #i6 < #i7
+
+        & InitDomain(B, %1) @ #i8
+
+        & Domain_Reconfig_Event(B, %1 %+ %1)@ #i9
+        & InitSubject(S_b, %1 %+ %1) @ #i10
+        & Subject_Register(S_b, B, %1 %+ %1) @ #i11
+        & IssueCert(B, S_b, %1 %+ %1, gpkB) @ #i12
+        & #i1 < #i8
+        & #i8 < #i3
+        & #i3 < #i9
+        & #i9 < #i10
+        & #i10 < #i11
+        & #i11 < #i12
+
+        & not(A = B)
+"
+
+lemma PolicyRegisterRequest1:
+exists-trace
+"
+    Ex S_a S_b bit A B #i.
+    PolicyRegister(S_a, S_b, %1 %+ %1, bit, A, B) @ #i
+"
+lemma PolicyRegisterRequest2:
+exists-trace
+"
+    Ex B A Pb mr_root new_mr_root #j.
+    ProcessPolicy(A, B, %1 %+ %1, Pb, mr_root, new_mr_root) @ #j
+"
+lemma PolicyRegisterRequest3:
+exists-trace
+"
+    Ex A B Pb mt_root new_mt_rootB #i.
+    ProcessPolicyDomain(A, B, %1 %+ %1, Pb, mt_root, new_mt_rootB) @ #i
+"
+
+lemma Data_Accees1:
+exists-trace
+"
+    Ex S_a S_b A B pska pskb gskA #i.
+    AccessRequest(S_a, S_b, %1 %+ %1, A, B, pska, pskb, gskA) @ #i
+    & not (S_a = S_b) & not(A = B)
+"
+lemma Data_Accees11:
+exists-trace
+"
+    Ex S_a S_b A B pska pskb gskA pka pkb bit #i #j.
+    AccessRequest(S_a, S_b, %1 %+ %1, A, B, pska, pskb, gskA) @ #i
+    & not (S_a = S_b) & not(A = B)
+    & AccessGranted(S_a, S_b, %1 %+ %1, pka, pkb, bit) @ #j
+    & i < j
+"
+lemma Data_Accees2:
+exists-trace
+"
+    Ex S_a S_b pka pkb bit #i.
+    AccessGranted(S_a, S_b, %1 %+ %1, pka, pkb, bit) @ #i
+    & not (S_a = S_b) 
+"
+lemma Data_Accees3:
+exists-trace
+"
+    Ex S_a S_b pskb ppka pka x k #i.
+    DataSent(S_b, S_a, %1 %+ %1, pskb, ppka, pka, x, k) @ #i
+    & not (S_a = S_b)
+"
+lemma Data_Accees4:
+exists-trace
+"
+    Ex S_a S_b alpha beta pska pkb k x #i.
+    DataReceive(S_b, S_a, %1 %+ %1, alpha, beta, pska, pkb, k, x) @ #i
+    & not (S_a = S_b)
+"
+/* ----------------------------最终可行性验证--------------------------------------- */
+lemma Executable:
+exists-trace
+"
+    Ex S_a S_b alpha beta pska pkb k x #i.
+    DataReceive(S_b, S_a, %1 %+ %1, alpha, beta, pska, pkb, k, x) @ #i
+    & not (S_a = S_b)
+"
+/* ----------------------------安全性证明------------------------------------------- */
+lemma secrecy_session_key://会话密钥保密性引理
+"All k n #i.
+  SessionKey(k, n) @i ==>
+  not (Ex #j. K(k)@j) | (Ex S_b #r. Reveal_Subject(S_b, n)@r & Honest(S_b, n) @i)"
+
+lemma secrecy_x://数据保密性引理
+"All x n #i.
+Secret(x, n) @i ==>
+not (Ex #j. K(x)@j)
+| (Ex S_b #r. Reveal_Subject(S_b, n)@r & Honest(S_b, n) @i)"
+
+lemma secrecy_subject_sk://主体私钥保密性引理
+"All S I n psk ppsk spk sppk #i.
+  Subject1(S, I, n, psk, ppsk, spk, sppk) @i ==>
+  not (Ex #j. K(psk)@j) | (Ex #r. Reveal_Subject(S, n)@r)"
+
+lemma secrecy_domain_sk://域私钥保密性引理
+"All I n gsk #i.
+  Domain1(I, n, gsk, pk(gsk)) @i ==>
+  not (Ex #j. K(gsk)@j) | (Ex #r. Reveal_Domain(I, n)@r)"
+
+lemma forward_secrecy_x://前向安全性
+"All x n #i.
+Secret(x, n) @i
+& not (Ex S_a #j. Reveal_Subject(S_a, n)@j) ==>
+not (Ex #j. K(x)@j)"
+
+lemma authentication_registration://主体注册认证
+"All I S n gsk #i.
+    IssueCert(I, S, n, gsk) @i
+    ==>
+    (Ex #j. Subject_Register(S, I, n) @j & #j < #i)"
+
+lemma authentication_access_grant://访问授权认证
+"All S_a S_b n pka pkb bit #i.
+    AccessGranted(S_a, S_b, n, pka, pkb, bit) @i
+    ==>
+    (Ex A B pska pskb gskA #j #k.
+        AccessRequest(S_a, S_b, n, A, B, pska, pskb, gskA) @j &
+        #j < #i &
+        PolicyRegisterEnd(S_a, S_b, n, bit, A, B) @k 
+        & k < i
+    )"
+
+lemma authentication_data_cert:// 发送数据资格认证
+"All S_b S_a n pskb ppka ppska x k #i.
+    DataSent(S_b, S_a, n, pskb, ppka, ppska, x, k) @i
+    ==>
+    (Ex pkb pka bit #j.
+        AccessGranted(S_a, S_b, n, pka, pkb, bit) @j &
+        #j < #i 
+    )"
+
+lemma authentication_data_origin:// 数据源认证
+"All S_b S_a n alpha beta ppska pkb k x #i.
+    DataReceive(S_b, S_a, n, alpha, beta, ppska, pkb, k, x) @i
+    ==>
+    (Ex pskb ppka pka #j.
+        DataSent(S_b, S_a, n, pskb, ppka, pka, x, k) @j &
+        #j < #i 
+    )"
+
+lemma Cross_Domain_Policy_Consistency://域策略一致性
+    all-traces
+    "
+        All A B PbIn mt_root new_mt_root #i1 #i2 #i3.
+        PolicyRegister(A, B, %1 %+ %1, '1', A, B) @ #i1
+        & ProcessPolicy(A, B,  %1 %+ %1, PbIn, mt_root, new_mt_root) @ #i2
+        & PolicyRegisterEnd(A, B,  %1 %+ %1, '1', A, B) @ #i3
+        & #i1 < #i2
+        & #i2 < #i3 
+        & not(A = B)
+        ==>
+         (Ex new_mt_root_A new_mt_root_B #j1 #j2.
+            New_MerkleRoot(A, B,  %1 %+ %1, new_mt_root_A) @ #j1
+            & New_MerkleRoot(B, A, %1 %+ %1, new_mt_root_B) @ #j2
+            // & #i3 < #j1
+            // & #j1 < #j2
+            & new_mt_root_A = new_mt_root_B
+            & new_mt_root_A = new_mt_root
+            )  // 策略的 Merkle 根节点保持一致
+    "
+//假设：
+//假设在某一时刻，策略 P 被提交给域 A 和 B，并且在策略注册时，已经通过签名验证。
+//假设域 A 和 B 都成功提交了策略，并且策略通过了验证。
+//结论：在合理的时间内，策略会被所有域记录并生效。
+// lemma Policy_Registration_Liveness:
+//     exists-trace
+//     "
+//         Ex A B Pb mt_root #i1 #i2 #i3 #i4 #i5.
+//         Epoch_init('epoch', %1) @ #i1
+//         & InitDomain(A, %1) @ #i2
+//         & InitDomain(B, %1) @ #i3
+//         & Update_epoch('epoch', %1 %+ %1) @ #i4
+//         & PolicyRegister(A, B, %1 %+ %1, '1', A, B) @ #i5
+//         & PolicyRegisterEnd(A, B, %1 %+ %1, '1', A, B) @ #i6
+//         & PolicyRegisterEnd(B, A, %1 %+ %1, '1', B, A) @ #i7
+//         & #i1 < #i2 < #i3 < #i4 < #i5 < #i6 < #i7
+//         & not(A = B)
+//         & Eq(mt_root, h(<pka, pkb, %1>))
+//     "
+
+/* ------------------------------------------------------------------------- */
+/* HCC v4 proof layer for the minimally repaired full CDDS model.            */
+/* ------------------------------------------------------------------------- */
+
+lemma reachable_repaired_running_commit:
+  exists-trace
+  "Ex S_a S_b A B n sid x k T #running #commit.
+     RunningResponder(S_b,S_a,A,B,n,sid,x,k,T) @ #running
+   & CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & #running < #commit"
+
+lemma reachable_repaired_normal_transfer:
+  exists-trace
+  "Ex S_a S_b A B n sid x k T #send #accept #erase.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & #send < #accept
+   & #accept < #erase"
+
+lemma repaired_authorization_before_send:
+  all-traces
+  "All S_b S_a A B n sid x k T #send.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+     ==>
+       (Ex X hGrant #grant.
+          RepairAccessGranted(S_a,S_b,A,B,n,sid,X,hGrant) @ #grant
+        & #grant < #send)"
+
+lemma repaired_lowe_data_aliveness:
+  all-traces
+  "All S_a S_b A B n sid x k T #commit.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal.
+            Reveal_Subject(S_b,n) @ #reveal
+          & #reveal < #commit)
+     ==>
+       (Ex Peer A2 B2 n2 sid2 x2 k2 T2 #running.
+          RunningResponder(S_b,Peer,A2,B2,n2,sid2,x2,k2,T2) @ #running
+        & #running < #commit)"
+
+lemma repaired_lowe_data_weak_agreement:
+  all-traces
+  "All S_a S_b A B n sid x k T #commit.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal.
+            Reveal_Subject(S_b,n) @ #reveal
+          & #reveal < #commit)
+     ==>
+       (Ex A2 B2 n2 sid2 x2 k2 T2 #running.
+          RunningResponder(S_b,S_a,A2,B2,n2,sid2,x2,k2,T2) @ #running
+        & #running < #commit)"
+
+lemma repaired_lowe_data_noninjective_agreement:
+  all-traces
+  "All S_a S_b A B n sid x k T #commit.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal.
+            Reveal_Subject(S_b,n) @ #reveal
+          & #reveal < #commit)
+     ==>
+       (Ex #running.
+          RunningResponder(S_b,S_a,A,B,n,sid,x,k,T) @ #running
+        & #running < #commit)"
+
+/* Injectivity is deliberately split from non-injective agreement to reduce
+ * proof-search branching and to expose reliance on the original uniqueness
+ * restrictions. */
+lemma repaired_commit_is_single_use:
+  all-traces
+  "All S_a S_b A B n sid x1 k1 T1 x2 k2 T2 #i #j.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x1,k1,T1) @ #i
+   & CommitInitiator(S_a,S_b,A,B,n,sid,x2,k2,T2) @ #j
+   ==> #i = #j"
+
+lemma reachable_repaired_ephemeral_compromise:
+  exists-trace
+  "Ex S_a S_b A B n sid x k T b #send #reveal #learn.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RevealEphemeralR(S_a,S_b,n,sid,b) @ #reveal
+   & K(x) @ #learn
+   & #send < #reveal
+   & #reveal < #learn"
+
+lemma repaired_session_key_secrecy_after_erasure:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #erase #learn.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & K(k) @ #learn
+   & #erase < #learn
+   ==>
+      ((Ex a #ri.
+          RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+        & #ri < #learn)
+       | (Ex b #rr.
+          RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+        & #rr < #learn))"
+
+lemma repaired_standard_forward_secrecy:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #accept #erase #reveal.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & Reveal_Subject(S_a,n) @ #reveal
+   & #send < #accept
+   & #accept < #erase
+   & #erase < #reveal
+   ==>
+     not (Ex #learn.
+            K(x) @ #learn
+          & #reveal < #learn
+          & not (Ex a #ri.
+                   RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+                 & #ri < #learn)
+          & not (Ex b #rr.
+                   RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+                 & #rr < #learn))"
+
+lemma repaired_intra_epoch_compromise_resilience:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #accept #erase #reveal.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & Reveal_Subject(S_a,n) @ #reveal
+   & #send < #accept
+   & #accept < #erase
+   & #erase < #reveal
+   ==>
+     not (Ex #learn.
+            K(x) @ #learn
+          & #reveal < #learn
+          & not (Ex nNext #transition.
+                   Update_epoch('epoch',nNext) @ #transition
+                 & #send < #transition
+                 & #transition < #learn)
+          & not (Ex a #ri.
+                   RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+                 & #ri < #learn)
+          & not (Ex b #rr.
+                   RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+                 & #rr < #learn))"
+
+lemma repaired_cross_epoch_key_compromise_isolation:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #accept #erase #transition #revealNew.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & Update_epoch('epoch',n %+ %1) @ #transition
+   & Reveal_Subject(S_a,n %+ %1) @ #revealNew
+   & #send < #accept
+   & #accept < #erase
+   & #erase < #transition
+   & #transition < #revealNew
+   ==>
+     not (Ex #learn.
+            K(x) @ #learn
+          & #revealNew < #learn
+          & not (Ex a #ri.
+                   RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+                 & #ri < #learn)
+          & not (Ex b #rr.
+                   RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+                 & #rr < #learn))"
+
+end
