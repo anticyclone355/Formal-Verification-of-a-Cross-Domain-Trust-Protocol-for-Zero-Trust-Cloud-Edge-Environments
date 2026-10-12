@@ -1,0 +1,7 @@
+started_utc=2026-09-28T10:56:42.734638+00:00
+finished_utc=2026-09-28T10:57:12.362246+00:00
+wall_seconds=29.628
+timeout=False
+exit_code=0
+command=tamarin-prover original_reveal_matrix.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w1_o_pce_only_plaintext_secrecy --output=w1_o_pce_only_plaintext_secrecy.proof.spthy --output-json=w1_o_pce_only_plaintext_secrecy.trace.json --output-dot=w1_o_pce_only_plaintext_secrecy.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T105641Z/original/pce_only

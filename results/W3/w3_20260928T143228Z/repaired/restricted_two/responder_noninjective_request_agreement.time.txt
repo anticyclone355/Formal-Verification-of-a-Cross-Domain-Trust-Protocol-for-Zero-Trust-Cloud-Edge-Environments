@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:33:32.306583+00:00
+finished_utc=2026-09-28T14:34:43.883366+00:00
+wall_seconds=71.577
+timeout=False
+exit_code=0
+profile=restricted_two
+model=repaired_restricted_two.spthy
+command=tamarin-prover repaired_restricted_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=responder_noninjective_request_agreement --output=responder_noninjective_request_agreement.proof.spthy --output-json=responder_noninjective_request_agreement.trace.json --output-dot=responder_noninjective_request_agreement.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/restricted_two

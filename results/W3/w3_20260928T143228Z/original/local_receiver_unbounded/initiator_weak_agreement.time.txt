@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:33:08.611546+00:00
+finished_utc=2026-09-28T14:33:25.329333+00:00
+wall_seconds=16.718
+timeout=False
+exit_code=0
+profile=local_receiver_unbounded
+model=original_local_receiver_unbounded.spthy
+command=tamarin-prover original_local_receiver_unbounded.spthy --quit-on-warning --derivcheck-timeout=300 --prove=initiator_weak_agreement --output=initiator_weak_agreement.proof.spthy --output-json=initiator_weak_agreement.trace.json --output-dot=initiator_weak_agreement.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/local_receiver_unbounded

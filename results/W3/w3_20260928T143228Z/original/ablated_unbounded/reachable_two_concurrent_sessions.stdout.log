@@ -1,0 +1,19 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: original_ablated_unbounded.spthy
+
+  output:          reachable_two_concurrent_sessions.proof.spthy
+  processing time: 28.86s
+  
+  reachable_session (exists-trace): analysis incomplete (1 steps)
+  reachable_two_concurrent_sessions (exists-trace): verified (30 steps)
+  initiator_aliveness (all-traces): analysis incomplete (1 steps)
+  initiator_weak_agreement (all-traces): analysis incomplete (1 steps)
+  initiator_noninjective_agreement (all-traces): analysis incomplete (1 steps)
+  initiator_injective_agreement (all-traces): analysis incomplete (1 steps)
+  data_origin_authentication (all-traces): analysis incomplete (1 steps)
+  replay_acceptance_exclusion (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

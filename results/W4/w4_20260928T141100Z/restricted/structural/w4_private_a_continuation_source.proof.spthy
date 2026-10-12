@@ -1,0 +1,627 @@
+theory W4_Policy_Decomposition begin
+
+// Function signature and definition of the equational theory E
+
+builtins: natural-numbers
+functions: fst/1, h/1, pair/2, pk/1, ppk/1, sign/2, snd/1, true/0,
+           verify/3
+equations:
+    fst(<x.1, x.2>) = x.1,
+    snd(<x.1, x.2>) = x.2,
+    verify(sign(x.1, x.2), x.1, pk(x.2)) = true
+
+
+
+
+
+
+
+
+
+
+
+restriction Equality:
+  "∀ x y #i. (Eq( x, y ) @ #i) ⇒ (x = y)"
+  // safety formula
+
+restriction W4_OneSetup:
+  "∀ #i #j. ((W4Init( ) @ #i) ∧ (W4Init( ) @ #j)) ⇒ (#i = #j)"
+  // safety formula
+
+restriction unique_Policy_register:
+  "∀ S_a S_b n bit1 bit2 A B #i #j.
+    ((PolicyRegister( S_a, S_b, n, bit1, A, B ) @ #i) ∧
+     (PolicyRegister( S_a, S_b, n, bit2, A, B ) @ #j)) ⇒
+    ((#i = #j) ∧ (bit1 = bit2))"
+  // safety formula
+
+restriction unique_ProcessPolicy:
+  "∀ B A n Pb1 Pb2 mt1 mt2 new_mt_root_B1 new_mt_root_B2 #i #j.
+    (((ProcessPolicy( A, B, n, Pb1, mt1, new_mt_root_B1 ) @ #i) ∧
+      (ProcessPolicy( A, B, n, Pb2, mt2, new_mt_root_B2 ) @ #j)) ∧
+     (Pb1 = Pb2)) ⇒
+    (((#i = #j) ∧ (mt1 = mt2)) ∧ (new_mt_root_B1 = new_mt_root_B2))"
+  // safety formula
+
+restriction W4_NoRepeatAfterEnd:
+  "∀ A B n S_a S_b bit #i.
+    (PolicyRegister( S_a, S_b, n, bit, A, B ) @ #i) ⇒
+    (¬(∃ #j.
+        (PolicyRegisterEnd( S_a, S_b, n, bit, A, B ) @ #j) ∧ (#j < #i)))"
+  // safety formula
+
+rule (modulo E) W4_Registered_Environment:
+   [ Fr( ~si ), Fr( ~pi ), Fr( ~sr ), Fr( ~pr ), Fr( ~da ), Fr( ~db ) ]
+  --[
+  W4Init( ), W4Registered( 'requester', 'domain_A', %1, pk(~si) ),
+  W4Registered( 'owner', 'domain_B', %1, pk(~sr) )
+  ]->
+   [
+   !Domain( 'domain_A', %1, ~da, pk(~da) ),
+   !Domain( 'domain_B', %1, ~db, pk(~db) ), !Domain_id( 'domain_A' ),
+   !Domain_id( 'domain_B' ),
+   !Subject( 'requester', 'domain_A', %1, ~si, ~pi, pk(~si), ppk(~pi) ),
+   !Subject( 'owner', 'domain_B', %1, ~sr, ~pr, pk(~sr), ppk(~pr) ),
+   !W4Context( 'requester', 'owner', 'domain_A', 'domain_B', %1 ),
+   W4GenesisReady( ), W4RootSlot( 'domain_A', 'domain_B' ),
+   W4RootSlot( 'domain_B', 'domain_A' ),
+   W4IdentityAvailable( 'requester', %1 ),
+   W4IdentityAvailable( 'owner', %1 ), W4DomainAvailable( 'domain_A', %1 ),
+   W4DomainAvailable( 'domain_B', %1 ),
+   Out( <pk(~si), ppk(~pi), %1, 'Subject Pk'> ),
+   Out( <pk(~sr), ppk(~pr), %1, 'Subject Pk'> ),
+   Out( <<pk(~si), ppk(~pi), %1>, sign(<pk(~si), ppk(~pi), %1>, ~da), 
+         pk(~da), 'SubjectCert'>
+   ),
+   Out( <<pk(~sr), ppk(~pr), %1>, sign(<pk(~sr), ppk(~pr), %1>, ~db), 
+         pk(~db), 'SubjectCert'>
+   )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) W4_Initial_Root:
+   [ W4GenesisReady( ), Fr( ~root ) ]
+  --[ W4Genesis( ~root ) ]->
+   [ !Initial_merkle_root( ~root ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Initial_mt_root_between_domain:
+   [
+   !Domain_id( $A ), !Domain_id( $B ), !Initial_merkle_root( mt_root ),
+   W4RootSlot( $A, $B )
+   ]
+  --[
+  Initial_mt_root_between_domain( $A, $B, mt_root ),
+  W4RootReady( $A, $B, mt_root )
+  ]->
+   [ MerkleRoot( $A, $B, mt_root ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) W4_Reveal_Identity:
+   [ !Subject( I, D, e, sk, psk, pkS, ppkS ), W4IdentityAvailable( I, e ) ]
+  --[ W4KeyReveal( 'identity', I, e ) ]->
+   [ Out( sk ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) W4_Reveal_Domain:
+   [ !Domain( D, e, sk, pkD ), W4DomainAvailable( D, e ) ]
+  --[ W4KeyReveal( 'domain', D, e ) ]->
+   [ Out( sk ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Object_Policy_Creation[role=Policy_Register]:
+   [
+   !W4Context( $S_a, $S_b, $A, $B, %n ), !Domain( $A, %n, gskA, gpkA ),
+   !Domain( $B, %n, gskB, gpkB ),
+   !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ),
+   MerkleRoot( $A, $B, mt_root1 ), MerkleRoot( $B, $A, mt_root1 ),
+   !Initial_merkle_root( mt_root )
+   ]
+  --[
+  PolicyRegister( $S_a, $S_b, %n, '1', $A, $B ),
+  W4Proposed( $S_a, $S_b, $A, $B, %n, <pka, pkb, '1', %n>, mt_root ),
+  Eq( mt_root1, mt_root ), Eq( '1', '1' )
+  ]->
+   [
+   Out( <<pka, pkb, '1', %n>, sign(<pka, pkb, '1', %n>, pskb), pkb, 
+         'PolicyRb'>
+   ),
+   Create_policy( $A, $B, gskB, gpkB, $S_a, $S_b, %n, <pka, pkb, '1', %n>,
+                  pka, pkb, '1', mt_root
+   )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) DomainB_Policy_Processing[role=Policy_Register]:
+   [
+   In( <PbIn, Pbsign, Pbpk, field> ),
+   Create_policy( $A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                  mt_root
+   )
+   ]
+  --[
+  Eq( field, 'PolicyRb' ), Eq( Pbpk, pkb ),
+  Eq( verify(Pbsign, PbIn, pkb), true ), Eq( PbIn, Pb ),
+  ProcessPolicy( $A, $B, %n, PbIn, mt_root, h(<mt_root, PbIn>) ),
+  W4BRoot( $A, $B, %n, PbIn, mt_root, h(<mt_root, PbIn>) )
+  ]->
+   [
+   Out( <<PbIn, h(<mt_root, PbIn>)>, 
+         sign(<PbIn, h(<mt_root, PbIn>)>, gskB), gpkB, 'MerkleRoot certification'>
+   ),
+   B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root,
+                   h(<mt_root, PbIn>)
+   )
+   ]
+
+  // loop breaker: [1]
+  /*
+  rule (modulo AC) DomainB_Policy_Processing[role=Policy_Register]:
+     [
+     In( <PbIn, Pbsign, Pbpk, field> ),
+     Create_policy( $A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                    mt_root
+     )
+     ]
+    --[
+    Eq( field, 'PolicyRb' ), Eq( Pbpk, pkb ), Eq( z, true ), Eq( PbIn, Pb ),
+    ProcessPolicy( $A, $B, %n, PbIn, mt_root, h(<mt_root, PbIn>) ),
+    W4BRoot( $A, $B, %n, PbIn, mt_root, h(<mt_root, PbIn>) )
+    ]->
+     [
+     Out( <<PbIn, h(<mt_root, PbIn>)>, 
+           sign(<PbIn, h(<mt_root, PbIn>)>, gskB), gpkB, 'MerkleRoot certification'>
+     ),
+     B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root,
+                     h(<mt_root, PbIn>)
+     )
+     ]
+    variants (modulo AC)
+    1. PbIn  = PbIn.30
+       Pbsign
+             = Pbsign.32
+       pkb   = pkb.39
+       z     = verify(Pbsign.32, PbIn.30, pkb.39)
+    
+    2. PbIn  = PbIn.37
+       Pbsign
+             = sign(PbIn.37, x.67)
+       pkb   = pk(x.67)
+       z     = true
+    // loop breaker: [1]
+  */
+
+rule (modulo E) DomainA_Receive_Policy[role=Policy_Register]:
+   [
+   In( <mrba, mrbasign, mrbapk, field> ),
+   B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root,
+                   new_mt_root_B
+   )
+   ]
+  --[
+  Eq( field, 'MerkleRoot certification' ), Eq( mrbapk, gpkB ),
+  Eq( verify(mrbasign, mrba, gpkB), true ), Eq( fst(mrba), Pb ),
+  Eq( snd(mrba), new_mt_root_B ),
+  Eq( new_mt_root_B, h(<mt_root, fst(mrba)>) ),
+  ProcessPolicyDomain( $A, $B, %n, Pb, mt_root, new_mt_root_B ),
+  W4ARoot( $A, $B, %n, fst(mrba), mt_root, h(<mt_root, fst(mrba)>) ),
+  W4InstalledRoots( $S_a, $S_b, $A, $B, %n, Pb, mt_root,
+                    h(<mt_root, fst(mrba)>), new_mt_root_B
+  ),
+  PolicyRegisterEnd( $S_a, $S_b, %n, bit, $A, $B ),
+  New_MerkleRoot( $A, $B, %n, h(<mt_root, fst(mrba)>) ),
+  New_MerkleRoot( $B, $A, %n, new_mt_root_B )
+  ]->
+   [
+   MerkleRoot( $A, $B, h(<mt_root, fst(mrba)>) ),
+   MerkleRoot( $B, $A, new_mt_root_B )
+   ]
+
+  /*
+  rule (modulo AC) DomainA_Receive_Policy[role=Policy_Register]:
+     [
+     In( <mrba, mrbasign, mrbapk, field> ),
+     B_Process_send( $A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root,
+                     new_mt_root_B
+     )
+     ]
+    --[
+    Eq( field, 'MerkleRoot certification' ), Eq( mrbapk, gpkB ),
+    Eq( z.1, true ), Eq( z, Pb ), Eq( z.2, new_mt_root_B ),
+    Eq( new_mt_root_B, h(<mt_root, z>) ),
+    ProcessPolicyDomain( $A, $B, %n, Pb, mt_root, new_mt_root_B ),
+    W4ARoot( $A, $B, %n, z, mt_root, h(<mt_root, z>) ),
+    W4InstalledRoots( $S_a, $S_b, $A, $B, %n, Pb, mt_root, h(<mt_root, z>),
+                      new_mt_root_B
+    ),
+    PolicyRegisterEnd( $S_a, $S_b, %n, bit, $A, $B ),
+    New_MerkleRoot( $A, $B, %n, h(<mt_root, z>) ),
+    New_MerkleRoot( $B, $A, %n, new_mt_root_B )
+    ]->
+     [
+     MerkleRoot( $A, $B, h(<mt_root, z>) ),
+     MerkleRoot( $B, $A, new_mt_root_B )
+     ]
+    variants (modulo AC)
+    1. gpkB  = gpkB.22
+       mrba  = mrba.23
+       mrbasign
+             = mrbasign.25
+       z     = fst(mrba.23)
+       z.1   = verify(mrbasign.25, mrba.23, gpkB.22)
+       z.2   = snd(mrba.23)
+    
+    2. gpkB  = gpkB.24
+       mrba  = <z.33, z.36>
+       mrbasign
+             = mrbasign.27
+       z     = z.33
+       z.1   = verify(mrbasign.27, <z.33, z.36>, gpkB.24)
+       z.2   = z.36
+    
+    3. gpkB  = pk(x.28)
+       mrba  = <z.24, z.27>
+       mrbasign
+             = sign(<z.24, z.27>, x.28)
+       z     = z.24
+       z.1   = true
+       z.2   = z.27
+    
+    4. gpkB  = pk(x.35)
+       mrba  = mrba.23
+       mrbasign
+             = sign(mrba.23, x.35)
+       z     = fst(mrba.23)
+       z.1   = true
+       z.2   = snd(mrba.23)
+  */
+
+lemma reachable_roots:
+  exists-trace
+  "∃ root #g #ab #ba.
+    (((((W4Genesis( root ) @ #g) ∧
+        (W4RootReady( 'domain_A', 'domain_B', root ) @ #ab)) ∧
+       (W4RootReady( 'domain_B', 'domain_A', root ) @ #ba)) ∧
+      (#g < #ab)) ∧
+     (#g < #ba)) ∧
+    (¬(#ab = #ba))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ root #g #ab #ba.
+  (W4Genesis( root ) @ #g) ∧
+  (W4RootReady( 'domain_A', 'domain_B', root ) @ #ab) ∧
+  (W4RootReady( 'domain_B', 'domain_A', root ) @ #ba)
+ ∧
+  (#g < #ab) ∧ (#g < #ba) ∧ (¬(#ab = #ba))"
+*/
+by sorry
+
+lemma reachable_proposal:
+  exists-trace
+  "∃ I R A B e Pb old #p.
+    (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+    (¬(∃ kind who epoch #rev.
+        (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #p)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ I R A B e Pb old #p.
+  (W4Proposed( I, R, A, B, e, Pb, old ) @ #p)
+ ∧
+  ∀ kind who epoch #rev.
+   (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #p)"
+*/
+by sorry
+
+lemma reachable_b_processing:
+  exists-trace
+  "∃ I R A B e Pb old new #p #b.
+    (((W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+      (ProcessPolicy( A, B, e, Pb, old, new ) @ #b)) ∧
+     (#p < #b)) ∧
+    (¬(∃ kind who epoch #rev.
+        (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #b)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ I R A B e Pb old new #p #b.
+  (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+  (ProcessPolicy( A, B, e, Pb, old, new ) @ #b)
+ ∧
+  (#p < #b) ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #b))"
+*/
+by sorry
+
+lemma reachable_policy_installation:
+  exists-trace
+  "∃ I R A B e Pb old ra rb #p #b #a.
+    (((((W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+        (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b)) ∧
+       (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)) ∧
+      (#p < #b)) ∧
+     (#b < #a)) ∧
+    (¬(∃ kind who epoch #rev.
+        (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #a)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ I R A B e Pb old ra rb #p #b #a.
+  (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+  (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ∧
+  (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)
+ ∧
+  (#p < #b) ∧
+  (#b < #a) ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #a))"
+*/
+by sorry
+
+lemma w4_proposal_source:
+  all-traces
+  "∀ I R A B e Pb old #p.
+    ((W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+     (¬(∃ kind who epoch #rev.
+         (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #p)))) ⇒
+    (∃ pka pkb #ri #rr #ab #ba.
+      ((((((((W4Registered( I, A, e, pka ) @ #ri) ∧
+             (W4Registered( R, B, e, pkb ) @ #rr)) ∧
+            (W4RootReady( A, B, old ) @ #ab)) ∧
+           (W4RootReady( B, A, old ) @ #ba)) ∧
+          (Pb = <pka, pkb, '1', e>)) ∧
+         (#ri < #p)) ∧
+        (#rr < #p)) ∧
+       (#ab < #p)) ∧
+      (#ba < #p))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R A B e Pb old #p.
+  (W4Proposed( I, R, A, B, e, Pb, old ) @ #p)
+ ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #p)) ∧
+  (∀ pka pkb #ri #rr #ab #ba.
+    (W4Registered( I, A, e, pka ) @ #ri) ∧
+    (W4Registered( R, B, e, pkb ) @ #rr) ∧
+    (W4RootReady( A, B, old ) @ #ab) ∧
+    (W4RootReady( B, A, old ) @ #ba) ∧
+    (Pb = <pka, pkb, '1', e>)
+   ⇒
+    ((¬(#ri < #p)) ∨ (¬(#rr < #p)) ∨ (¬(#ab < #p)) ∨ (¬(#ba < #p))))"
+*/
+by sorry
+
+lemma w4_b_processing_source:
+  all-traces
+  "∀ A B e Pb old new #b.
+    ((ProcessPolicy( A, B, e, Pb, old, new ) @ #b) ∧
+     (¬(∃ kind who epoch #rev.
+         (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #b)))) ⇒
+    (∃ I R #p. (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧ (#p < #b))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ A B e Pb old new #b.
+  (ProcessPolicy( A, B, e, Pb, old, new ) @ #b)
+ ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #b)) ∧
+  (∀ I R #p. (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ⇒ ¬(#p < #b))"
+*/
+by sorry
+
+lemma w4_a_acceptance_source:
+  all-traces
+  "∀ A B e Pb old rb #a.
+    ((ProcessPolicyDomain( A, B, e, Pb, old, rb ) @ #a) ∧
+     (¬(∃ kind who epoch #rev.
+         (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #a)))) ⇒
+    (∃ #b. (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ∧ (#b < #a))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ A B e Pb old rb #a.
+  (ProcessPolicyDomain( A, B, e, Pb, old, rb ) @ #a)
+ ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #a)) ∧
+  (∀ #b. (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ⇒ ¬(#b < #a))"
+*/
+by sorry
+
+lemma w4_b_to_a_root_derivation:
+  all-traces
+  "∀ A B e Pb old rb #b.
+    ((W4BRoot( A, B, e, Pb, old, rb ) @ #b) ∧
+     (¬(∃ kind who epoch #rev.
+         (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #b)))) ⇒
+    (((rb = h(<old, Pb>)) ∧ (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b)) ∧
+     (∃ I R #p. (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧ (#p < #b)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ A B e Pb old rb #b.
+  (W4BRoot( A, B, e, Pb, old, rb ) @ #b)
+ ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #b)) ∧
+  (((¬(rb = h(<old, Pb>))) ∨
+    (¬(ProcessPolicy( A, B, e, Pb, old, rb ) @ #b)) ∨
+    (∀ I R #p. (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ⇒ ¬(#p < #b))))"
+*/
+by sorry
+
+lemma w4_a_to_b_root_derivation:
+  all-traces
+  "∀ A B e Pb old ra #a.
+    ((W4ARoot( A, B, e, Pb, old, ra ) @ #a) ∧
+     (¬(∃ kind who epoch #rev.
+         (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #a)))) ⇒
+    (((ra = h(<old, Pb>)) ∧ (New_MerkleRoot( A, B, e, ra ) @ #a)) ∧
+     (∃ rb #b. (W4BRoot( A, B, e, Pb, old, rb ) @ #b) ∧ (#b < #a)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ A B e Pb old ra #a.
+  (W4ARoot( A, B, e, Pb, old, ra ) @ #a)
+ ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #a)) ∧
+  (((¬(ra = h(<old, Pb>))) ∨
+    (¬(New_MerkleRoot( A, B, e, ra ) @ #a)) ∨
+    (∀ rb #b. (W4BRoot( A, B, e, Pb, old, rb ) @ #b) ⇒ ¬(#b < #a))))"
+*/
+by sorry
+
+lemma w4_matching_context_root_agreement:
+  all-traces
+  "∀ I R A B e Pb old ra rb #a.
+    ((W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a) ∧
+     (¬(∃ kind who epoch #rev.
+         (W4KeyReveal( kind, who, epoch ) @ #rev) ∧ (#rev < #a)))) ⇒
+    (((((ra = rb) ∧ (New_MerkleRoot( A, B, e, ra ) @ #a)) ∧
+       (New_MerkleRoot( B, A, e, rb ) @ #a)) ∧
+      (W4ARoot( A, B, e, Pb, old, ra ) @ #a)) ∧
+     (∃ #b. (W4BRoot( A, B, e, Pb, old, rb ) @ #b) ∧ (#b < #a)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R A B e Pb old ra rb #a.
+  (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)
+ ∧
+  (∀ kind who epoch #rev.
+    (W4KeyReveal( kind, who, epoch ) @ #rev) ⇒ ¬(#rev < #a)) ∧
+  (((¬(ra = rb)) ∨
+    (¬(New_MerkleRoot( A, B, e, ra ) @ #a)) ∨
+    (¬(New_MerkleRoot( B, A, e, rb ) @ #a)) ∨
+    (¬(W4ARoot( A, B, e, Pb, old, ra ) @ #a)) ∨
+    (∀ #b. (W4BRoot( A, B, e, Pb, old, rb ) @ #b) ⇒ ¬(#b < #a))))"
+*/
+by sorry
+
+lemma reachable_owner_identity_compromise:
+  exists-trace
+  "∃ I R A B e Pb old ra rb #rev #p #b #a.
+    (((((((W4KeyReveal( 'identity', R, e ) @ #rev) ∧
+          (W4Proposed( I, R, A, B, e, Pb, old ) @ #p)) ∧
+         (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b)) ∧
+        (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)) ∧
+       (#rev < #p)) ∧
+      (#p < #b)) ∧
+     (#b < #a)) ∧
+    (∀ kind who epoch #r.
+      ((W4KeyReveal( kind, who, epoch ) @ #r) ∧ (#r < #a)) ⇒
+      (((kind = 'identity') ∧ (who = R)) ∧ (epoch = e)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ I R A B e Pb old ra rb #rev #p #b #a.
+  (W4KeyReveal( 'identity', R, e ) @ #rev) ∧
+  (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+  (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ∧
+  (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)
+ ∧
+  (#rev < #p) ∧
+  (#p < #b) ∧
+  (#b < #a) ∧
+  (∀ kind who epoch #r.
+    (W4KeyReveal( kind, who, epoch ) @ #r)
+   ⇒
+    ((¬(#r < #a)) ∨ ((kind = 'identity') ∧ (who = R) ∧ (epoch = e))))"
+*/
+by sorry
+
+lemma reachable_b_domain_compromise:
+  exists-trace
+  "∃ I R A B e Pb old ra rb #rev #p #b #a.
+    (((((((W4KeyReveal( 'domain', B, e ) @ #rev) ∧
+          (W4Proposed( I, R, A, B, e, Pb, old ) @ #p)) ∧
+         (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b)) ∧
+        (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)) ∧
+       (#rev < #p)) ∧
+      (#p < #b)) ∧
+     (#b < #a)) ∧
+    (∀ kind who epoch #r.
+      ((W4KeyReveal( kind, who, epoch ) @ #r) ∧ (#r < #a)) ⇒
+      (((kind = 'domain') ∧ (who = B)) ∧ (epoch = e)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ I R A B e Pb old ra rb #rev #p #b #a.
+  (W4KeyReveal( 'domain', B, e ) @ #rev) ∧
+  (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧
+  (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ∧
+  (W4InstalledRoots( I, R, A, B, e, Pb, old, ra, rb ) @ #a)
+ ∧
+  (#rev < #p) ∧
+  (#p < #b) ∧
+  (#b < #a) ∧
+  (∀ kind who epoch #r.
+    (W4KeyReveal( kind, who, epoch ) @ #r)
+   ⇒
+    ((¬(#r < #a)) ∨ ((kind = 'domain') ∧ (who = B) ∧ (epoch = e))))"
+*/
+by sorry
+
+lemma w4_private_b_continuation_source:
+  all-traces
+  "∀ A B e Pb old rb #b.
+    (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ⇒
+    (∃ I R #p. (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ∧ (#p < #b))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ A B e Pb old rb #b.
+  (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b)
+ ∧
+  ∀ I R #p. (W4Proposed( I, R, A, B, e, Pb, old ) @ #p) ⇒ ¬(#p < #b)"
+*/
+by sorry
+
+lemma w4_private_a_continuation_source:
+  all-traces
+  "∀ A B e Pb old rb #a.
+    (ProcessPolicyDomain( A, B, e, Pb, old, rb ) @ #a) ⇒
+    (∃ #b. (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ∧ (#b < #a))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ A B e Pb old rb #a.
+  (ProcessPolicyDomain( A, B, e, Pb, old, rb ) @ #a)
+ ∧
+  ∀ #b. (ProcessPolicy( A, B, e, Pb, old, rb ) @ #b) ⇒ ¬(#b < #a)"
+*/
+simplify
+solve( B_Process_send( $A, $B, pk(x), $S_a, $S_b, %n, Pb, pka, pkb, bit,
+                       old, h(<old, Pb>)
+       ) ▶₁ #a )
+  case DomainB_Policy_Processing
+  by contradiction /* from formulas */
+qed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.10.0
+Maude version 3.1
+Git revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master
+Compiled at: 2024-10-30 11:11:02.432289291 UTC
+*/
+
+end

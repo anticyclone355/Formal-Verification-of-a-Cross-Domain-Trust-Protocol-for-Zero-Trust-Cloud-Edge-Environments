@@ -1,0 +1,7 @@
+started_utc=2026-09-28T10:57:03.483137+00:00
+finished_utc=2026-09-28T11:09:46.672702+00:00
+wall_seconds=763.189
+timeout=False
+exit_code=0
+command=tamarin-prover repaired_reveal_matrix.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w1_r_identity_only_plaintext_secrecy --output=w1_r_identity_only_plaintext_secrecy.proof.spthy --output-json=w1_r_identity_only_plaintext_secrecy.trace.json --output-dot=w1_r_identity_only_plaintext_secrecy.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T105641Z/repaired/identity_only

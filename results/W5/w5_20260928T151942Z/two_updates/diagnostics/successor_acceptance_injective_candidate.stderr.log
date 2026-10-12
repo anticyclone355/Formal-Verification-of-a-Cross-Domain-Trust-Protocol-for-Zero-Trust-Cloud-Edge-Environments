@@ -1,0 +1,10 @@
+maude tool: 'maude'
+ checking version: 3.1. OK.
+ checking installation: OK.
+[Theory W5_Epoch_Successor] Theory loaded
+[Theory W5_Epoch_Successor] Theory translated
+[Theory W5_Epoch_Successor] Derivation checks started
+[Theory W5_Epoch_Successor] Derivation checks ended
+[Theory W5_Epoch_Successor] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done

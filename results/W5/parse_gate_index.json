@@ -1,0 +1,37 @@
+[
+  {
+    "profile": "core",
+    "defines": [],
+    "returncode": 0,
+    "log": "output_parse_core.log",
+    "wellformedness_warnings": 0
+  },
+  {
+    "profile": "special",
+    "defines": [
+      "SPECIAL_ATTACK"
+    ],
+    "returncode": 0,
+    "log": "output_parse_special.log",
+    "wellformedness_warnings": 0
+  },
+  {
+    "profile": "two_updates",
+    "defines": [
+      "SECOND_UPDATE"
+    ],
+    "returncode": 0,
+    "log": "output_parse_two_updates.log",
+    "wellformedness_warnings": 0
+  },
+  {
+    "profile": "special_two_updates",
+    "defines": [
+      "SPECIAL_ATTACK",
+      "SECOND_UPDATE"
+    ],
+    "returncode": 0,
+    "log": "output_parse_special_two_updates.log",
+    "wellformedness_warnings": 0
+  }
+]

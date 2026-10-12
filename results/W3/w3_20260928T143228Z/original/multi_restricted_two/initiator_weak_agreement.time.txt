@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:37:04.091595+00:00
+finished_utc=2026-09-28T14:37:33.463697+00:00
+wall_seconds=29.372
+timeout=False
+exit_code=0
+profile=multi_restricted_two
+model=original_multi_restricted_two.spthy
+command=tamarin-prover original_multi_restricted_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=initiator_weak_agreement --output=initiator_weak_agreement.proof.spthy --output-json=initiator_weak_agreement.trace.json --output-dot=initiator_weak_agreement.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_restricted_two

@@ -1,0 +1,1272 @@
+{
+  "campaign": "W1 独立密钥泄露矩阵（补充实验）",
+  "reconstructed_utc": "2026-09-28T13:16:23.727224+00:00",
+  "note": "本文件由已结算记录重建，覆盖整轮运行；运行中该文件曾被最后一次驱动调用覆盖为仅 6 条，故在此重建。逐条命令亦见各 *.time.txt。",
+  "server": "192.168.120.71 (/home/lab701/qzy/CDDS补充实验)",
+  "tamarin": "1.10.0",
+  "maude": "3.1",
+  "graphviz": "2.43.0",
+  "platform": "Linux 6.8.0 x86_64, 80 cores",
+  "derivcheck_timeout_seconds": 300,
+  "derivcheck_note": "默认 5 s 对这两份模型不足（派生检查约需 40 s），与 --quit-on-warning 同时使用会中止全部性质，故统一设为 300 s。",
+  "parallel_jobs": 16,
+  "timeout_overrides": {
+    "historical_pce_after_epoch": 7200,
+    "successor_only": 7200,
+    "key_lifecycle": 10800
+  },
+  "settled": 58,
+  "planned": 66,
+  "unsettled": [
+    "w1_r_historical_pce_after_epoch_reachable",
+    "w1_r_historical_pce_after_epoch_plaintext_secrecy",
+    "w1_r_historical_pce_after_epoch_key_secrecy",
+    "w1_r_successor_only_reachable",
+    "w1_r_successor_only_plaintext_secrecy",
+    "w1_r_successor_only_key_secrecy",
+    "w1_r_key_disclosure_after_erasure_unreachable",
+    "w1_r_ephemeral_disclosure_after_erasure_unreachable"
+  ],
+  "run_dir": "J:\\qzy\\3论文\\论文1修改版\\1零信任云边缘终端形式化分析\\1零信任云边缘终端形式化分析\\CMC转投\\返修审稿\\代码\\v1_auxiliary\\W1_reveal_matrix\\运行结果\\w1_20260928T105641Z",
+  "entries": [
+    {
+      "protocol": "original",
+      "case": "baseline",
+      "lemma": "w1_o_baseline_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 20.258,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_baseline_key_secrecy",
+        "--output=w1_o_baseline_key_secrecy.proof.spthy",
+        "--output-json=w1_o_baseline_key_secrecy.trace.json",
+        "--output-dot=w1_o_baseline_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "baseline",
+      "lemma": "w1_o_baseline_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 19.995,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_baseline_plaintext_secrecy",
+        "--output=w1_o_baseline_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_o_baseline_plaintext_secrecy.trace.json",
+        "--output-dot=w1_o_baseline_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "baseline",
+      "lemma": "w1_o_baseline_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 38.352,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_baseline_reachable",
+        "--output=w1_o_baseline_reachable.proof.spthy",
+        "--output-json=w1_o_baseline_reachable.trace.json",
+        "--output-dot=w1_o_baseline_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "combined",
+      "lemma": "w1_o_combined_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "falsified",
+      "wall_seconds": 29.579,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_combined_key_secrecy",
+        "--output=w1_o_combined_key_secrecy.proof.spthy",
+        "--output-json=w1_o_combined_key_secrecy.trace.json",
+        "--output-dot=w1_o_combined_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "combined",
+      "lemma": "w1_o_combined_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "falsified",
+      "wall_seconds": 28.601,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_combined_plaintext_secrecy",
+        "--output=w1_o_combined_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_o_combined_plaintext_secrecy.trace.json",
+        "--output-dot=w1_o_combined_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "combined",
+      "lemma": "w1_o_combined_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 27.261,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_combined_reachable",
+        "--output=w1_o_combined_reachable.proof.spthy",
+        "--output-json=w1_o_combined_reachable.trace.json",
+        "--output-dot=w1_o_combined_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "combined",
+      "lemma": "w1_o_combined_record_decrypt",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 30.635,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_combined_record_decrypt",
+        "--output=w1_o_combined_record_decrypt.proof.spthy",
+        "--output-json=w1_o_combined_record_decrypt.trace.json",
+        "--output-dot=w1_o_combined_record_decrypt.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "historical_pce_after_epoch",
+      "lemma": "w1_o_historical_pce_after_epoch_key_secrecy",
+      "trace": "all-traces",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "falsified",
+      "wall_seconds": 85.497,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_historical_pce_after_epoch_key_secrecy",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_historical_pce_after_epoch_key_secrecy.proof.spthy",
+        "--output-json=w1_o_historical_pce_after_epoch_key_secrecy.trace.json",
+        "--output-dot=w1_o_historical_pce_after_epoch_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "historical_pce_after_epoch",
+      "lemma": "w1_o_historical_pce_after_epoch_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "falsified",
+      "wall_seconds": 90.419,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_historical_pce_after_epoch_plaintext_secrecy",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_historical_pce_after_epoch_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_o_historical_pce_after_epoch_plaintext_secrecy.trace.json",
+        "--output-dot=w1_o_historical_pce_after_epoch_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "historical_pce_after_epoch",
+      "lemma": "w1_o_historical_pce_after_epoch_reachable",
+      "trace": "exists-trace",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "verified",
+      "wall_seconds": 77.098,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_historical_pce_after_epoch_reachable",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_historical_pce_after_epoch_reachable.proof.spthy",
+        "--output-json=w1_o_historical_pce_after_epoch_reachable.trace.json",
+        "--output-dot=w1_o_historical_pce_after_epoch_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "historical_pce_after_epoch",
+      "lemma": "w1_o_historical_pce_after_epoch_record_decrypt",
+      "trace": "exists-trace",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "verified",
+      "wall_seconds": 91.186,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_historical_pce_after_epoch_record_decrypt",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_historical_pce_after_epoch_record_decrypt.proof.spthy",
+        "--output-json=w1_o_historical_pce_after_epoch_record_decrypt.trace.json",
+        "--output-dot=w1_o_historical_pce_after_epoch_record_decrypt.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "identity_only",
+      "lemma": "w1_o_identity_only_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 20.748,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_identity_only_key_secrecy",
+        "--output=w1_o_identity_only_key_secrecy.proof.spthy",
+        "--output-json=w1_o_identity_only_key_secrecy.trace.json",
+        "--output-dot=w1_o_identity_only_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "identity_only",
+      "lemma": "w1_o_identity_only_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 20.246,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_identity_only_plaintext_secrecy",
+        "--output=w1_o_identity_only_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_o_identity_only_plaintext_secrecy.trace.json",
+        "--output-dot=w1_o_identity_only_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "identity_only",
+      "lemma": "w1_o_identity_only_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 28.978,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_identity_only_reachable",
+        "--output=w1_o_identity_only_reachable.proof.spthy",
+        "--output-json=w1_o_identity_only_reachable.trace.json",
+        "--output-dot=w1_o_identity_only_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "pce_only",
+      "lemma": "w1_o_pce_only_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "falsified",
+      "wall_seconds": 29.221,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_pce_only_key_secrecy",
+        "--output=w1_o_pce_only_key_secrecy.proof.spthy",
+        "--output-json=w1_o_pce_only_key_secrecy.trace.json",
+        "--output-dot=w1_o_pce_only_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "pce_only",
+      "lemma": "w1_o_pce_only_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "falsified",
+      "wall_seconds": 29.628,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_pce_only_plaintext_secrecy",
+        "--output=w1_o_pce_only_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_o_pce_only_plaintext_secrecy.trace.json",
+        "--output-dot=w1_o_pce_only_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "pce_only",
+      "lemma": "w1_o_pce_only_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 27.155,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_pce_only_reachable",
+        "--output=w1_o_pce_only_reachable.proof.spthy",
+        "--output-json=w1_o_pce_only_reachable.trace.json",
+        "--output-dot=w1_o_pce_only_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "pce_only",
+      "lemma": "w1_o_pce_only_record_decrypt",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 30.175,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_pce_only_record_decrypt",
+        "--output=w1_o_pce_only_record_decrypt.proof.spthy",
+        "--output-json=w1_o_pce_only_record_decrypt.trace.json",
+        "--output-dot=w1_o_pce_only_record_decrypt.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "session_key_control",
+      "lemma": "w1_o_session_key_disclosure_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 36.316,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_session_key_disclosure_reachable",
+        "--output=w1_o_session_key_disclosure_reachable.proof.spthy",
+        "--output-json=w1_o_session_key_disclosure_reachable.trace.json",
+        "--output-dot=w1_o_session_key_disclosure_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "successor_only",
+      "lemma": "w1_o_successor_only_key_secrecy",
+      "trace": "all-traces",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "verified",
+      "wall_seconds": 46.869,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_successor_only_key_secrecy",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_successor_only_key_secrecy.proof.spthy",
+        "--output-json=w1_o_successor_only_key_secrecy.trace.json",
+        "--output-dot=w1_o_successor_only_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "successor_only",
+      "lemma": "w1_o_successor_only_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "verified",
+      "wall_seconds": 49.021,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_successor_only_plaintext_secrecy",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_successor_only_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_o_successor_only_plaintext_secrecy.trace.json",
+        "--output-dot=w1_o_successor_only_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "original",
+      "case": "successor_only",
+      "lemma": "w1_o_successor_only_reachable",
+      "trace": "exists-trace",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "timeout_seconds": 7200,
+      "status": "verified",
+      "wall_seconds": 73.887,
+      "command": [
+        "tamarin-prover",
+        "original_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_o_successor_only_reachable",
+        "-DAFTER_EPOCH",
+        "--output=w1_o_successor_only_reachable.proof.spthy",
+        "--output-json=w1_o_successor_only_reachable.trace.json",
+        "--output-dot=w1_o_successor_only_reachable.trace.dot"
+      ],
+      "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5"
+    },
+    {
+      "protocol": "repaired",
+      "case": "all_identity_domain",
+      "lemma": "w1_r_all_identity_domain_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 771.155,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_all_identity_domain_key_secrecy",
+        "--output=w1_r_all_identity_domain_key_secrecy.proof.spthy",
+        "--output-json=w1_r_all_identity_domain_key_secrecy.trace.json",
+        "--output-dot=w1_r_all_identity_domain_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "all_identity_domain",
+      "lemma": "w1_r_all_identity_domain_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 793.303,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_all_identity_domain_plaintext_secrecy",
+        "--output=w1_r_all_identity_domain_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_all_identity_domain_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_all_identity_domain_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "all_identity_domain",
+      "lemma": "w1_r_all_identity_domain_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 1326.877,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_all_identity_domain_reachable",
+        "--output=w1_r_all_identity_domain_reachable.proof.spthy",
+        "--output-json=w1_r_all_identity_domain_reachable.trace.json",
+        "--output-dot=w1_r_all_identity_domain_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "baseline",
+      "lemma": "w1_r_baseline_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 656.386,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_baseline_key_secrecy",
+        "--output=w1_r_baseline_key_secrecy.proof.spthy",
+        "--output-json=w1_r_baseline_key_secrecy.trace.json",
+        "--output-dot=w1_r_baseline_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "baseline",
+      "lemma": "w1_r_baseline_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 749.045,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_baseline_plaintext_secrecy",
+        "--output=w1_r_baseline_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_baseline_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_baseline_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "baseline",
+      "lemma": "w1_r_baseline_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 959.16,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_baseline_reachable",
+        "--output=w1_r_baseline_reachable.proof.spthy",
+        "--output-json=w1_r_baseline_reachable.trace.json",
+        "--output-dot=w1_r_baseline_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "both_domain",
+      "lemma": "w1_r_both_domain_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 719.685,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_both_domain_key_secrecy",
+        "--output=w1_r_both_domain_key_secrecy.proof.spthy",
+        "--output-json=w1_r_both_domain_key_secrecy.trace.json",
+        "--output-dot=w1_r_both_domain_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "both_domain",
+      "lemma": "w1_r_both_domain_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 695.176,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_both_domain_plaintext_secrecy",
+        "--output=w1_r_both_domain_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_both_domain_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_both_domain_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "both_domain",
+      "lemma": "w1_r_both_domain_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 973.581,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_both_domain_reachable",
+        "--output=w1_r_both_domain_reachable.proof.spthy",
+        "--output-json=w1_r_both_domain_reachable.trace.json",
+        "--output-dot=w1_r_both_domain_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "both_identity",
+      "lemma": "w1_r_both_identity_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 675.104,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_both_identity_key_secrecy",
+        "--output=w1_r_both_identity_key_secrecy.proof.spthy",
+        "--output-json=w1_r_both_identity_key_secrecy.trace.json",
+        "--output-dot=w1_r_both_identity_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "both_identity",
+      "lemma": "w1_r_both_identity_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 686.711,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_both_identity_plaintext_secrecy",
+        "--output=w1_r_both_identity_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_both_identity_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_both_identity_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "both_identity",
+      "lemma": "w1_r_both_identity_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 959.694,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_both_identity_reachable",
+        "--output=w1_r_both_identity_reachable.proof.spthy",
+        "--output-json=w1_r_both_identity_reachable.trace.json",
+        "--output-dot=w1_r_both_identity_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "combined",
+      "lemma": "w1_r_combined_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 727.615,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_combined_key_secrecy",
+        "--output=w1_r_combined_key_secrecy.proof.spthy",
+        "--output-json=w1_r_combined_key_secrecy.trace.json",
+        "--output-dot=w1_r_combined_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "combined",
+      "lemma": "w1_r_combined_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 671.144,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_combined_plaintext_secrecy",
+        "--output=w1_r_combined_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_combined_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_combined_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "combined",
+      "lemma": "w1_r_combined_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 960.171,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_combined_reachable",
+        "--output=w1_r_combined_reachable.proof.spthy",
+        "--output-json=w1_r_combined_reachable.trace.json",
+        "--output-dot=w1_r_combined_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "identity_only",
+      "lemma": "w1_r_identity_only_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 670.121,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_identity_only_key_secrecy",
+        "--output=w1_r_identity_only_key_secrecy.proof.spthy",
+        "--output-json=w1_r_identity_only_key_secrecy.trace.json",
+        "--output-dot=w1_r_identity_only_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "identity_only",
+      "lemma": "w1_r_identity_only_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 763.189,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_identity_only_plaintext_secrecy",
+        "--output=w1_r_identity_only_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_identity_only_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_identity_only_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "identity_only",
+      "lemma": "w1_r_identity_only_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 945.494,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_identity_only_reachable",
+        "--output=w1_r_identity_only_reachable.proof.spthy",
+        "--output-json=w1_r_identity_only_reachable.trace.json",
+        "--output-dot=w1_r_identity_only_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "initiator_ephemeral_control",
+      "lemma": "w1_r_initiator_ephemeral_control_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 1241.892,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_initiator_ephemeral_control_reachable",
+        "--output=w1_r_initiator_ephemeral_control_reachable.proof.spthy",
+        "--output-json=w1_r_initiator_ephemeral_control_reachable.trace.json",
+        "--output-dot=w1_r_initiator_ephemeral_control_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "initiator_session_key_control",
+      "lemma": "w1_r_initiator_session_key_control_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 1121.521,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_initiator_session_key_control_reachable",
+        "--output=w1_r_initiator_session_key_control_reachable.proof.spthy",
+        "--output-json=w1_r_initiator_session_key_control_reachable.trace.json",
+        "--output-dot=w1_r_initiator_session_key_control_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "kci",
+      "lemma": "w1_r_kci_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 858.048,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_kci_reachable",
+        "--output=w1_r_kci_reachable.proof.spthy",
+        "--output-json=w1_r_kci_reachable.trace.json",
+        "--output-dot=w1_r_kci_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "kci",
+      "lemma": "w1_r_kci_responder_origin",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 548.343,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_kci_responder_origin",
+        "--output=w1_r_kci_responder_origin.proof.spthy",
+        "--output-json=w1_r_kci_responder_origin.trace.json",
+        "--output-dot=w1_r_kci_responder_origin.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "pce_only",
+      "lemma": "w1_r_pce_only_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 666.243,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_pce_only_key_secrecy",
+        "--output=w1_r_pce_only_key_secrecy.proof.spthy",
+        "--output-json=w1_r_pce_only_key_secrecy.trace.json",
+        "--output-dot=w1_r_pce_only_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "pce_only",
+      "lemma": "w1_r_pce_only_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 754.244,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_pce_only_plaintext_secrecy",
+        "--output=w1_r_pce_only_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_pce_only_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_pce_only_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "pce_only",
+      "lemma": "w1_r_pce_only_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 930.128,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_pce_only_reachable",
+        "--output=w1_r_pce_only_reachable.proof.spthy",
+        "--output-json=w1_r_pce_only_reachable.trace.json",
+        "--output-dot=w1_r_pce_only_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "requester_domain",
+      "lemma": "w1_r_requester_domain_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 653.978,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_requester_domain_key_secrecy",
+        "--output=w1_r_requester_domain_key_secrecy.proof.spthy",
+        "--output-json=w1_r_requester_domain_key_secrecy.trace.json",
+        "--output-dot=w1_r_requester_domain_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "requester_domain",
+      "lemma": "w1_r_requester_domain_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 680.234,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_requester_domain_plaintext_secrecy",
+        "--output=w1_r_requester_domain_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_requester_domain_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_requester_domain_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "requester_domain",
+      "lemma": "w1_r_requester_domain_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 922.736,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_requester_domain_reachable",
+        "--output=w1_r_requester_domain_reachable.proof.spthy",
+        "--output-json=w1_r_requester_domain_reachable.trace.json",
+        "--output-dot=w1_r_requester_domain_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_domain",
+      "lemma": "w1_r_responder_domain_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 666.023,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_domain_key_secrecy",
+        "--output=w1_r_responder_domain_key_secrecy.proof.spthy",
+        "--output-json=w1_r_responder_domain_key_secrecy.trace.json",
+        "--output-dot=w1_r_responder_domain_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_domain",
+      "lemma": "w1_r_responder_domain_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 689.624,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_domain_plaintext_secrecy",
+        "--output=w1_r_responder_domain_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_responder_domain_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_responder_domain_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_domain",
+      "lemma": "w1_r_responder_domain_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 917.141,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_domain_reachable",
+        "--output=w1_r_responder_domain_reachable.proof.spthy",
+        "--output-json=w1_r_responder_domain_reachable.trace.json",
+        "--output-dot=w1_r_responder_domain_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_ephemeral_control",
+      "lemma": "w1_r_responder_ephemeral_control_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 1162.69,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_ephemeral_control_reachable",
+        "--output=w1_r_responder_ephemeral_control_reachable.proof.spthy",
+        "--output-json=w1_r_responder_ephemeral_control_reachable.trace.json",
+        "--output-dot=w1_r_responder_ephemeral_control_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_identity",
+      "lemma": "w1_r_responder_identity_key_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 676.717,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_identity_key_secrecy",
+        "--output=w1_r_responder_identity_key_secrecy.proof.spthy",
+        "--output-json=w1_r_responder_identity_key_secrecy.trace.json",
+        "--output-dot=w1_r_responder_identity_key_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_identity",
+      "lemma": "w1_r_responder_identity_plaintext_secrecy",
+      "trace": "all-traces",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 683.047,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_identity_plaintext_secrecy",
+        "--output=w1_r_responder_identity_plaintext_secrecy.proof.spthy",
+        "--output-json=w1_r_responder_identity_plaintext_secrecy.trace.json",
+        "--output-dot=w1_r_responder_identity_plaintext_secrecy.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_identity",
+      "lemma": "w1_r_responder_identity_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 946.76,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_identity_reachable",
+        "--output=w1_r_responder_identity_reachable.proof.spthy",
+        "--output-json=w1_r_responder_identity_reachable.trace.json",
+        "--output-dot=w1_r_responder_identity_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    },
+    {
+      "protocol": "repaired",
+      "case": "responder_session_key_control",
+      "lemma": "w1_r_responder_session_key_control_reachable",
+      "trace": "exists-trace",
+      "defines": [],
+      "timeout_seconds": 1800,
+      "status": "verified",
+      "wall_seconds": 1080.93,
+      "command": [
+        "tamarin-prover",
+        "repaired_reveal_matrix.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=w1_r_responder_session_key_control_reachable",
+        "--output=w1_r_responder_session_key_control_reachable.proof.spthy",
+        "--output-json=w1_r_responder_session_key_control_reachable.trace.json",
+        "--output-dot=w1_r_responder_session_key_control_reachable.trace.dot"
+      ],
+      "model_sha256": "0A052A26A0E30B475034F0CCDFC7D8EEEA994B611F6200B859902800C515B916"
+    }
+  ]
+}

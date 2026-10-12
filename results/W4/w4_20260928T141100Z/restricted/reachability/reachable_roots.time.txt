@@ -1,0 +1,7 @@
+started_utc=2026-09-28T14:13:27.940207+00:00
+finished_utc=2026-09-28T14:13:37.018876+00:00
+wall_seconds=9.079
+timeout=False
+exit_code=0
+command=tamarin-prover policy_decomposition.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_roots -DKEEP_POLICY_RESTRICTIONS +RTS -N2 -RTS --output=reachable_roots.proof.spthy --output-json=reachable_roots.trace.json --output-dot=reachable_roots.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/restricted/reachability

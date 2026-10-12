@@ -1,0 +1,926 @@
+/* v8 candidate: runtime proof validation pending. */
+theory CDDS_matched_v8
+begin
+
+
+builtins: hashing, signing, symmetric-encryption, diffie-hellman, asymmetric-encryption, multiset, natural-numbers
+
+
+functions: 
+  PEnc/3,     
+  PDec/2,     
+  ppk/1,      
+  kdf_data/2, 
+  kdf_conf/2  
+
+
+equations:
+    PDec(ppsk, PEnc(ppk(ppsk), k, r)) = k
+
+restriction Equality:
+"All x y #i. Eq(x,y) @#i ==> x = y"
+
+restriction unique_InitEpoch:
+"All  #i #j. Epoch_init('epoch', %1) @#i & Epoch_init('epoch', %1) @#j ==> #i = #j"
+
+restriction unique_EpochUpdate:
+"All a b  #i #j. Update_epoch('epoch', a %+ %1) @#i & Update_epoch('epoch', b %+ %1) @#j & a = b ==> #i = #j"
+
+restriction unique_InitDomain:
+"All x y #i #j. InitDomain(x,%1) @#i & InitDomain(y,%1) @#j &(x = y) ==> #i = #j"
+
+restriction unique_Reconfig:
+"All x y epoch #i #j. Domain_Reconfig_Event(x, epoch %+ %1) @#i & Domain_Reconfig_Event(y, epoch %+ %1) @#j &(x = y) ==> #i = #j"
+
+restriction Reconfig_sequence:
+"All x epoch #i. Domain_Reconfig_Event(x, epoch) @#i  ==> not(Ex #j. Update_epoch('epoch', epoch %+ %1)@#j & #j < #i)"
+
+restriction unique_Domain_Receive_Signature:
+"All x y epoch #i #j. Domain_Reconfig_Event(x, epoch %+ %1) @#i & Domain_Reconfig_Event(y, epoch %+ %1) @#j &(x = y) ==> #i = #j"
+
+restriction merkle_onlyOnce1:
+"All A B mt_root #i #j.
+    Initial_mt_root_between_domain(A, B, mt_root) @#i & Initial_mt_root_between_domain(A, B, mt_root) @#j ==> #i = #j & not(A = B)"
+
+restriction unique_InitSubject:
+"All x y n #i #j. InitSubject(x, n) @#i & InitSubject(y, n) @#j &(x = y) ==> #i = #j"
+
+restriction unique_SubjectKey:
+"All x y n psk1 psk2 ppsk1 ppsk2 #i #j. SubjectKey(x, n, psk1, ppsk1) @#i & SubjectKey(y, n, psk2, ppsk2) @#j & not(x=y)==> ( (not(psk1 = psk2)) & (not(ppsk1 = ppsk2)))"
+
+restriction unique_IssueCert:
+"All S A B n gskA gskB #i #j. IssueCert(A, S, n, gskA) @#i & IssueCert(B, S, n, gskB) @#j ==> (#i = #j & A = B & gskA = gskB)"
+
+restriction Only_unregistered_can_submit:
+"All S A n #i. Subject_Register(S,A,n) @#i ==> not (Ex B gsk #j.(IssueCert(B,S,n,gsk)@#j) & (not(A = B)) & (#j < #i))"
+
+restriction unique_Policy_register:
+"All S_a S_b n bit1 bit2 A B #i #j.
+    PolicyRegister(S_a, S_b, n, bit1, A, B) @ #i & PolicyRegister(S_a, S_b, n, bit2, A, B) @ #j ==> (#i = #j & bit1 = bit2)"
+
+restriction Subject_before_PolicyRegister:
+"All S_a S_b n bit A B #i.
+PolicyRegister(S_a, S_b, n, bit, A, B) @ #i 
+==>(Ex gskA gskB #j #k. 
+    IssueCert(A, S_a, n, gskA)@#j 
+    & IssueCert(B, S_b, n, gskB)@#k 
+    &(#j < #i) & (#k < #i)& not(A = B))"
+
+restriction unique_ProcessPolicy:
+"All B A n Pb1 Pb2 mt1 mt2 new_mt_root_B1 new_mt_root_B2 #i #j.
+    ProcessPolicy(A, B, n, Pb1, mt1, new_mt_root_B1) @ #i & ProcessPolicy(A, B, n, Pb2, mt2, new_mt_root_B2) @ #j &(Pb1 = Pb2)==> (#i = #j & mt1 = mt2 & new_mt_root_B1 = new_mt_root_B2)"
+
+restriction 1:
+"All A B n S_a S_b bit #i.PolicyRegister(S_a, S_b, n, bit, A, B)@#i 
+==>not(Ex #j. PolicyRegisterEnd(S_a, S_b, n, bit, A, B)@#j & #j < #i)"
+
+restriction unique_AccessRequest:
+"All S_a S_b n A B pska pskb gskA #i #j.
+    AccessRequest(S_a, S_b, n, A, B, pska, pskb, gskA)@#i & AccessRequest(S_a, S_b, n, A, B, pska, pskb, gskA)@#j ==> #i = #j"
+
+restriction unique_AccessGranted:
+"All S_a S_b n pka pkb bit #i #j.
+    AccessGranted(S_a, S_b, n, pka, pkb, bit) @#i & AccessGranted(S_a, S_b, n, pka, pkb, bit) @#j ==> #i = #j"
+
+restriction unique_Datasend:
+"All S_a S_b n1 n2 pskb ppka pka x k #i #j.
+    DataSent(S_b, S_a, n1, pskb, ppka, pka, x, k) @#i & DataSent(S_b, S_a, n2, pskb, ppka, pka, x, k) @#j & n1 = n2 ==> #i = #j"
+
+restriction unique_DataReceive: 
+"All S_a S_b n1 n2 alpha beta pska pkb k x #i #j.
+    DataReceive(S_b, S_a, n1, alpha, beta, pska, pkb, k, x) @#i & DataReceive(S_b, S_a, n2, alpha, beta, pska, pkb, k, x) @#j & n1 = n2 ==> #i = #j"
+
+restriction Domain_Reconfiguration_adversary1:
+"All domain_id epoch #i.
+    Domain_Reconfig_adversary(domain_id, epoch %+ %1) @#i  ==> not(Ex #j. Domain_Reconfig_Event(domain_id, epoch %+ %1) @#j)"
+
+rule epoch_Init:
+    [  ]
+    --[
+        Epoch_init('epoch', %1)
+    ]->
+    [ !Epoch('epoch', %1) ]
+
+rule epoch_update[role="epoch_update"]:
+    [ !Epoch('epoch', %n) ]
+    --[
+        Update_epoch('epoch', %n %+ %1)
+    ]->
+    [ !Epoch('epoch', %n %+ %1) ]
+
+rule initial_mt_root:
+    [ Fr(~mt_root) ]
+    --[
+        
+    ]->
+    [ !Initial_merkle_root(~mt_root) ]
+
+rule Domain_Init:
+    [ 
+        Fr(~gsk)
+    ]  
+    --[
+        InitDomain($I, %1)
+        , Domain1($I, %1, ~gsk, pk(~gsk))
+    ]->
+    [ 
+        
+        !Domain($I, %1, ~gsk, pk(~gsk))
+        , !Domain_id($I)
+    ]
+
+rule Initial_mt_root_between_domain:
+    [ 
+        !Domain_id($A)
+        , !Domain_id($B)
+        , !Initial_merkle_root(mt_root)
+     ]
+    --[
+        Initial_mt_root_between_domain($A, $B, mt_root)
+    ]->
+    [ 
+        MerkleRoot($A, $B, mt_root)
+     ]
+
+rule Domain_Reconfiguration[role="Reconfiguration"]:
+    [ 
+        !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+        , !Epoch('epoch', %epoch %+ %1)
+        , Fr(~new_gsk)
+    ]
+    --[
+        Domain_Reconfig_Event($domain_id, %epoch %+ %1)
+        , DDomain($domain_id, %epoch)
+    ]->  
+    [ 
+        
+        !Domain($domain_id, %epoch %+ %1, ~new_gsk, pk(~new_gsk))
+        , Out(<pk(~new_gsk), sign(pk(~new_gsk), old_gsk), pk(old_gsk), 'Update domain public key'>)
+        
+    ]
+
+rule Subject_Init[role="Subject_Register"]:
+    [ 
+        Fr(~psk)
+        , Fr(~ppsk)
+        , !Epoch('epoch', %n)
+    ]
+    --[
+        InitSubject($S, %n)
+        , SubjectKey($S, %n, ~psk, ~ppsk)
+    ]->
+    [ 
+        Subject_NR($S, %n, ~psk, ~ppsk, pk(~psk),ppk(~ppsk))
+        
+        
+        , SubjectSKpari_NR($S, %n, ~psk, ~ppsk)
+        , Out(<pk(~psk),ppk(~ppsk), %n, 'Subject Pk'>)
+     ]
+
+rule Subject_Register[role="Subject_Register"]:
+    let
+        info = 'user_info'
+        CertR = < spk, sppk, %n >
+    in
+    [ 
+        !Epoch('epoch', %n)
+        , !Domain($I, %n, gsk, gpk)
+        , Subject_NR($S, %n, psk, ppsk, spk, sppk)
+     ]
+    --[
+        Subject_Register($S, $I, %n)
+    ]->
+    [ 
+        Out(<CertR, sign(CertR, psk), 'Subject Register'>)
+        , Subject_Register_request($S, $I, %n)
+     ]
+
+rule Domain_Register[role="Subject_Register"]:
+    let
+        
+        
+        
+        SubjectCert = <pk(psk), ppk(ppsk), %n>
+    in
+    [ 
+        In(<pk(psk), ppk(ppsk), %n, 'Subject Pk'>)
+        , In(<CertR, sign(CertR,psk), 'Subject Register'>)
+        
+        
+        , !Domain($I, %n, gsk, gpk)
+        , Subject_Register_request($S, $I, %n)
+        , SubjectSKpari_NR($S, %n, psk, ppsk)
+     ]
+    --[
+        IssueCert($I, $S, %n, gsk)
+        , Subject1($S, $I, %n, psk, ppsk, pk(psk), ppk(ppsk))
+    ]->
+    [ 
+        Out(<SubjectCert, sign(SubjectCert, gsk), gpk, 'SubjectCert'>)
+        , !Subject($S, $I, %n, psk, ppsk, pk(psk), ppk(ppsk))
+        
+    ]
+
+rule Object_Policy_Creation[role="Policy_Register"]:
+    let
+        bit = '1'
+        
+        Pb = <pka, pkb, bit, %n>
+    in
+    [ 
+
+        
+        
+        !Domain($A, %n, gskA, gpkA)
+        , !Domain($B, %n, gskB, gpkB)
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , MerkleRoot($A, $B, mt_root)
+        , MerkleRoot($B, $A, mt_root)
+        , !Initial_merkle_root(mt_root)
+
+    ]
+    --[
+        PolicyRegister($S_a, $S_b, %n, bit, $A, $B)
+        , Eq(bit,'1')
+        , PolicyInstanceCreated($S_a,$S_b,$A,$B,%n,Pb,mt_root)
+    ]->
+    [ 
+        
+        Out(<Pb, sign(Pb, pskb), pkb, 'PolicyRb'>)
+        , Create_policy($A,$B,gskB,gpkB,$S_a,$S_b,%n,Pb,pka,pkb,bit,mt_root,pskb)
+    ]
+
+rule DomainB_Policy_Processing[role="Policy_Register"]:
+    let
+        new_mt_root_B = h(<mt_root,Pb>)
+        mrba = <Pb, new_mt_root_B>
+    in
+    [ 
+        In(<Pb, sign(Pb,v8_policy_sk), pk(v8_policy_sk), 'PolicyRb'>) 
+        , Create_policy($A,$B,gskB,gpkB,$S_a,$S_b,%n,Pb,pka,pk(v8_policy_sk),bit,mt_root,v8_policy_sk)
+     ]
+    --[
+        Eq(true,true)
+        , ProcessPolicy($A, $B, %n, Pb, mt_root, new_mt_root_B)
+        , PolicyInstanceProcessed($S_a,$S_b,$A,$B,%n,Pb,mt_root,new_mt_root_B)
+    ]->
+    [ 
+        Out(<mrba, sign(mrba, gskB), gpkB, 'MerkleRoot certification'>)
+        , B_Process_send($A,$B,gpkB,$S_a,$S_b,%n,Pb,pka,pk(v8_policy_sk),bit,mt_root,new_mt_root_B,gskB)
+     ]
+
+rule DomainA_Receive_Policy[role="Policy_Register"]:
+    let
+
+        new_mt_root_A = h(<mt_root, Pb>)
+        
+    in
+    [ 
+        In(<<Pb,new_mt_root_A>, sign(<Pb,new_mt_root_A>,v8_policy_domain_sk), pk(v8_policy_domain_sk), 'MerkleRoot certification'>)
+        , B_Process_send($A,$B,pk(v8_policy_domain_sk),$S_a,$S_b,%n,Pb,pka,pkb,bit,mt_root,new_mt_root_A,v8_policy_domain_sk)
+    ]
+    --[
+        Eq(true,true)
+        , ProcessPolicyDomain($A, $B, %n, Pb, mt_root, new_mt_root_A)
+        , PolicyRegisterEnd($S_a, $S_b, %n, bit, $A, $B)
+        , New_MerkleRoot($A, $B, %n, new_mt_root_A)
+        , New_MerkleRoot($B, $A, %n, new_mt_root_A)
+        , PolicyInstanceAccepted($S_a,$S_b,$A,$B,%n,Pb,mt_root,new_mt_root_A)
+    ]->
+    [ 
+        MerkleRoot($A, $B, new_mt_root_A)
+        , MerkleRoot($B, $A, new_mt_root_A)
+        , !Policy($A, $B, %n, $S_a, $S_b, bit)
+    ]
+
+rule Subject_Access_Request[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = <<pka,ppka,%n>, sign(<pka,ppka,%n>,gskA), pk(gskA)>
+        X = 'g'^~ie
+        AccessRa = <CertA_Pro, pkb, %n, ~sid, X>
+    in
+    [ 
+        !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , !Domain($A, %n, gskA, pk(gskA))
+        , !Domain($B, %n, gskB, gpkB)
+        , Fr(~sid)
+        , Fr(~ie)
+        , In(<<pka,ppka,%n>, sign(<pka,ppka,%n>,gskA), pk(gskA), 'SubjectCert'>)
+    ]
+    --[
+        Eq(true,true)
+        , AccessRequest($S_a, $S_b, %n, $A, $B, pska, pskb, gskA)
+        , RepairAccessRequest($S_a,$S_b,$A,$B,%n,~sid,X)
+        , RepairEphemeralCreatedI($S_a,$S_b,%n,~sid,~ie)
+    ]->
+    [
+        
+        
+        
+        
+
+        Out(<AccessRa,sign(AccessRa,pska),pka, 'AccessR_a_fs'>)
+        , Access_send($S_a,$S_b,%n,pka,pkb,$A,$B,gskA,gskB,pk(gskA),gpkB,ppka,pska)
+        , St_Initiator_DH_Clean($S_a,$S_b,$A,$B,%n,~sid,~ie,pka,ppka,pkb,pskb)
+    ]
+
+rule Domain_Access_Verification[role="Authentication_and_Data_Sharing"]:
+    let
+        sid = fst(v6_tail)
+        X = snd(v6_tail)
+
+        GrantBody = <pk(v8_request_sk), pkb, %n, sid, X>
+        
+        
+        
+    in
+    [ 
+        In(<<v6_cert,pkb,%n,v6_tail>,sign(<v6_cert,pkb,%n,v6_tail>,v8_request_sk),pk(v8_request_sk), 'AccessR_a_fs'>)
+        , Access_send($S_a,$S_b,%n,pk(v8_request_sk),pkb,$A,$B,gskA,gskB,gpkA,gpkB,ppka,v8_request_sk)
+        , !Policy($A, $B, %n, $S_a, $S_b, '1')
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+    ]
+    --[
+        Eq(true,true)
+        , AccessGranted($S_a, $S_b, %n, pk(v8_request_sk), pkb, '1')
+        , RepairAccessGranted($S_a,$S_b,$A,$B,%n,sid,X,h(GrantBody))
+    ]->
+    [ 
+        Out(<h(GrantBody), sign(h(GrantBody), gskB), pk(gskB), sid, X,
+             'AccessCert_ab_fs'>)    
+        , AccessCert_send($S_a,$S_b,%n,pk(v8_request_sk),pkb,pskb,ppka,$A,$B,gpkA,gpkB,gskB)
+    ]
+
+rule Object_Data_Encryption[role="Authentication_and_Data_Sharing"]:
+    let 
+        GrantBody = <pka, pkb, %n, sid, X>
+        Y = 'g'^~re
+        Z = X^~re
+        transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+                      sid,pka,pkb,X,Y,h(h(GrantBody))>
+        kData = kdf_data(Z,transcript)
+        kConf = kdf_conf(Z,transcript)
+        d = <~data, sign(<~data,transcript>,pskb), pk(pskb)>
+        beta = senc(d,kData)
+        keyConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+    in
+    [ 
+        In(<h(GrantBody),sign(h(GrantBody),v8_grant_sk),pk(v8_grant_sk),sid,X,'AccessCert_ab_fs'>)
+        , AccessCert_send($S_a,$S_b,%n,pka,pkb,pskb,ppka,$A,$B,gpkA,pk(v8_grant_sk),v8_grant_sk)
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , Fr(~data)                                                
+        , Fr(~re)                                                
+    ]
+    --[
+        Eq(true,true)
+        , DataSent($S_b, $S_a, %n, pskb, ppka, pka, ~data, kData)
+        , RepairDataSent($S_b,$S_a,$A,$B,%n,sid,~data,kData,transcript)
+        , RunningResponder($S_b,$S_a,$A,$B,%n,sid,~data,kData,transcript)
+        , Secret(~data, %n)
+        , SessionKey(kData, %n)
+        , Honest($S_a, %n)
+        , Honest($S_b, %n)
+        , RepairEphemeralCreatedR($S_a,$S_b,%n,sid,~re)
+    ]->                                                     
+    [ 
+        Out(<sid,Y,beta,keyConfirm,h(GrantBody),'data_fs'>)
+        , St_Responder_PreErase_Clean($S_a,$S_b,$A,$B,%n,sid,~re)
+        
+        
+    ]
+
+rule Subject_Data_Decryption_Clean[role="Authentication_and_Data_Sharing"]:
+let
+    X = 'g'^~ie
+    transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+                  ~sid,pka,pk(v8_peer_sk),X,Y,h(Hash1)>
+    Z = Y^~ie
+    k_in = kdf_data(Z,transcript)
+    kConf = kdf_conf(Z,transcript)
+
+    beta = senc(<v6_plain,sign(<v6_plain,transcript>,v8_peer_sk),pk(v8_peer_sk)>,k_in)
+    expectedConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+in
+[
+    In(<~sid,Y,beta,expectedConfirm,Hash1,'data_fs'>)
+    , St_Initiator_DH_Clean($S_a,$S_b,$A,$B,%n,~sid,~ie,pka,ppka,pk(v8_peer_sk),v8_peer_sk)
+    
+    
+]
+--[
+        Eq(true,true)
+        , DataReceive($S_b, $S_a, %n, Y, beta, ppka, pk(v8_peer_sk), k_in, v6_plain)
+        , RepairDataAccepted($S_a,$S_b,$A,$B,%n,~sid,v6_plain,k_in,transcript)
+        , CommitInitiator($S_a,$S_b,$A,$B,%n,~sid,v6_plain,k_in,transcript)
+    ]->
+[
+    St_Initiator_PreErase_Clean($S_a,$S_b,$A,$B,%n,~sid,~ie)
+]
+
+rule Subject_Data_Decryption_Revealed[role="Authentication_and_Data_Sharing"]:
+let
+    X = 'g'^~ie
+    transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+                  ~sid,pka,pk(v8_peer_sk),X,Y,h(Hash1)>
+    Z = Y^~ie
+    k_in = kdf_data(Z,transcript)
+    kConf = kdf_conf(Z,transcript)
+
+    beta = senc(<v6_plain,sign(<v6_plain,transcript>,v8_peer_sk),pk(v8_peer_sk)>,k_in)
+    expectedConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+in
+[
+    In(<~sid,Y,beta,expectedConfirm,Hash1,'data_fs'>)
+    , St_Initiator_DH_Revealed($S_a,$S_b,$A,$B,%n,~sid,~ie,pka,ppka,pk(v8_peer_sk),v8_peer_sk)
+    
+    
+]
+--[
+        Eq(true,true)
+        , DataReceive($S_b, $S_a, %n, Y, beta, ppka, pk(v8_peer_sk), k_in, v6_plain)
+        , RepairDataAccepted($S_a,$S_b,$A,$B,%n,~sid,v6_plain,k_in,transcript)
+        , CommitInitiator($S_a,$S_b,$A,$B,%n,~sid,v6_plain,k_in,transcript)
+    ]->
+[
+    St_Initiator_PreErase_Revealed($S_a,$S_b,$A,$B,%n,~sid,~ie)
+]
+
+rule Initiator_Erase_Ephemeral_Clean[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_Clean($S_a,$S_b,$A,$B,%n,~sid,~ie)
+]
+--[
+        InitiatorErased($S_a,$S_b,$A,$B,%n,~sid)
+    ]->
+[
+    InitErased($S_a,$S_b,%n,~sid)
+]
+
+rule Initiator_Erase_Ephemeral_Revealed[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_Revealed($S_a,$S_b,$A,$B,%n,~sid,~ie)
+]
+--[
+        InitiatorErased($S_a,$S_b,$A,$B,%n,~sid)
+    ]->
+[
+    InitErased($S_a,$S_b,%n,~sid)
+]
+
+rule Responder_Erase_Ephemeral_Clean[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_Clean($S_a,$S_b,$A,$B,%n,sid,~re)
+]
+--[
+        ResponderErased($S_a,$S_b,$A,$B,%n,sid)
+    ]->
+[
+    RespErased($S_a,$S_b,%n,sid)
+]
+
+rule Responder_Erase_Ephemeral_Revealed[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_Revealed($S_a,$S_b,$A,$B,%n,sid,~re)
+]
+--[
+        ResponderErased($S_a,$S_b,$A,$B,%n,sid)
+    ]->
+[
+    RespErased($S_a,$S_b,%n,sid)
+]
+
+rule Close_Repair_Session_After_Erasure[role="Authentication_and_Data_Sharing"]:
+[
+    InitErased($S_a,$S_b,%n,sid)
+    , RespErased($S_a,$S_b,%n,sid)
+]
+--[
+        SessionErased($S_a,$S_b,%n,sid)
+    ]->
+[]
+
+rule Reveal_Initiator_Ephemeral_Pending[role="adversary"]:
+[
+    St_Initiator_DH_Clean($S_a,$S_b,$A,$B,%n,~sid,~ie,pka,ppka,pkb,v8_peer_sk)
+]
+--[
+        RevealEphemeralI($S_a,$S_b,%n,~sid,~ie)
+    ]->
+[
+    St_Initiator_DH_Revealed($S_a,$S_b,$A,$B,%n,~sid,~ie,pka,ppka,pkb,v8_peer_sk)
+    , Out(~ie)
+]
+
+rule Reveal_Initiator_Ephemeral_Accepted[role="adversary"]:
+[
+    St_Initiator_PreErase_Clean($S_a,$S_b,$A,$B,%n,~sid,~ie)
+]
+--[
+        RevealEphemeralI($S_a,$S_b,%n,~sid,~ie)
+    ]->
+[
+    St_Initiator_PreErase_Revealed($S_a,$S_b,$A,$B,%n,~sid,~ie)
+    , Out(~ie)
+]
+
+rule Reveal_Responder_Ephemeral[role="adversary"]:
+[
+    St_Responder_PreErase_Clean($S_a,$S_b,$A,$B,%n,sid,~re)
+]
+--[
+        RevealEphemeralR($S_a,$S_b,%n,sid,~re)
+    ]->
+[
+    St_Responder_PreErase_Revealed($S_a,$S_b,$A,$B,%n,sid,~re)
+    , Out(~re)
+]
+
+rule Reveal_Domain_sk[role="adversary"]:
+[ !Domain($I, %n, gsk, pk(gsk)) ] --[
+        Reveal_Domain($I, %n)
+    ]-> [ Out(gsk) ]
+
+rule Reveal_Subject_psk[role="adversary"]:
+[ !Subject($S, $I, %n, psk, ppsk, spk, sppk) ] --[
+        Reveal_Subject($S, %n)
+    ]-> [ Out(<psk, ppsk, %n>) ]
+
+rule Domain_Reconfig_be_adversary[role="adversary"]:
+    [                                                   
+        !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+        , !Epoch('epoch', %epoch %+ %1)
+        , Fr(~faker_gsk)
+    ]
+    --[
+        Domain_Reconfig_adversary($domain_id, %epoch %+ %1)
+        , DDomain($domain_id, %epoch)
+        , Fakergsk_Reconfig_Broadcast($domain_id, %epoch %+ %1, ~faker_gsk)
+    ]->  
+     [
+        !Domain($domain_id, %epoch %+ %1, ~faker_gsk, pk(~faker_gsk))
+        , Out(<pk(~faker_gsk), sign(pk(~faker_gsk),old_gsk), pk(old_gsk), 'Update domain public key'>)
+        
+        
+    ]
+
+lemma v7_accept_has_request [reuse]:
+  all-traces
+  "All Sa Sb A B n sid x k T #accept.
+     CommitInitiator(Sa,Sb,A,B,n,sid,x,k,T) @ #accept
+     ==> (Ex X ie #request.
+          RepairAccessRequest(Sa,Sb,A,B,n,sid,X) @ #request
+        & RepairEphemeralCreatedI(Sa,Sb,n,sid,ie) @ #request
+        & #request < #accept)"
+
+lemma policy_processing_has_matching_proposal [reuse]:
+  all-traces
+  "All Sa Sb A B n Pb mt root #process.
+     PolicyInstanceProcessed(Sa,Sb,A,B,n,Pb,mt,root) @ #process
+     ==> (Ex #proposal.
+          PolicyInstanceCreated(Sa,Sb,A,B,n,Pb,mt) @ #proposal
+        & #proposal < #process)"
+
+lemma policy_acceptance_has_matching_processing [reuse]:
+  all-traces
+  "All Sa Sb A B n Pb mt root #accept.
+     PolicyInstanceAccepted(Sa,Sb,A,B,n,Pb,mt,root) @ #accept
+     ==> (Ex #process.
+          PolicyInstanceProcessed(Sa,Sb,A,B,n,Pb,mt,root) @ #process
+        & #process < #accept)"
+
+lemma policy_acceptance_installs_matching_roots [reuse]:
+  all-traces
+  "All Sa Sb A B n Pb mt root #accept.
+     PolicyInstanceAccepted(Sa,Sb,A,B,n,Pb,mt,root) @ #accept
+     ==> (New_MerkleRoot(A,B,n,root) @ #accept
+        & New_MerkleRoot(B,A,n,root) @ #accept)"
+
+lemma Cross_Domain_Policy_Consistency:
+  all-traces
+  "All Sa Sb A B n Pb mt root #accept.
+     PolicyInstanceAccepted(Sa,Sb,A,B,n,Pb,mt,root) @ #accept
+     ==> (Ex #proposal #process.
+          PolicyInstanceCreated(Sa,Sb,A,B,n,Pb,mt) @ #proposal
+        & PolicyInstanceProcessed(Sa,Sb,A,B,n,Pb,mt,root) @ #process
+        & #proposal < #process & #process < #accept
+        & New_MerkleRoot(A,B,n,root) @ #accept
+        & New_MerkleRoot(B,A,n,root) @ #accept)"
+
+lemma repaired_ephemeral_i_reveal_has_creation [reuse,use_induction]:
+  all-traces
+  "All Sa Sb n sid ie #reveal.
+     RevealEphemeralI(Sa,Sb,n,sid,ie) @ #reveal
+     ==> (Ex #create. RepairEphemeralCreatedI(Sa,Sb,n,sid,ie) @ #create
+                        & #create < #reveal)"
+
+lemma repaired_ephemeral_r_reveal_has_creation [reuse,use_induction]:
+  all-traces
+  "All Sa Sb n sid re #reveal.
+     RevealEphemeralR(Sa,Sb,n,sid,re) @ #reveal
+     ==> (Ex #create. RepairEphemeralCreatedR(Sa,Sb,n,sid,re) @ #create
+                        & #create < #reveal)"
+
+lemma repaired_lowe_data_noninjective_agreement [reuse]:
+  all-traces
+  "All S_a S_b A B n sid x k T #commit.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal.
+            Reveal_Subject(S_b,n) @ #reveal
+          & #reveal < #commit)
+     ==>
+       (Ex #running.
+          RunningResponder(S_b,S_a,A,B,n,sid,x,k,T) @ #running
+        & #running < #commit)"
+
+lemma repaired_commit_is_single_use [reuse]:
+  all-traces
+  "All S_a S_b A B n sid x1 k1 T1 x2 k2 T2 #i #j.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x1,k1,T1) @ #i
+   & CommitInitiator(S_a,S_b,A,B,n,sid,x2,k2,T2) @ #j
+   ==> #i = #j"
+
+lemma repaired_completed_session_key_secrecy_after_erasure [reuse]:
+  all-traces
+  "All Sa Sb A B n sid x k T #send #accept #erase #learn.
+     RepairDataSent(Sb,Sa,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(Sa,Sb,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(Sa,Sb,n,sid) @ #erase
+   & K(k) @ #learn
+   & #send < #accept & #accept < #erase & #erase < #learn
+     ==> ((Ex ie #ri. RevealEphemeralI(Sa,Sb,n,sid,ie) @ #ri & #ri < #learn)
+        | (Ex re #rr. RevealEphemeralR(Sa,Sb,n,sid,re) @ #rr & #rr < #learn))"
+
+lemma repaired_completed_plaintext_secrecy_after_erasure [reuse]:
+  all-traces
+  "All Sa Sb A B n sid x k T #send #accept #erase #learn.
+     RepairDataSent(Sb,Sa,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(Sa,Sb,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(Sa,Sb,n,sid) @ #erase
+   & K(x) @ #learn
+   & #send < #accept & #accept < #erase & #erase < #learn
+     ==> ((Ex ie #ri. RevealEphemeralI(Sa,Sb,n,sid,ie) @ #ri & #ri < #learn)
+        | (Ex re #rr. RevealEphemeralR(Sa,Sb,n,sid,re) @ #rr & #rr < #learn))"
+
+lemma repaired_conditional_data_origin:
+  all-traces
+  "All Sa Sb A B n sid x k T #commit.
+     CommitInitiator(Sa,Sb,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal. Reveal_Subject(Sb,n) @ #reveal & #reveal < #commit)
+     ==> (Ex #send. RepairDataSent(Sb,Sa,A,B,n,sid,x,k,T) @ #send
+                    & #send < #commit)"
+
+lemma repaired_lowe_data_injective_agreement:
+  all-traces
+  "All Sa Sb A B n sid x k T #commit.
+     CommitInitiator(Sa,Sb,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal. Reveal_Subject(Sb,n) @ #reveal & #reveal < #commit)
+     ==> (Ex #running.
+          RunningResponder(Sb,Sa,A,B,n,sid,x,k,T) @ #running
+        & #running < #commit
+        & not (Ex #other. CommitInitiator(Sa,Sb,A,B,n,sid,x,k,T) @ #other
+                         & not (#other = #commit)))"
+
+lemma repaired_conditional_session_key_secrecy:
+  all-traces
+  "All Sa Sb A B n sid x k T #send #learn.
+     RepairDataSent(Sb,Sa,A,B,n,sid,x,k,T) @ #send & K(k) @ #learn
+     ==> ((Ex #r. Reveal_Subject(Sa,n) @ #r & #r < #learn)
+        | (Ex #r. Reveal_Subject(Sb,n) @ #r & #r < #learn)
+        | (Ex #r. Reveal_Domain(A,n) @ #r & #r < #learn)
+        | (Ex #r. Reveal_Domain(B,n) @ #r & #r < #learn)
+        | (Ex ie #ri. RevealEphemeralI(Sa,Sb,n,sid,ie) @ #ri & #ri < #learn)
+        | (Ex re #rr. RevealEphemeralR(Sa,Sb,n,sid,re) @ #rr & #rr < #learn))"
+
+lemma repaired_conditional_data_secrecy:
+  all-traces
+  "All Sa Sb A B n sid x k T #send #learn.
+     RepairDataSent(Sb,Sa,A,B,n,sid,x,k,T) @ #send & K(x) @ #learn
+     ==> ((Ex #r. Reveal_Subject(Sa,n) @ #r & #r < #learn)
+        | (Ex #r. Reveal_Subject(Sb,n) @ #r & #r < #learn)
+        | (Ex #r. Reveal_Domain(A,n) @ #r & #r < #learn)
+        | (Ex #r. Reveal_Domain(B,n) @ #r & #r < #learn)
+        | (Ex ie #ri. RevealEphemeralI(Sa,Sb,n,sid,ie) @ #ri & #ri < #learn)
+        | (Ex re #rr. RevealEphemeralR(Sa,Sb,n,sid,re) @ #rr & #rr < #learn))"
+
+lemma Init_before_Register:
+"
+    All S n I #i.
+    Subject_Register(S, I, n) @i & (%1 %+ %1 << n)
+    ==>
+    (Ex #j #k #m.InitSubject(S, n) @j & j<i 
+    & InitDomain(I, %1) @k & k<i
+    & Domain_Reconfig_Event(I, n)@#m & m<i)
+"
+
+lemma Executable:
+exists-trace
+"
+    Ex S_a S_b alpha beta pska pkb k x #i.
+    DataReceive(S_b, S_a, %1 %+ %1, alpha, beta, pska, pkb, k, x) @ #i
+    & not (S_a = S_b)
+"
+
+lemma secrecy_session_key:
+"All k n #i.
+  SessionKey(k, n) @i ==>
+  not (Ex #j. K(k)@j) | (Ex S_b #r. Reveal_Subject(S_b, n)@r & Honest(S_b, n) @i)"
+
+lemma secrecy_x:
+"All x n #i.
+Secret(x, n) @i ==>
+not (Ex #j. K(x)@j)
+| (Ex S_b #r. Reveal_Subject(S_b, n)@r & Honest(S_b, n) @i)"
+
+lemma secrecy_subject_sk:
+"All S I n psk ppsk spk sppk #i.
+  Subject1(S, I, n, psk, ppsk, spk, sppk) @i ==>
+  not (Ex #j. K(psk)@j) | (Ex #r. Reveal_Subject(S, n)@r)"
+
+lemma secrecy_domain_sk:
+"All I n gsk #i.
+  Domain1(I, n, gsk, pk(gsk)) @i ==>
+  not (Ex #j. K(gsk)@j) | (Ex #r. Reveal_Domain(I, n)@r)"
+
+lemma forward_secrecy_x:
+"All x n #i.
+Secret(x, n) @i
+& not (Ex S_a #j. Reveal_Subject(S_a, n)@j) ==>
+not (Ex #j. K(x)@j)"
+
+lemma authentication_registration:
+"All I S n gsk #i.
+    IssueCert(I, S, n, gsk) @i
+    ==>
+    (Ex #j. Subject_Register(S, I, n) @j & #j < #i)"
+
+lemma authentication_access_grant:
+"All S_a S_b n pka pkb bit #i.
+    AccessGranted(S_a, S_b, n, pka, pkb, bit) @i
+    ==>
+    (Ex A B pska pskb gskA #j #k.
+        AccessRequest(S_a, S_b, n, A, B, pska, pskb, gskA) @j &
+        #j < #i &
+        PolicyRegisterEnd(S_a, S_b, n, bit, A, B) @k 
+        & k < i
+    )"
+
+lemma authentication_data_cert:
+"All S_b S_a n pskb ppka ppska x k #i.
+    DataSent(S_b, S_a, n, pskb, ppka, ppska, x, k) @i
+    ==>
+    (Ex pkb pka bit #j.
+        AccessGranted(S_a, S_b, n, pka, pkb, bit) @j &
+        #j < #i 
+    )"
+
+lemma authentication_data_origin:
+"All S_b S_a n alpha beta ppska pkb k x #i.
+    DataReceive(S_b, S_a, n, alpha, beta, ppska, pkb, k, x) @i
+    ==>
+    (Ex pskb ppka pka #j.
+        DataSent(S_b, S_a, n, pskb, ppka, pka, x, k) @j &
+        #j < #i 
+    )"
+
+lemma repaired_authorization_before_send:
+  all-traces
+  "All S_b S_a A B n sid x k T #send.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+     ==>
+       (Ex X hGrant #grant.
+          RepairAccessGranted(S_a,S_b,A,B,n,sid,X,hGrant) @ #grant
+        & #grant < #send)"
+
+lemma repaired_lowe_data_aliveness:
+  all-traces
+  "All S_a S_b A B n sid x k T #commit.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal.
+            Reveal_Subject(S_b,n) @ #reveal
+          & #reveal < #commit)
+     ==>
+       (Ex Peer A2 B2 n2 sid2 x2 k2 T2 #running.
+          RunningResponder(S_b,Peer,A2,B2,n2,sid2,x2,k2,T2) @ #running
+        & #running < #commit)"
+
+lemma repaired_lowe_data_weak_agreement:
+  all-traces
+  "All S_a S_b A B n sid x k T #commit.
+     CommitInitiator(S_a,S_b,A,B,n,sid,x,k,T) @ #commit
+   & not (Ex #reveal.
+            Reveal_Subject(S_b,n) @ #reveal
+          & #reveal < #commit)
+     ==>
+       (Ex A2 B2 n2 sid2 x2 k2 T2 #running.
+          RunningResponder(S_b,S_a,A2,B2,n2,sid2,x2,k2,T2) @ #running
+        & #running < #commit)"
+
+lemma repaired_session_key_secrecy_after_erasure:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #erase #learn.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & K(k) @ #learn
+   & #erase < #learn
+   ==>
+      ((Ex a #ri.
+          RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+        & #ri < #learn)
+       | (Ex b #rr.
+          RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+        & #rr < #learn))"
+
+lemma repaired_standard_forward_secrecy:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #accept #erase #reveal.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & Reveal_Subject(S_a,n) @ #reveal
+   & #send < #accept
+   & #accept < #erase
+   & #erase < #reveal
+   ==>
+     not (Ex #learn.
+            K(x) @ #learn
+          & #reveal < #learn
+          & not (Ex a #ri.
+                   RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+                 & #ri < #learn)
+          & not (Ex b #rr.
+                   RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+                 & #rr < #learn))"
+
+lemma repaired_intra_epoch_compromise_resilience:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #accept #erase #reveal.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & Reveal_Subject(S_a,n) @ #reveal
+   & #send < #accept
+   & #accept < #erase
+   & #erase < #reveal
+   ==>
+     not (Ex #learn.
+            K(x) @ #learn
+          & #reveal < #learn
+          & not (Ex nNext #transition.
+                   Update_epoch('epoch',nNext) @ #transition
+                 & #send < #transition
+                 & #transition < #learn)
+          & not (Ex a #ri.
+                   RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+                 & #ri < #learn)
+          & not (Ex b #rr.
+                   RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+                 & #rr < #learn))"
+
+lemma repaired_cross_epoch_key_compromise_isolation:
+  all-traces
+  "All S_a S_b A B n sid x k T #send #accept #erase #transition #revealNew.
+     RepairDataSent(S_b,S_a,A,B,n,sid,x,k,T) @ #send
+   & RepairDataAccepted(S_a,S_b,A,B,n,sid,x,k,T) @ #accept
+   & SessionErased(S_a,S_b,n,sid) @ #erase
+   & Update_epoch('epoch',n %+ %1) @ #transition
+   & Reveal_Subject(S_a,n %+ %1) @ #revealNew
+   & #send < #accept
+   & #accept < #erase
+   & #erase < #transition
+   & #transition < #revealNew
+   ==>
+     not (Ex #learn.
+            K(x) @ #learn
+          & #revealNew < #learn
+          & not (Ex a #ri.
+                   RevealEphemeralI(S_a,S_b,n,sid,a) @ #ri
+                 & #ri < #learn)
+          & not (Ex b #rr.
+                   RevealEphemeralR(S_a,S_b,n,sid,b) @ #rr
+                 & #rr < #learn))"
+
+lemma Cross_Domain_Policy_Consistency_legacy:
+    all-traces
+    "
+        All A B PbIn mt_root new_mt_root #i1 #i2 #i3.
+        PolicyRegister(A, B, %1 %+ %1, '1', A, B) @ #i1
+        & ProcessPolicy(A, B,  %1 %+ %1, PbIn, mt_root, new_mt_root) @ #i2
+        & PolicyRegisterEnd(A, B,  %1 %+ %1, '1', A, B) @ #i3
+        & #i1 < #i2
+        & #i2 < #i3 
+        & not(A = B)
+        ==>
+         (Ex new_mt_root_A new_mt_root_B #j1 #j2.
+            New_MerkleRoot(A, B,  %1 %+ %1, new_mt_root_A) @ #j1
+            & New_MerkleRoot(B, A, %1 %+ %1, new_mt_root_B) @ #j2
+            
+            
+            & new_mt_root_A = new_mt_root_B
+            & new_mt_root_A = new_mt_root
+            )  
+    "
+
+end

@@ -1,0 +1,9 @@
+# 本仓库文本文件统一使用 LF 换行；不要让 Git 在检出时改写换行符。
+# README.md §5 中的模型哈希均按 LF 字节计算。
+* text=auto eol=lf
+*.spthy text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.csv text eol=lf
+*.log text eol=lf
+*.txt text eol=lf

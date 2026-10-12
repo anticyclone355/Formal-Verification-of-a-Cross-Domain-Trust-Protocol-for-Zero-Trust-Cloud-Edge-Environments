@@ -1,0 +1,7 @@
+started_utc=2026-09-28T08:56:19.145606+00:00
+finished_utc=2026-09-28T09:05:27.488858+00:00
+wall_seconds=548.343
+timeout=False
+exit_code=0
+command=tamarin-prover repaired_reveal_matrix.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w1_r_kci_responder_origin --output=w1_r_kci_responder_origin.proof.spthy --output-json=w1_r_kci_responder_origin.trace.json --output-dot=w1_r_kci_responder_origin.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T083216Z/repaired/kci

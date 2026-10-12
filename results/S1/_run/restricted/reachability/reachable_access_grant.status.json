@@ -1,0 +1,39 @@
+{
+  "profile": "restricted",
+  "case": "reachability",
+  "lemma": "reachable_access_grant",
+  "trace": "exists-trace",
+  "defines": [
+    "KEEP_ORDER"
+  ],
+  "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+  "status": "timeout",
+  "raw_summary": null,
+  "steps": null,
+  "wall_seconds": 900.146,
+  "tamarin_processing_seconds": null,
+  "started_utc": "2026-09-29T08:00:38.048491+00:00",
+  "timed_out": true,
+  "exit_code": -9,
+  "command": [
+    "tamarin-prover",
+    "registration_policy_order.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_access_grant",
+    "-DKEEP_ORDER",
+    "--output=reachable_access_grant.proof.spthy",
+    "--output-json=reachable_access_grant.trace.json",
+    "--output-dot=reachable_access_grant.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/reachability",
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory S1_Registration_Policy_Order] Theory translated",
+    "[Theory S1_Registration_Policy_Order] Derivation checks started",
+    "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+    "[Theory S1_Registration_Policy_Order] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

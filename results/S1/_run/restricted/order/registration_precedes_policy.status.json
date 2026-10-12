@@ -1,0 +1,39 @@
+{
+  "profile": "restricted",
+  "case": "order",
+  "lemma": "registration_precedes_policy",
+  "trace": "all-traces",
+  "defines": [
+    "KEEP_ORDER"
+  ],
+  "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+  "status": "verified",
+  "raw_summary": "verified (2 steps)",
+  "steps": 2,
+  "wall_seconds": 23.327,
+  "tamarin_processing_seconds": 23.11,
+  "started_utc": "2026-09-29T08:00:38.058009+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "registration_policy_order.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=registration_precedes_policy",
+    "-DKEEP_ORDER",
+    "--output=registration_precedes_policy.proof.spthy",
+    "--output-json=registration_precedes_policy.trace.json",
+    "--output-dot=registration_precedes_policy.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/order",
+  "rendered_graphs": {},
+  "stderr_tail": [
+    " checking installation: OK.",
+    "[Theory S1_Registration_Policy_Order] Theory loaded",
+    "[Theory S1_Registration_Policy_Order] Theory translated",
+    "[Theory S1_Registration_Policy_Order] Derivation checks started",
+    "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+    "[Theory S1_Registration_Policy_Order] Theory closed"
+  ]
+}

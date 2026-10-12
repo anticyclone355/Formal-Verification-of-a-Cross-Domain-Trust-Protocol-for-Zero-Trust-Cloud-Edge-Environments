@@ -1,0 +1,49 @@
+{
+  "protocol": "repaired",
+  "case": "lifecycle",
+  "lemma": "w2_responder_erases_before_acceptance",
+  "trace": "exists-trace",
+  "defines": [],
+  "model_sha256": "14E941343C02EB549AC53CB568E14742E6B3F525A3873170A1160887BDEE19F9",
+  "status": "verified",
+  "raw_summary": "verified (25 steps)",
+  "steps": 25,
+  "wall_seconds": 1012.05,
+  "tamarin_processing_seconds": 1010.45,
+  "started_utc": "2026-09-28T10:03:58.794712+00:00",
+  "finished_utc": "2026-09-28T10:20:50.844790+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_state_lifecycle.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=w2_responder_erases_before_acceptance",
+    "--output=w2_responder_erases_before_acceptance.proof.spthy",
+    "--output-json=w2_responder_erases_before_acceptance.trace.json",
+    "--output-dot=w2_responder_erases_before_acceptance.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/lifecycle",
+  "artifacts": {
+    "stdout": "w2_responder_erases_before_acceptance.stdout.log",
+    "stderr": "w2_responder_erases_before_acceptance.stderr.log",
+    "time": "w2_responder_erases_before_acceptance.time.txt",
+    "proof": "w2_responder_erases_before_acceptance.proof.spthy",
+    "trace_json": "w2_responder_erases_before_acceptance.trace.json",
+    "trace_dot": "w2_responder_erases_before_acceptance.trace.dot",
+    "trace_png": "w2_responder_erases_before_acceptance.trace.png",
+    "trace_svg": "w2_responder_erases_before_acceptance.trace.svg"
+  },
+  "rendered_graphs": {
+    "png": "w2_responder_erases_before_acceptance.trace.png",
+    "svg": "w2_responder_erases_before_acceptance.trace.svg"
+  },
+  "stderr_tail": [
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks started",
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks ended",
+    "[Theory W2_AECDHE_State_Lifecycle] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

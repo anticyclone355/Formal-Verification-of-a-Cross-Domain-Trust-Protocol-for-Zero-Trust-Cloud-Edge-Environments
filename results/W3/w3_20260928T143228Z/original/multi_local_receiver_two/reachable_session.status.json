@@ -1,0 +1,55 @@
+{
+  "protocol": "original",
+  "profile": "multi_local_receiver_two",
+  "case": "smoke",
+  "lemma": "reachable_session",
+  "trace": "exists-trace",
+  "defines": [
+    "MULTI_PARTY",
+    "LOCAL_RECEIVER"
+  ],
+  "model_sha256": "4B87C79AC1533E35B8C271ECEC4266701E2F41DDAF5EC4D581F4C7D074B311B1",
+  "status": "verified",
+  "raw_summary": "verified (21 steps)",
+  "steps": 21,
+  "wall_seconds": 403.009,
+  "tamarin_processing_seconds": 402.62,
+  "started_utc": "2026-09-28T15:04:44.928772+00:00",
+  "finished_utc": "2026-09-28T15:11:27.937712+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_multi_local_receiver_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_session",
+    "--output=reachable_session.proof.spthy",
+    "--output-json=reachable_session.trace.json",
+    "--output-dot=reachable_session.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_local_receiver_two",
+  "artifacts": {
+    "stdout": "reachable_session.stdout.log",
+    "stderr": "reachable_session.stderr.log",
+    "time": "reachable_session.time.txt",
+    "proof": "reachable_session.proof.spthy",
+    "trace_json": "reachable_session.trace.json",
+    "trace_dot": "reachable_session.trace.dot",
+    "trace_png": "reachable_session.trace.png",
+    "trace_svg": "reachable_session.trace.svg",
+    "trace_pdf": "reachable_session.trace.pdf"
+  },
+  "rendered_graphs": {
+    "png": "reachable_session.trace.png",
+    "svg": "reachable_session.trace.svg",
+    "pdf": "reachable_session.trace.pdf"
+  },
+  "stderr_tail": [
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_original_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:20:46.904069+00:00
+finished_utc=2026-09-28T15:20:48.777183+00:00
+wall_seconds=1.873
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_old_key_disclosure -DSECOND_UPDATE +RTS -N2 -RTS --output=reachable_old_key_disclosure.proof.spthy --output-json=reachable_old_key_disclosure.trace.json --output-dot=reachable_old_key_disclosure.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/compromise

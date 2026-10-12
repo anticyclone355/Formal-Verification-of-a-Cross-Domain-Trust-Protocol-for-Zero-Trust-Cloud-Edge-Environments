@@ -1,0 +1,21 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: original_multi_ablated_two.spthy
+
+  output:          initiator_injective_agreement.proof.spthy
+  processing time: 26.63s
+  
+  reachable_session (exists-trace): analysis incomplete (1 steps)
+  reachable_two_concurrent_sessions (exists-trace): analysis incomplete (1 steps)
+  initiator_aliveness (all-traces): analysis incomplete (1 steps)
+  initiator_weak_agreement (all-traces): analysis incomplete (1 steps)
+  initiator_noninjective_agreement (all-traces): analysis incomplete (1 steps)
+  initiator_injective_agreement (all-traces): verified (42 steps)
+  data_origin_authentication (all-traces): analysis incomplete (1 steps)
+  replay_acceptance_exclusion (all-traces): analysis incomplete (1 steps)
+  reachable_two_distinct_contexts (exists-trace): analysis incomplete (1 steps)
+  unknown_key_share_exclusion (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

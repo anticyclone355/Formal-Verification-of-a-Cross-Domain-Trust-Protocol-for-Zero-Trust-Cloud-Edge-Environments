@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:19:42.962772+00:00
+finished_utc=2026-09-28T15:19:44.338439+00:00
+wall_seconds=1.376
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_honest_update +RTS -N2 -RTS --output=reachable_honest_update.proof.spthy --output-json=reachable_honest_update.trace.json --output-dot=reachable_honest_update.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/reachability

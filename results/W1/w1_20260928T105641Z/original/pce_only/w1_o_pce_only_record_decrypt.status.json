@@ -1,0 +1,49 @@
+{
+  "protocol": "original",
+  "case": "pce_only",
+  "lemma": "w1_o_pce_only_record_decrypt",
+  "trace": "exists-trace",
+  "defines": [],
+  "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5",
+  "status": "verified",
+  "raw_summary": "verified (23 steps)",
+  "steps": 23,
+  "wall_seconds": 30.175,
+  "tamarin_processing_seconds": 29.94,
+  "started_utc": "2026-09-28T10:56:42.734981+00:00",
+  "finished_utc": "2026-09-28T10:57:12.910059+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_reveal_matrix.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=w1_o_pce_only_record_decrypt",
+    "--output=w1_o_pce_only_record_decrypt.proof.spthy",
+    "--output-json=w1_o_pce_only_record_decrypt.trace.json",
+    "--output-dot=w1_o_pce_only_record_decrypt.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T105641Z/original/pce_only",
+  "artifacts": {
+    "stdout": "w1_o_pce_only_record_decrypt.stdout.log",
+    "stderr": "w1_o_pce_only_record_decrypt.stderr.log",
+    "time": "w1_o_pce_only_record_decrypt.time.txt",
+    "proof": "w1_o_pce_only_record_decrypt.proof.spthy",
+    "trace_json": "w1_o_pce_only_record_decrypt.trace.json",
+    "trace_dot": "w1_o_pce_only_record_decrypt.trace.dot",
+    "trace_png": "w1_o_pce_only_record_decrypt.trace.png",
+    "trace_svg": "w1_o_pce_only_record_decrypt.trace.svg"
+  },
+  "rendered_graphs": {
+    "png": "w1_o_pce_only_record_decrypt.trace.png",
+    "svg": "w1_o_pce_only_record_decrypt.trace.svg"
+  },
+  "stderr_tail": [
+    "[Theory W1_PCE_Reveal_Matrix] Derivation checks started",
+    "[Theory W1_PCE_Reveal_Matrix] Derivation checks ended",
+    "[Theory W1_PCE_Reveal_Matrix] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

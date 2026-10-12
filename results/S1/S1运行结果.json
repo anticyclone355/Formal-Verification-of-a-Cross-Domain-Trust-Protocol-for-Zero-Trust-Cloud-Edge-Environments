@@ -1,0 +1,1092 @@
+{
+  "run_name": "s1_20260929T080037Z",
+  "generated_utc": "2026-09-29T08:17:42.118772+00:00",
+  "tally": {
+    "verified": 26,
+    "timeout": 2
+  },
+  "records": [
+    {
+      "profile": "restricted",
+      "case": "authorization",
+      "lemma": "access_grant_correspondence",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (578 steps)",
+      "steps": 578,
+      "wall_seconds": 103.038,
+      "tamarin_processing_seconds": 102.61,
+      "started_utc": "2026-09-29T08:01:01.386887+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=access_grant_correspondence",
+        "-DKEEP_ORDER",
+        "--output=access_grant_correspondence.proof.spthy",
+        "--output-json=access_grant_correspondence.trace.json",
+        "--output-dot=access_grant_correspondence.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/authorization",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "authorization",
+      "lemma": "access_request_registration_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (9 steps)",
+      "steps": 9,
+      "wall_seconds": 30.265,
+      "tamarin_processing_seconds": 29.91,
+      "started_utc": "2026-09-29T08:01:01.036621+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=access_request_registration_source",
+        "-DKEEP_ORDER",
+        "--output=access_request_registration_source.proof.spthy",
+        "--output-json=access_request_registration_source.trace.json",
+        "--output-dot=access_request_registration_source.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/authorization",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "environment",
+      "lemma": "reachable_request_before_policy",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (37 steps)",
+      "steps": 37,
+      "wall_seconds": 445.693,
+      "tamarin_processing_seconds": 445.22,
+      "started_utc": "2026-09-29T08:00:38.050817+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_request_before_policy",
+        "-DKEEP_ORDER",
+        "--output=reachable_request_before_policy.proof.spthy",
+        "--output-json=reachable_request_before_policy.trace.json",
+        "--output-dot=reachable_request_before_policy.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/environment",
+      "rendered_graphs": {
+        "png": "reachable_request_before_policy.trace.png",
+        "svg": "reachable_request_before_policy.trace.svg",
+        "pdf": "reachable_request_before_policy.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "environment",
+      "lemma": "reachable_same_domain_registration",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (15 steps)",
+      "steps": 15,
+      "wall_seconds": 40.745,
+      "tamarin_processing_seconds": 40.42,
+      "started_utc": "2026-09-29T08:00:38.048652+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_same_domain_registration",
+        "-DKEEP_ORDER",
+        "--output=reachable_same_domain_registration.proof.spthy",
+        "--output-json=reachable_same_domain_registration.trace.json",
+        "--output-dot=reachable_same_domain_registration.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/environment",
+      "rendered_graphs": {
+        "png": "reachable_same_domain_registration.trace.png",
+        "svg": "reachable_same_domain_registration.trace.svg",
+        "pdf": "reachable_same_domain_registration.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "order",
+      "lemma": "policy_domains_distinct",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (2 steps)",
+      "steps": 2,
+      "wall_seconds": 22.98,
+      "tamarin_processing_seconds": 22.76,
+      "started_utc": "2026-09-29T08:00:38.054211+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_domains_distinct",
+        "-DKEEP_ORDER",
+        "--output=policy_domains_distinct.proof.spthy",
+        "--output-json=policy_domains_distinct.trace.json",
+        "--output-dot=policy_domains_distinct.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/order",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        " checking installation: OK.",
+        "[Theory S1_Registration_Policy_Order] Theory loaded",
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "order",
+      "lemma": "registration_precedes_policy",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (2 steps)",
+      "steps": 2,
+      "wall_seconds": 23.327,
+      "tamarin_processing_seconds": 23.11,
+      "started_utc": "2026-09-29T08:00:38.058009+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=registration_precedes_policy",
+        "-DKEEP_ORDER",
+        "--output=registration_precedes_policy.proof.spthy",
+        "--output-json=registration_precedes_policy.trace.json",
+        "--output-dot=registration_precedes_policy.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/order",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        " checking installation: OK.",
+        "[Theory S1_Registration_Policy_Order] Theory loaded",
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "order",
+      "lemma": "subject_before_policy_full_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (2 steps)",
+      "steps": 2,
+      "wall_seconds": 23.733,
+      "tamarin_processing_seconds": 23.46,
+      "started_utc": "2026-09-29T08:00:38.053683+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=subject_before_policy_full_candidate",
+        "-DKEEP_ORDER",
+        "--output=subject_before_policy_full_candidate.proof.spthy",
+        "--output-json=subject_before_policy_full_candidate.trace.json",
+        "--output-dot=subject_before_policy_full_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/order",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        " checking installation: OK.",
+        "[Theory S1_Registration_Policy_Order] Theory loaded",
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "policy",
+      "lemma": "policy_acceptance_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (3 steps)",
+      "steps": 3,
+      "wall_seconds": 30.21,
+      "tamarin_processing_seconds": 29.94,
+      "started_utc": "2026-09-29T08:00:38.059872+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_acceptance_source",
+        "-DKEEP_ORDER",
+        "--output=policy_acceptance_source.proof.spthy",
+        "--output-json=policy_acceptance_source.trace.json",
+        "--output-dot=policy_acceptance_source.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/policy",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "policy",
+      "lemma": "policy_context_root_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (7 steps)",
+      "steps": 7,
+      "wall_seconds": 31.009,
+      "tamarin_processing_seconds": 30.69,
+      "started_utc": "2026-09-29T08:00:38.056284+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_context_root_agreement",
+        "-DKEEP_ORDER",
+        "--output=policy_context_root_agreement.proof.spthy",
+        "--output-json=policy_context_root_agreement.trace.json",
+        "--output-dot=policy_context_root_agreement.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/policy",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "policy",
+      "lemma": "policy_processing_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (6 steps)",
+      "steps": 6,
+      "wall_seconds": 30.702,
+      "tamarin_processing_seconds": 30.37,
+      "started_utc": "2026-09-29T08:00:38.058440+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_processing_source",
+        "-DKEEP_ORDER",
+        "--output=policy_processing_source.proof.spthy",
+        "--output-json=policy_processing_source.trace.json",
+        "--output-dot=policy_processing_source.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/policy",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_access_grant",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "timeout",
+      "raw_summary": null,
+      "steps": null,
+      "wall_seconds": 900.146,
+      "tamarin_processing_seconds": null,
+      "started_utc": "2026-09-29T08:00:38.048491+00:00",
+      "timed_out": true,
+      "exit_code": -9,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_access_grant",
+        "-DKEEP_ORDER",
+        "--output=reachable_access_grant.proof.spthy",
+        "--output-json=reachable_access_grant.trace.json",
+        "--output-dot=reachable_access_grant.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/reachability",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_policy_installation",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (28 steps)",
+      "steps": 28,
+      "wall_seconds": 515.493,
+      "tamarin_processing_seconds": 514.76,
+      "started_utc": "2026-09-29T08:00:38.047042+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_policy_installation",
+        "-DKEEP_ORDER",
+        "--output=reachable_policy_installation.proof.spthy",
+        "--output-json=reachable_policy_installation.trace.json",
+        "--output-dot=reachable_policy_installation.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/reachability",
+      "rendered_graphs": {
+        "png": "reachable_policy_installation.trace.png",
+        "svg": "reachable_policy_installation.trace.svg",
+        "pdf": "reachable_policy_installation.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_registration",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (11 steps)",
+      "steps": 11,
+      "wall_seconds": 38.788,
+      "tamarin_processing_seconds": 38.48,
+      "started_utc": "2026-09-29T08:00:38.046349+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_registration",
+        "-DKEEP_ORDER",
+        "--output=reachable_registration.proof.spthy",
+        "--output-json=reachable_registration.trace.json",
+        "--output-dot=reachable_registration.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/reachability",
+      "rendered_graphs": {
+        "png": "reachable_registration.trace.png",
+        "svg": "reachable_registration.trace.svg",
+        "pdf": "reachable_registration.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "restricted",
+      "case": "registration",
+      "lemma": "registration_issuance_correspondence",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_ORDER"
+      ],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (8 steps)",
+      "steps": 8,
+      "wall_seconds": 30.805,
+      "tamarin_processing_seconds": 30.5,
+      "started_utc": "2026-09-29T08:00:38.054934+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=registration_issuance_correspondence",
+        "-DKEEP_ORDER",
+        "--output=registration_issuance_correspondence.proof.spthy",
+        "--output-json=registration_issuance_correspondence.trace.json",
+        "--output-dot=registration_issuance_correspondence.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/registration",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "authorization",
+      "lemma": "access_grant_correspondence",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (578 steps)",
+      "steps": 578,
+      "wall_seconds": 97.065,
+      "tamarin_processing_seconds": 96.7,
+      "started_utc": "2026-09-29T08:02:07.256696+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=access_grant_correspondence",
+        "--output=access_grant_correspondence.proof.spthy",
+        "--output-json=access_grant_correspondence.trace.json",
+        "--output-dot=access_grant_correspondence.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/authorization",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "authorization",
+      "lemma": "access_request_registration_source",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (9 steps)",
+      "steps": 9,
+      "wall_seconds": 29.262,
+      "tamarin_processing_seconds": 28.89,
+      "started_utc": "2026-09-29T08:02:01.019141+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=access_request_registration_source",
+        "--output=access_request_registration_source.proof.spthy",
+        "--output-json=access_request_registration_source.trace.json",
+        "--output-dot=access_request_registration_source.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/authorization",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "environment",
+      "lemma": "reachable_request_before_policy",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (37 steps)",
+      "steps": 37,
+      "wall_seconds": 352.23,
+      "tamarin_processing_seconds": 351.83,
+      "started_utc": "2026-09-29T08:01:09.066814+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_request_before_policy",
+        "--output=reachable_request_before_policy.proof.spthy",
+        "--output-json=reachable_request_before_policy.trace.json",
+        "--output-dot=reachable_request_before_policy.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/environment",
+      "rendered_graphs": {
+        "png": "reachable_request_before_policy.trace.png",
+        "svg": "reachable_request_before_policy.trace.svg",
+        "pdf": "reachable_request_before_policy.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "environment",
+      "lemma": "reachable_same_domain_registration",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (15 steps)",
+      "steps": 15,
+      "wall_seconds": 39.601,
+      "tamarin_processing_seconds": 39.28,
+      "started_utc": "2026-09-29T08:01:08.861268+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_same_domain_registration",
+        "--output=reachable_same_domain_registration.proof.spthy",
+        "--output-json=reachable_same_domain_registration.trace.json",
+        "--output-dot=reachable_same_domain_registration.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/environment",
+      "rendered_graphs": {
+        "png": "reachable_same_domain_registration.trace.png",
+        "svg": "reachable_same_domain_registration.trace.svg",
+        "pdf": "reachable_same_domain_registration.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "order",
+      "lemma": "policy_domains_distinct",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (23 steps)",
+      "steps": 23,
+      "wall_seconds": 29.714,
+      "tamarin_processing_seconds": 29.37,
+      "started_utc": "2026-09-29T08:01:31.303196+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_domains_distinct",
+        "--output=policy_domains_distinct.proof.spthy",
+        "--output-json=policy_domains_distinct.trace.json",
+        "--output-dot=policy_domains_distinct.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/order",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "order",
+      "lemma": "registration_precedes_policy",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (17 steps)",
+      "steps": 17,
+      "wall_seconds": 29.553,
+      "tamarin_processing_seconds": 29.2,
+      "started_utc": "2026-09-29T08:01:19.743502+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=registration_precedes_policy",
+        "--output=registration_precedes_policy.proof.spthy",
+        "--output-json=registration_precedes_policy.trace.json",
+        "--output-dot=registration_precedes_policy.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/order",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "order",
+      "lemma": "subject_before_policy_full_candidate",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (29 steps)",
+      "steps": 29,
+      "wall_seconds": 30.054,
+      "tamarin_processing_seconds": 29.75,
+      "started_utc": "2026-09-29T08:01:17.333627+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=subject_before_policy_full_candidate",
+        "--output=subject_before_policy_full_candidate.proof.spthy",
+        "--output-json=subject_before_policy_full_candidate.trace.json",
+        "--output-dot=subject_before_policy_full_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/order",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "policy",
+      "lemma": "policy_acceptance_source",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (3 steps)",
+      "steps": 3,
+      "wall_seconds": 28.813,
+      "tamarin_processing_seconds": 28.49,
+      "started_utc": "2026-09-29T08:01:49.297930+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_acceptance_source",
+        "--output=policy_acceptance_source.proof.spthy",
+        "--output-json=policy_acceptance_source.trace.json",
+        "--output-dot=policy_acceptance_source.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/policy",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "policy",
+      "lemma": "policy_context_root_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (7 steps)",
+      "steps": 7,
+      "wall_seconds": 29.214,
+      "tamarin_processing_seconds": 28.93,
+      "started_utc": "2026-09-29T08:01:49.463127+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_context_root_agreement",
+        "--output=policy_context_root_agreement.proof.spthy",
+        "--output-json=policy_context_root_agreement.trace.json",
+        "--output-dot=policy_context_root_agreement.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/policy",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "policy",
+      "lemma": "policy_processing_source",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (6 steps)",
+      "steps": 6,
+      "wall_seconds": 29.065,
+      "tamarin_processing_seconds": 28.76,
+      "started_utc": "2026-09-29T08:01:47.389807+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=policy_processing_source",
+        "--output=policy_processing_source.proof.spthy",
+        "--output-json=policy_processing_source.trace.json",
+        "--output-dot=policy_processing_source.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/policy",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "reachability",
+      "lemma": "reachable_access_grant",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "timeout",
+      "raw_summary": null,
+      "steps": null,
+      "wall_seconds": 900.124,
+      "tamarin_processing_seconds": null,
+      "started_utc": "2026-09-29T08:01:08.762702+00:00",
+      "timed_out": true,
+      "exit_code": -9,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_access_grant",
+        "--output=reachable_access_grant.proof.spthy",
+        "--output-json=reachable_access_grant.trace.json",
+        "--output-dot=reachable_access_grant.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/reachability",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "reachability",
+      "lemma": "reachable_policy_installation",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (28 steps)",
+      "steps": 28,
+      "wall_seconds": 427.261,
+      "tamarin_processing_seconds": 426.63,
+      "started_utc": "2026-09-29T08:01:08.272590+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_policy_installation",
+        "--output=reachable_policy_installation.proof.spthy",
+        "--output-json=reachable_policy_installation.trace.json",
+        "--output-dot=reachable_policy_installation.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/reachability",
+      "rendered_graphs": {
+        "png": "reachable_policy_installation.trace.png",
+        "svg": "reachable_policy_installation.trace.svg",
+        "pdf": "reachable_policy_installation.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "reachability",
+      "lemma": "reachable_registration",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (11 steps)",
+      "steps": 11,
+      "wall_seconds": 35.989,
+      "tamarin_processing_seconds": 35.67,
+      "started_utc": "2026-09-29T08:01:01.788826+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_registration",
+        "--output=reachable_registration.proof.spthy",
+        "--output-json=reachable_registration.trace.json",
+        "--output-dot=reachable_registration.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/reachability",
+      "rendered_graphs": {
+        "png": "reachable_registration.trace.png",
+        "svg": "reachable_registration.trace.svg",
+        "pdf": "reachable_registration.trace.pdf"
+      },
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "ablated",
+      "case": "registration",
+      "lemma": "registration_issuance_correspondence",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+      "status": "verified",
+      "raw_summary": "verified (8 steps)",
+      "steps": 8,
+      "wall_seconds": 28.976,
+      "tamarin_processing_seconds": 28.69,
+      "started_utc": "2026-09-29T08:01:38.279018+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "registration_policy_order.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=registration_issuance_correspondence",
+        "--output=registration_issuance_correspondence.proof.spthy",
+        "--output-json=registration_issuance_correspondence.trace.json",
+        "--output-dot=registration_issuance_correspondence.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/registration",
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory S1_Registration_Policy_Order] Theory translated",
+        "[Theory S1_Registration_Policy_Order] Derivation checks started",
+        "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+        "[Theory S1_Registration_Policy_Order] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    }
+  ]
+}

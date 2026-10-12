@@ -1,0 +1,556 @@
+/* W3 repaired: clean-key concurrent authentication / restriction ablation.
+
+   Conditional honest registration and fixed allow policy; one epoch/domain pair.
+
+   Default: at most TWO request starts; -DUNBOUNDED removes only that bound.
+
+   KEEP_REQUEST/KEEP_GRANT/KEEP_SEND/KEEP_RECEIVE restore exact v0 restrictions.
+
+   Original only: -DLOCAL_RECEIVER replaces X_send with receiver-owned state.
+
+   No reveal oracles; W1/W2 cover compromise and lifecycle separately.
+
+*/
+
+theory W3_repaired_Concurrent_Agreement
+
+begin
+
+
+
+builtins: hashing, signing, symmetric-encryption, diffie-hellman, natural-numbers
+
+functions: PEnc/3, PDec/2, ppk/1, kdf_data/2, kdf_conf/2
+
+equations: PDec(psk,PEnc(ppk(psk),k,r)) = k
+
+
+
+restriction Equality:
+
+  "All x y #i. Eq(x,y) @i ==> x = y"
+
+
+
+/* Fixed experimental environment, NOT a session-uniqueness property. */
+
+restriction W3_OneSetup:
+
+  "All #i #j. W3Init() @i & W3Init() @j ==> #i = #j"
+
+
+
+
+
+
+
+
+
+
+
+/* MULTI_PARTY: two requesters and two owners, the same two domains.
+
+   Four allow-policy pairs; still only two request starts in the bounded mode. */
+
+rule W3_Setup:
+
+  [ Fr(~si), Fr(~pi), Fr(~sr), Fr(~pr), Fr(~da), Fr(~db) ]
+
+  --[ W3Init() ]->
+
+  [ !Subject('requester','domain_A',%1,~si,~pi,pk(~si),ppk(~pi))
+
+  , !Subject('owner','domain_B',%1,~sr,~pr,pk(~sr),ppk(~pr))
+
+  , !Domain('domain_A',%1,~da,pk(~da))
+
+  , !Domain('domain_B',%1,~db,pk(~db))
+
+  , !Policy('domain_A','domain_B',%1,'requester','owner','1')
+
+  , !W3Ready('requester','owner','domain_A','domain_B',%1)
+
+  , W3Budget(), W3Budget()
+
+  , Out(<pk(~si),ppk(~pi),%1,'Subject Pk'>)
+
+  , Out(<pk(~sr),ppk(~pr),%1,'Subject Pk'>)
+
+  , Out(<<pk(~si),ppk(~pi),%1>,sign(<pk(~si),ppk(~pi),%1>,~da),pk(~da),'SubjectCert'>)
+
+  , Out(<<pk(~sr),ppk(~pr),%1>,sign(<pk(~sr),ppk(~pr),%1>,~db),pk(~db),'SubjectCert'>)
+
+  ]
+
+
+
+/* The bounded profile consumes one of two request-start tokens.
+
+   Requests consume budgets directly; no intermediate permission transition.
+
+   Tokens do not constrain message replay, order, or acceptance uniqueness. */
+
+
+
+rule Subject_Access_Request[role="Authentication_and_Data_Sharing"]:
+
+    let
+
+        CertA_Pro = <CertA, CertaSign, SignPk>
+
+        X = 'g'^~ie
+
+        AccessRa = <CertA_Pro, pkb, %n, ~sid, X>
+
+    in
+
+    [
+
+        !W3Ready($S_a,$S_b,$A,$B,%n)
+
+        ,         !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+
+        , !Domain($A, %n, gskA, gpkA)
+
+        , !Domain($B, %n, gskB, gpkB)
+
+        , Fr(~sid)
+
+        , Fr(~ie)
+
+        , In(<CertA, CertaSign, SignPk, field>)
+
+    ]
+
+    --[
+
+        Eq(field, 'SubjectCert')
+
+        , Eq(SignPk,gpkA)
+
+        , Eq(verify(CertaSign,CertA,gpkA),true)
+
+
+
+        , Eq(fst(CertA), pka)
+
+        , Eq(fst(snd(CertA)), ppka)
+
+        , Eq(snd(snd(CertA)), %n)
+
+        , AccessRequest($S_a, $S_b, %n, $A, $B, pska, pskb, gskA)
+
+        , W3Begin(~sid,$S_a,$S_b,%n)
+
+        , RunningInitiatorRequest($S_a,$S_b,$A,$B,%n,~sid,X,h(<pka,pkb,%n,~sid,X>))
+
+        , RepairAccessRequest($S_a,$S_b,$A,$B,%n,~sid,X)
+
+    ]->
+
+    [
+
+
+
+        Out(<AccessRa,sign(AccessRa,pska),pka, 'AccessR_a_fs'>)
+
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+
+        , St_Initiator_DH($S_a,$S_b,$A,$B,%n,~sid,~ie,X,pka,ppka,pkb,'clean')
+
+    ]
+
+
+
+rule Domain_Access_Verification[role="Authentication_and_Data_Sharing"]:
+
+    let
+
+        CertA_Pro = fst(AccessRa)
+
+        pkbIn = fst(snd(AccessRa))
+
+        Epoch_Access = fst(snd(snd(AccessRa)))
+
+        sid = fst(snd(snd(snd(AccessRa))))
+
+        X = snd(snd(snd(snd(AccessRa))))
+
+        GrantBody = <pka, pkb, %n, sid, X>
+
+
+
+    in
+
+    [
+
+        In(<AccessRa,AccesssSign,AccessPKa, field>)
+
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+
+        , !Policy($A, $B, %n, $S_a, $S_b, bit)
+
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+
+    ]
+
+    --[
+
+        Eq(field, 'AccessR_a_fs')
+
+        , Eq(pka,AccessPKa)
+
+        , Eq(verify(AccesssSign, AccessRa, pka), true)
+
+        , Eq(pkbIn,pkb)
+
+        , Eq(Epoch_Access, %n)
+
+
+
+        , Eq(bit, '1')
+
+        , AccessGranted($S_a, $S_b, %n, pka, pkb, bit)
+
+        , RepairAccessGranted($S_a,$S_b,$A,$B,%n,sid,X,h(GrantBody))
+
+    ]->
+
+    [
+
+        Out(<h(GrantBody), sign(h(GrantBody), gskB), pk(gskB), sid, X,
+
+             'AccessCert_ab_fs'>)
+
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+
+    ]
+
+
+
+rule Object_Data_Encryption[role="Authentication_and_Data_Sharing"]:
+
+    let
+
+        GrantBody = <pka, pkb, %n, sid, X>
+
+        Y = 'g'^~re
+
+        Z = X^~re
+
+        transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+
+                      sid,pka,pkb,X,Y,h(Hash1)>
+
+        kData = kdf_data(Z,transcript)
+
+        kConf = kdf_conf(Z,transcript)
+
+        d = <~data, sign(<~data,transcript>,pskb), pk(pskb)>
+
+        beta = senc(d,kData)
+
+        keyConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+
+    in
+
+    [
+
+        In(<Hash1,Hashsign,Hashpk,sid,X,field>)
+
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+
+        , Fr(~data)
+
+        , Fr(~re)
+
+    ]
+
+    --[
+
+        Eq(field, 'AccessCert_ab_fs')
+
+        , Eq(gpkB,Hashpk)
+
+        , Eq(verify(Hashsign, Hash1, gpkB), true)
+
+        , Eq(Hash1,h(GrantBody))
+
+        , DataSent($S_b, $S_a, %n, pskb, ppka, pka, ~data, kData)
+
+        , RepairDataSent($S_b,$S_a,$A,$B,%n,sid,~data,kData,transcript)
+
+        , CommitResponderRequest($S_a,$S_b,$A,$B,%n,sid,X,Hash1)
+
+        , W3DataSent($S_a,$S_b,%n,sid,~data,transcript,beta)
+
+        , RunningResponder($S_b,$S_a,$A,$B,%n,sid,~data,kData,transcript)
+
+
+
+        , Secret(~data, %n)
+
+        , SessionKey(kData, %n)
+
+        , Honest($S_a, %n)
+
+        , Honest($S_b, %n)
+
+
+
+    ]->
+
+    [
+
+        Out(<sid,Y,beta,keyConfirm,Hash1,'data_fs'>)
+
+
+
+    ]
+
+
+
+rule Subject_Data_Decryption[role="Authentication_and_Data_Sharing"]:
+
+let
+
+    transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%n,
+
+                  sid,pka,pkb,X,Y,h(Hash1)>
+
+    Z = Y^ie
+
+    k_in = kdf_data(Z,transcript)
+
+    kConf = kdf_conf(Z,transcript)
+
+    d_in = sdec(beta, k_in)
+
+    x_in = fst(d_in)
+
+    pk_in = snd(snd(d_in))
+
+    sign_x = fst(snd(d_in))
+
+    expectedConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+
+in
+
+[
+
+    In(<sid,Y,beta,keyConfirm,Hash1,field>)
+
+    , St_Initiator_DH($S_a,$S_b,$A,$B,%n,sid,ie,X,pka,ppka,pkb,iExposure)
+
+
+
+]
+
+--[
+
+    Eq(field, 'data_fs')
+
+    , Eq(keyConfirm,expectedConfirm)
+
+    , Eq(pk_in, pkb)
+
+    , Eq(verify(sign_x, <x_in,transcript>, pkb), true)
+
+    , DataReceive($S_b, $S_a, %n, Y, beta, ppka, pkb, k_in, x_in)
+
+    , RepairDataAccepted($S_a,$S_b,$A,$B,%n,sid,x_in,k_in,transcript)
+
+    , W3End(sid,$S_a,$S_b,%n)
+
+    , W3DataAccepted($S_a,$S_b,%n,sid,x_in,transcript,beta)
+
+    , CommitInitiator($S_a,$S_b,$A,$B,%n,sid,x_in,k_in,transcript)
+
+
+
+]->
+
+[
+
+
+
+]
+
+
+
+/* No corruption rules in W3: all credentials and session secrets are honest.
+
+   Safety formulas are candidates, not pre-recorded outcomes. */
+
+
+
+lemma reachable_session:
+
+ exists-trace
+
+ "Ex q I R e #b #c. W3Begin(q,I,R,e) @b & W3End(q,I,R,e) @c & #b < #c"
+
+
+
+lemma reachable_two_concurrent_sessions:
+
+ exists-trace
+
+ "Ex q1 q2 I R e #b1 #b2 #c1 #c2.
+
+ W3Begin(q1,I,R,e) @b1 & W3Begin(q2,I,R,e) @b2
+
+ & W3End(q1,I,R,e) @c1 & W3End(q2,I,R,e) @c2
+
+ & not(q1 = q2) & #b1 < #b2 & #b2 < #c1 & #b2 < #c2
+
+ & not(#c1 = #c2)"
+
+
+
+lemma initiator_aliveness:
+
+ all-traces
+
+ "All I R A B e sid x k T #c. CommitInitiator(I,R,A,B,e,sid,x,k,T) @c
+
+ ==> (Ex I2 A2 B2 e2 sid2 x2 k2 T2 #r.
+
+ RunningResponder(R,I2,A2,B2,e2,sid2,x2,k2,T2) @r & #r < #c)"
+
+
+
+lemma initiator_weak_agreement:
+
+ all-traces
+
+ "All I R A B e sid x k T #c. CommitInitiator(I,R,A,B,e,sid,x,k,T) @c
+
+ ==> (Ex A2 B2 e2 sid2 x2 k2 T2 #r.
+
+ RunningResponder(R,I,A2,B2,e2,sid2,x2,k2,T2) @r & #r < #c)"
+
+
+
+lemma initiator_noninjective_agreement:
+
+ all-traces
+
+ "All I R A B e sid x k T #c. CommitInitiator(I,R,A,B,e,sid,x,k,T) @c
+
+ ==> (Ex #r. RunningResponder(R,I,A,B,e,sid,x,k,T) @r & #r < #c)"
+
+
+
+lemma initiator_injective_agreement:
+
+ all-traces
+
+ "All I R A B e sid x k T #c. CommitInitiator(I,R,A,B,e,sid,x,k,T) @c
+
+ ==> (Ex #r. RunningResponder(R,I,A,B,e,sid,x,k,T) @r & #r < #c
+
+ & (All #c2. CommitInitiator(I,R,A,B,e,sid,x,k,T) @c2 ==> #c2 = #c))"
+
+
+
+lemma responder_aliveness:
+
+ all-traces
+
+ "All I R A B e sid X ctx #c. CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c
+
+ ==> (Ex R2 A2 B2 e2 sid2 X2 ctx2 #r.
+
+ RunningInitiatorRequest(I,R2,A2,B2,e2,sid2,X2,ctx2) @r & #r < #c)"
+
+
+
+lemma responder_weak_agreement:
+
+ all-traces
+
+ "All I R A B e sid X ctx #c. CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c
+
+ ==> (Ex A2 B2 e2 sid2 X2 ctx2 #r.
+
+ RunningInitiatorRequest(I,R,A2,B2,e2,sid2,X2,ctx2) @r & #r < #c)"
+
+
+
+lemma responder_noninjective_request_agreement:
+
+ all-traces
+
+ "All I R A B e sid X ctx #c. CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c
+
+ ==> (Ex #r. RunningInitiatorRequest(I,R,A,B,e,sid,X,ctx) @r & #r < #c)"
+
+
+
+lemma responder_injective_request_agreement:
+
+ all-traces
+
+ "All I R A B e sid X ctx #c. CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c
+
+ ==> (Ex #r. RunningInitiatorRequest(I,R,A,B,e,sid,X,ctx) @r & #r < #c
+
+ & (All #c2. CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c2 ==> #c2 = #c))"
+
+
+
+lemma repaired_data_origin_authentication:
+
+ all-traces
+
+ "All I R e sid x T beta #c. W3DataAccepted(I,R,e,sid,x,T,beta) @c
+
+ ==> (Ex #s. W3DataSent(I,R,e,sid,x,T,beta) @s & #s < #c)"
+
+
+
+lemma replay_acceptance_exclusion:
+
+ all-traces
+
+ "All I R A B e sid x1 x2 k1 k2 T1 T2 #c1 #c2.
+
+ CommitInitiator(I,R,A,B,e,sid,x1,k1,T1) @c1
+
+ & CommitInitiator(I,R,A,B,e,sid,x2,k2,T2) @c2 ==> #c1 = #c2"
+
+
+
+lemma responder_request_replay_exclusion:
+
+ all-traces
+
+ "All I R A B e sid X ctx #c1 #c2.
+
+ CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c1
+
+ & CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c2 ==> #c1 = #c2"
+
+
+
+lemma authorization_before_send:
+
+ all-traces
+
+ "All I R A B e sid X ctx #c. CommitResponderRequest(I,R,A,B,e,sid,X,ctx) @c
+
+ ==> (Ex #g. RepairAccessGranted(I,R,A,B,e,sid,X,ctx) @g & #g < #c)"
+
+
+
+
+
+end
+

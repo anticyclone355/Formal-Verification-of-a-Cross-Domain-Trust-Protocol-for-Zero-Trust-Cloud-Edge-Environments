@@ -1,0 +1,758 @@
+theory W3_original_Concurrent_Agreement begin
+
+// Function signature and definition of the equational theory E
+
+builtins: natural-numbers
+functions: PDec/2, PEnc/3, fst/1, h/1, pair/2, pk/1, ppk/1, sdec/2,
+           senc/2, sign/2, snd/1, true/0, verify/3
+equations:
+    PDec(psk, PEnc(ppk(psk), k, r)) = k,
+    fst(<x.1, x.2>) = x.1,
+    sdec(senc(x.1, x.2), x.2) = x.1,
+    snd(<x.1, x.2>) = x.2,
+    verify(sign(x.1, x.2), x.1, pk(x.2)) = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+restriction Equality:
+  "∀ x y #i. (Eq( x, y ) @ #i) ⇒ (x = y)"
+  // safety formula
+
+restriction W3_OneSetup:
+  "∀ #i #j. ((W3Init( ) @ #i) ∧ (W3Init( ) @ #j)) ⇒ (#i = #j)"
+  // safety formula
+
+rule (modulo E) W3_Setup:
+   [
+   Fr( ~si ), Fr( ~pi ), Fr( ~sr ), Fr( ~pr ), Fr( ~da ), Fr( ~db ),
+   Fr( ~si2 ), Fr( ~pi2 ), Fr( ~sr2 ), Fr( ~pr2 )
+   ]
+  --[ W3Init( ) ]->
+   [
+   !Subject( 'requester', 'domain_A', %1, ~si, ~pi, pk(~si), ppk(~pi) ),
+   !Subject( 'owner', 'domain_B', %1, ~sr, ~pr, pk(~sr), ppk(~pr) ),
+   !Domain( 'domain_A', %1, ~da, pk(~da) ),
+   !Domain( 'domain_B', %1, ~db, pk(~db) ),
+   !Policy( 'domain_A', 'domain_B', %1, 'requester', 'owner', '1' ),
+   !W3Ready( 'requester', 'owner', 'domain_A', 'domain_B', %1 ),
+   !Subject( 'requester_2', 'domain_A', %1, ~si2, ~pi2, pk(~si2), ppk(~pi2)
+   ),
+   !Subject( 'owner_2', 'domain_B', %1, ~sr2, ~pr2, pk(~sr2), ppk(~pr2) ),
+   !Policy( 'domain_A', 'domain_B', %1, 'requester', 'owner_2', '1' ),
+   !Policy( 'domain_A', 'domain_B', %1, 'requester_2', 'owner', '1' ),
+   !Policy( 'domain_A', 'domain_B', %1, 'requester_2', 'owner_2', '1' ),
+   !W3Ready( 'requester', 'owner_2', 'domain_A', 'domain_B', %1 ),
+   !W3Ready( 'requester_2', 'owner', 'domain_A', 'domain_B', %1 ),
+   !W3Ready( 'requester_2', 'owner_2', 'domain_A', 'domain_B', %1 ),
+   Out( <pk(~si2), ppk(~pi2), %1, 'Subject Pk'> ),
+   Out( <pk(~sr2), ppk(~pr2), %1, 'Subject Pk'> ),
+   Out( <<pk(~si2), ppk(~pi2), %1>, sign(<pk(~si2), ppk(~pi2), %1>, ~da), 
+         pk(~da), 'SubjectCert'>
+   ),
+   Out( <<pk(~sr2), ppk(~pr2), %1>, sign(<pk(~sr2), ppk(~pr2), %1>, ~db), 
+         pk(~db), 'SubjectCert'>
+   ),
+   W3Budget( ), W3Budget( ), Out( <pk(~si), ppk(~pi), %1, 'Subject Pk'> ),
+   Out( <pk(~sr), ppk(~pr), %1, 'Subject Pk'> ),
+   Out( <<pk(~si), ppk(~pi), %1>, sign(<pk(~si), ppk(~pi), %1>, ~da), 
+         pk(~da), 'SubjectCert'>
+   ),
+   Out( <<pk(~sr), ppk(~pr), %1>, sign(<pk(~sr), ppk(~pr), %1>, ~db), 
+         pk(~db), 'SubjectCert'>
+   )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Subject_Access_Request[role=Authentication_and_Data_Sharing]:
+   [
+   !W3Ready( $S_a, $S_b, $A, $B, %n ), W3Budget( ), Fr( ~rid ),
+   !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ),
+   !Domain( $A, %n, gskA, gpkA ), !Domain( $B, %n, gskB, gpkB ),
+   In( <CertA, CertaSign, SignPk, field> )
+   ]
+  --[
+  Eq( field, 'SubjectCert' ), Eq( SignPk, gpkA ),
+  Eq( verify(CertaSign, CertA, gpkA), true ), Eq( fst(CertA), pka ),
+  Eq( fst(snd(CertA)), ppka ), Eq( snd(snd(CertA)), %n ),
+  W3Begin( ~rid, $S_a, $S_b, %n ),
+  AccessRequest( $S_a, $S_b, %n, $A, $B, pska, pskb, gskA )
+  ]->
+   [
+   Out( <<<CertA, CertaSign, SignPk>, pkb, %n>, 
+         sign(<<CertA, CertaSign, SignPk>, pkb, %n>, pska), pka, 'AccessR_a'>
+   ),
+   Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB,
+                ppka, ~rid
+   )
+   ]
+
+  /*
+  rule (modulo AC) Subject_Access_Request[role=Authentication_and_Data_Sharing]:
+     [
+     !W3Ready( $S_a, $S_b, $A, $B, %n ), W3Budget( ), Fr( ~rid ),
+     !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+     !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ),
+     !Domain( $A, %n, gskA, gpkA ), !Domain( $B, %n, gskB, gpkB ),
+     In( <CertA, CertaSign, SignPk, field> )
+     ]
+    --[
+    Eq( field, 'SubjectCert' ), Eq( SignPk, gpkA ), Eq( z, true ),
+    Eq( z.1, pka ), Eq( z.2, ppka ), Eq( z.3, %n ),
+    W3Begin( ~rid, $S_a, $S_b, %n ),
+    AccessRequest( $S_a, $S_b, %n, $A, $B, pska, pskb, gskA )
+    ]->
+     [
+     Out( <<<CertA, CertaSign, SignPk>, pkb, %n>, 
+           sign(<<CertA, CertaSign, SignPk>, pkb, %n>, pska), pka, 'AccessR_a'>
+     ),
+     Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB,
+                  ppka, ~rid
+     )
+     ]
+    variants (modulo AC)
+    1. CertA = CertA.34
+       CertaSign
+             = CertaSign.35
+       gpkA  = gpkA.38
+       z     = verify(CertaSign.35, CertA.34, gpkA.38)
+       z.1   = fst(CertA.34)
+       z.2   = fst(snd(CertA.34))
+       z.3   = snd(snd(CertA.34))
+    
+    2. CertA = CertA.54
+       CertaSign
+             = sign(CertA.54, x.101)
+       gpkA  = pk(x.101)
+       z     = true
+       z.1   = fst(CertA.54)
+       z.2   = fst(snd(CertA.54))
+       z.3   = snd(snd(CertA.54))
+    
+    3. CertA = <z.35, x.42>
+       CertaSign
+             = sign(<z.35, x.42>, x.43)
+       gpkA  = pk(x.43)
+       z     = true
+       z.1   = z.35
+       z.2   = fst(x.42)
+       z.3   = snd(x.42)
+    
+    4. CertA = <z.36, z.37, z.38>
+       CertaSign
+             = sign(<z.36, z.37, z.38>, x.45)
+       gpkA  = pk(x.45)
+       z     = true
+       z.1   = z.36
+       z.2   = z.37
+       z.3   = z.38
+    
+    5. CertA = <z.70, z.71, z.72>
+       CertaSign
+             = CertaSign.51
+       gpkA  = gpkA.54
+       z     = verify(CertaSign.51, <z.70, z.71, z.72>, gpkA.54)
+       z.1   = z.70
+       z.2   = z.71
+       z.3   = z.72
+    
+    6. CertA = <z.72, x.98>
+       CertaSign
+             = CertaSign.53
+       gpkA  = gpkA.56
+       z     = verify(CertaSign.53, <z.72, x.98>, gpkA.56)
+       z.1   = z.72
+       z.2   = fst(x.98)
+       z.3   = snd(x.98)
+  */
+
+rule (modulo E) Domain_Access_Verification[role=Authentication_and_Data_Sharing]:
+   [
+   In( <AccessRa, AccesssSign, AccessPKa, field> ),
+   Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB,
+                ppka, rid
+   ),
+   !Policy( $A, $B, %n, $S_a, $S_b, bit ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb )
+   ]
+  --[
+  Eq( field, 'AccessR_a' ), Eq( pka, AccessPKa ),
+  Eq( verify(AccesssSign, AccessRa, pka), true ),
+  Eq( fst(snd(AccessRa)), pkb ), Eq( snd(snd(AccessRa)), %n ),
+  Eq( bit, '1' ), AccessGranted( $S_a, $S_b, %n, pka, pkb, bit )
+  ]->
+   [
+   Out( <h(<pka, pkb, %n>), sign(h(<pka, pkb, %n>), gskB), pk(gskB), 
+         'AccessCert_ab'>
+   ),
+   AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA,
+                    gpkB, rid
+   )
+   ]
+
+  /*
+  rule (modulo AC) Domain_Access_Verification[role=Authentication_and_Data_Sharing]:
+     [
+     In( <AccessRa, AccesssSign, AccessPKa, field> ),
+     Access_send( $S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB,
+                  ppka, rid
+     ),
+     !Policy( $A, $B, %n, $S_a, $S_b, bit ),
+     !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb )
+     ]
+    --[
+    Eq( field, 'AccessR_a' ), Eq( pka, AccessPKa ), Eq( z, true ),
+    Eq( z.1, pkb ), Eq( z.2, %n ), Eq( bit, '1' ),
+    AccessGranted( $S_a, $S_b, %n, pka, pkb, bit )
+    ]->
+     [
+     Out( <h(<pka, pkb, %n>), sign(h(<pka, pkb, %n>), gskB), pk(gskB), 
+           'AccessCert_ab'>
+     ),
+     AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA,
+                      gpkB, rid
+     )
+     ]
+    variants (modulo AC)
+    1. AccessRa
+             = AccessRa.36
+       AccesssSign
+             = AccesssSign.37
+       pka   = pka.44
+       z     = verify(AccesssSign.37, AccessRa.36, pka.44)
+       z.1   = fst(snd(AccessRa.36))
+       z.2   = snd(snd(AccessRa.36))
+    
+    2. AccessRa
+             = AccessRa.73
+       AccesssSign
+             = sign(AccessRa.73, x.139)
+       pka   = pk(x.139)
+       z     = true
+       z.1   = fst(snd(AccessRa.73))
+       z.2   = snd(snd(AccessRa.73))
+    
+    3. AccessRa
+             = <x.30, x.31>
+       AccesssSign
+             = sign(<x.30, x.31>, x.32)
+       pka   = pk(x.32)
+       z     = true
+       z.1   = fst(x.31)
+       z.2   = snd(x.31)
+    
+    4. AccessRa
+             = <x.45, z.37, z.38>
+       AccesssSign
+             = sign(<x.45, z.37, z.38>, x.48)
+       pka   = pk(x.48)
+       z     = true
+       z.1   = z.37
+       z.2   = z.38
+    
+    5. AccessRa
+             = <x.132, z.88, z.89>
+       AccesssSign
+             = AccesssSign.70
+       pka   = pka.77
+       z     = verify(AccesssSign.70, <x.132, z.88, z.89>, pka.77)
+       z.1   = z.88
+       z.2   = z.89
+    
+    6. AccessRa
+             = <x.133, x.134>
+       AccesssSign
+             = AccesssSign.71
+       pka   = pka.78
+       z     = verify(AccesssSign.71, <x.133, x.134>, pka.78)
+       z.1   = fst(x.134)
+       z.2   = snd(x.134)
+  */
+
+rule (modulo E) Object_Data_Encryption[role=Authentication_and_Data_Sharing]:
+   [
+   In( <Hash1, Hashsign, Hashpk, field> ),
+   AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA,
+                    gpkB, rid
+   ),
+   !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+   !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ), Fr( ~x ), Fr( ~k ),
+   Fr( ~v )
+   ]
+  --[
+  Eq( field, 'AccessCert_ab' ), Eq( gpkB, Hashpk ),
+  Eq( verify(Hashsign, Hash1, gpkB), true ),
+  Eq( Hash1, h(<pka, pkb, %n>) ), W3Running( $S_a, $S_b, %n, ~x, ~k ),
+  W3DataSent( $S_a, $S_b, %n, ~x, PEnc(ppka, ~k, ~v),
+              senc(<~x, sign(~x, pskb), pk(pskb)>, ~k)
+  ),
+  DataSent( $S_b, $S_a, %n, pskb, ppka, pka, ~x, ~k ), Secret( ~x, %n ),
+  SessionKey( ~k, %n ), Honest( $S_a, %n ), Honest( $S_b, %n )
+  ]->
+   [
+   Out( <PEnc(ppka, ~k, ~v), senc(<~x, sign(~x, pskb), pk(pskb)>, ~k), 
+         'data'>
+   ),
+   X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska,
+           <~x, sign(~x, pskb), pk(pskb)>, ~x, ~k, rid
+   )
+   ]
+
+  /*
+  rule (modulo AC) Object_Data_Encryption[role=Authentication_and_Data_Sharing]:
+     [
+     In( <Hash1, Hashsign, Hashpk, field> ),
+     AccessCert_send( $S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA,
+                      gpkB, rid
+     ),
+     !Subject( $S_a, $A, %n, pska, ppska, pka, ppka ),
+     !Subject( $S_b, $B, %n, pskb, ppskb, pkb, ppkb ), Fr( ~x ), Fr( ~k ),
+     Fr( ~v )
+     ]
+    --[
+    Eq( field, 'AccessCert_ab' ), Eq( gpkB, Hashpk ), Eq( z, true ),
+    Eq( Hash1, h(<pka, pkb, %n>) ), W3Running( $S_a, $S_b, %n, ~x, ~k ),
+    W3DataSent( $S_a, $S_b, %n, ~x, PEnc(ppka, ~k, ~v),
+                senc(<~x, sign(~x, pskb), pk(pskb)>, ~k)
+    ),
+    DataSent( $S_b, $S_a, %n, pskb, ppka, pka, ~x, ~k ), Secret( ~x, %n ),
+    SessionKey( ~k, %n ), Honest( $S_a, %n ), Honest( $S_b, %n )
+    ]->
+     [
+     Out( <PEnc(ppka, ~k, ~v), senc(<~x, sign(~x, pskb), pk(pskb)>, ~k), 
+           'data'>
+     ),
+     X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska,
+             <~x, sign(~x, pskb), pk(pskb)>, ~x, ~k, rid
+     )
+     ]
+    variants (modulo AC)
+    1. Hash1 = Hash1.33
+       Hashsign
+             = Hashsign.35
+       gpkB  = gpkB.38
+       z     = verify(Hashsign.35, Hash1.33, gpkB.38)
+    
+    2. Hash1 = Hash1.49
+       Hashsign
+             = sign(Hash1.49, x.89)
+       gpkB  = pk(x.89)
+       z     = true
+  */
+
+rule (modulo E) Subject_Data_Decryption[role=Authentication_and_Data_Sharing]:
+   [
+   In( <alpha, beta, field> ),
+   X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, x, k, rid )
+   ]
+  --[
+  Eq( field, 'data' ), Eq( PDec(ppska, alpha), k ),
+  Eq( sdec(beta, PDec(ppska, alpha)), d ),
+  Eq( snd(snd(sdec(beta, PDec(ppska, alpha)))), pkb ),
+  Eq( verify(fst(snd(sdec(beta, PDec(ppska, alpha)))),
+             fst(sdec(beta, PDec(ppska, alpha))), pkb),
+      true
+  ),
+  Eq( fst(sdec(beta, PDec(ppska, alpha))), x ),
+  W3End( rid, $S_a, $S_b, %n ), W3Commit( $S_a, $S_b, %n, x, k ),
+  W3DataAccepted( $S_a, $S_b, %n, x, alpha, beta ),
+  DataReceive( $S_b, $S_a, %n, alpha, beta, ppska, pkb, k, x )
+  ]->
+   [ ]
+
+  /*
+  rule (modulo AC) Subject_Data_Decryption[role=Authentication_and_Data_Sharing]:
+     [
+     In( <alpha, beta, field> ),
+     X_send( $S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, x, k, rid )
+     ]
+    --[
+    Eq( field, 'data' ), Eq( z, k ), Eq( z.1, d ), Eq( z.2, pkb ),
+    Eq( z.3, true ), Eq( z.4, x ), W3End( rid, $S_a, $S_b, %n ),
+    W3Commit( $S_a, $S_b, %n, x, k ),
+    W3DataAccepted( $S_a, $S_b, %n, x, alpha, beta ),
+    DataReceive( $S_b, $S_a, %n, alpha, beta, ppska, pkb, k, x )
+    ]->
+     [ ]
+    variants (modulo AC)
+     1. alpha = alpha.23
+        beta  = beta.24
+        pkb   = pkb.28
+        ppska = ppska.29
+        z     = PDec(ppska.29, alpha.23)
+        z.1   = sdec(beta.24, PDec(ppska.29, alpha.23))
+        z.2   = snd(snd(sdec(beta.24, PDec(ppska.29, alpha.23))))
+        z.3   = verify(fst(snd(sdec(beta.24, PDec(ppska.29, alpha.23)))),
+                       fst(sdec(beta.24, PDec(ppska.29, alpha.23))), pkb.28)
+        z.4   = fst(sdec(beta.24, PDec(ppska.29, alpha.23)))
+    
+     2. alpha = alpha.26
+        beta  = senc(z.41, PDec(ppska.32, alpha.26))
+        pkb   = pkb.31
+        ppska = ppska.32
+        z     = PDec(ppska.32, alpha.26)
+        z.1   = z.41
+        z.2   = snd(snd(z.41))
+        z.3   = verify(fst(snd(z.41)), fst(z.41), pkb.31)
+        z.4   = fst(z.41)
+    
+     3. alpha = alpha.27
+        beta  = senc(<z.45, x.48>, PDec(ppska.33, alpha.27))
+        pkb   = pkb.32
+        ppska = ppska.33
+        z     = PDec(ppska.33, alpha.27)
+        z.1   = <z.45, x.48>
+        z.2   = snd(x.48)
+        z.3   = verify(fst(x.48), z.45, pkb.32)
+        z.4   = z.45
+    
+     4. alpha = alpha.27
+        beta  = senc(<z.45, sign(z.45, x.48), z.43>, PDec(ppska.33, alpha.27))
+        pkb   = pk(x.48)
+        ppska = ppska.33
+        z     = PDec(ppska.33, alpha.27)
+        z.1   = <z.45, sign(z.45, x.48), z.43>
+        z.2   = z.43
+        z.3   = true
+        z.4   = z.45
+    
+     5. alpha = alpha.28
+        beta  = senc(<z.46, x.49, z.44>, PDec(ppska.34, alpha.28))
+        pkb   = pkb.33
+        ppska = ppska.34
+        z     = PDec(ppska.34, alpha.28)
+        z.1   = <z.46, x.49, z.44>
+        z.2   = z.44
+        z.3   = verify(x.49, z.46, pkb.33)
+        z.4   = z.46
+    
+     6. alpha = PEnc(ppk(ppska.28), z.36, x.43)
+        beta  = senc(z.37, z.36)
+        pkb   = pkb.27
+        ppska = ppska.28
+        z     = z.36
+        z.1   = z.37
+        z.2   = snd(snd(z.37))
+        z.3   = verify(fst(snd(z.37)), fst(z.37), pkb.27)
+        z.4   = fst(z.37)
+    
+     7. alpha = PEnc(ppk(ppska.28), z.36, x.43)
+        beta  = senc(<z.40, sign(z.40, x.45), z.38>, z.36)
+        pkb   = pk(x.45)
+        ppska = ppska.28
+        z     = z.36
+        z.1   = <z.40, sign(z.40, x.45), z.38>
+        z.2   = z.38
+        z.3   = true
+        z.4   = z.40
+    
+     8. alpha = PEnc(ppk(ppska.29), z.37, x.44)
+        beta  = senc(<z.41, x.46>, z.37)
+        pkb   = pkb.28
+        ppska = ppska.29
+        z     = z.37
+        z.1   = <z.41, x.46>
+        z.2   = snd(x.46)
+        z.3   = verify(fst(x.46), z.41, pkb.28)
+        z.4   = z.41
+    
+     9. alpha = PEnc(ppk(ppska.30), z.38, x.45)
+        beta  = senc(<z.42, x.47, z.40>, z.38)
+        pkb   = pkb.29
+        ppska = ppska.30
+        z     = z.38
+        z.1   = <z.42, x.47, z.40>
+        z.2   = z.40
+        z.3   = verify(x.47, z.42, pkb.29)
+        z.4   = z.42
+    
+    10. alpha = PEnc(ppk(ppska.31), z.39, x.46)
+        beta  = beta.26
+        pkb   = pkb.30
+        ppska = ppska.31
+        z     = z.39
+        z.1   = sdec(beta.26, z.39)
+        z.2   = snd(snd(sdec(beta.26, z.39)))
+        z.3   = verify(fst(snd(sdec(beta.26, z.39))), fst(sdec(beta.26, z.39)),
+                       pkb.30)
+        z.4   = fst(sdec(beta.26, z.39))
+  */
+
+lemma reachable_session:
+  exists-trace
+  "∃ q I R e #b #c.
+    ((W3Begin( q, I, R, e ) @ #b) ∧ (W3End( q, I, R, e ) @ #c)) ∧ (#b < #c)"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ q I R e #b #c.
+  (W3Begin( q, I, R, e ) @ #b) ∧ (W3End( q, I, R, e ) @ #c) ∧ #b < #c"
+*/
+simplify
+solve( !W3Ready( $S_a, $S_b, $A, $B, %n ) ▶₀ #b )
+  case W3_Setup_case_1
+  solve( W3Budget( ) ▶₁ #b )
+    case W3_Setup_case_1
+    solve( !Subject( 'requester', 'domain_A', %1, pska, ppska, pka, ppka
+           ) ▶₃ #b )
+      case W3_Setup
+      solve( !Subject( 'owner', 'domain_B', %1, pskb, ppskb, pkb, ppkb
+             ) ▶₄ #b )
+        case W3_Setup
+        solve( !Domain( 'domain_A', %1, gskA, pk(x) ) ▶₅ #b )
+          case W3_Setup
+          solve( !Domain( 'domain_B', %1, gskB, gpkB ) ▶₆ #b )
+            case W3_Setup
+            solve( X_send( 'owner', 'requester', %1, pskb, pk(x.1), ppskb, pska,
+                           ppska, <x, sign(x, x.1), pk(x.1)>, x, k, ~rid
+                   ) ▶₁ #c )
+              case Object_Data_Encryption
+              solve( !KU( sign(<x.2, pk(~sr), %1>, ~si) ) @ #vk.28 )
+                case Subject_Access_Request_case_1
+                solve( !KU( PEnc(ppk(~pi), ~k, x) ) @ #vk.11 )
+                  case Object_Data_Encryption
+                  solve( !KU( sign(<pk(~si), ppk(~pi), %1>, ~da) ) @ #vk.9 )
+                    case W3_Setup
+                    solve( !KU( sign(h(<pk(~si), pk(~sr), %1>), ~db) ) @ #vk.27 )
+                      case Domain_Access_Verification_case_1
+                      solve( !KU( pk(~da) ) @ #vk.14 )
+                        case W3_Setup_case_1
+                        solve( !KU( senc(<~x, sign(~x, ~sr), pk(~sr)>, ~k) ) @ #vk.19 )
+                          case Object_Data_Encryption
+                          solve( !KU( pk(~si) ) @ #vk.21 )
+                            case W3_Setup_case_1
+                            solve( !KU( ppk(~pi) ) @ #vk.24 )
+                              case W3_Setup_case_1
+                              solve( !KU( h(<pk(~si), pk(~sr), %1>) ) @ #vk.27 )
+                                case Domain_Access_Verification
+                                solve( !KU( pk(~db) ) @ #vk.29 )
+                                  case Domain_Access_Verification_case_1
+                                  solve( !KU( pk(~sr) ) @ #vk.32 )
+                                    case Subject_Access_Request_case_1
+                                    SOLVED // trace found
+                                  qed
+                                qed
+                              qed
+                            qed
+                          qed
+                        qed
+                      qed
+                    qed
+                  qed
+                qed
+              qed
+            qed
+          qed
+        qed
+      qed
+    qed
+  qed
+qed
+
+lemma reachable_two_concurrent_sessions:
+  exists-trace
+  "∃ q1 q2 I R e #b1 #b2 #c1 #c2.
+    ((((((((W3Begin( q1, I, R, e ) @ #b1) ∧ (W3Begin( q2, I, R, e ) @ #b2)) ∧
+          (W3End( q1, I, R, e ) @ #c1)) ∧
+         (W3End( q2, I, R, e ) @ #c2)) ∧
+        (¬(q1 = q2))) ∧
+       (#b1 < #b2)) ∧
+      (#b2 < #c1)) ∧
+     (#b2 < #c2)) ∧
+    (¬(#c1 = #c2))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ q1 q2 I R e #b1 #b2 #c1 #c2.
+  (W3Begin( q1, I, R, e ) @ #b1) ∧
+  (W3Begin( q2, I, R, e ) @ #b2) ∧
+  (W3End( q1, I, R, e ) @ #c1) ∧
+  (W3End( q2, I, R, e ) @ #c2)
+ ∧
+  (¬(q1 = q2)) ∧ (#b1 < #b2) ∧ (#b2 < #c1) ∧ (#b2 < #c2) ∧ (¬(#c1 = #c2))"
+*/
+by sorry
+
+lemma initiator_aliveness:
+  all-traces
+  "∀ I R e x k #c.
+    (W3Commit( I, R, e, x, k ) @ #c) ⇒
+    (∃ I2 e2 x2 k2 #r. (W3Running( I2, R, e2, x2, k2 ) @ #r) ∧ (#r < #c))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x k #c.
+  (W3Commit( I, R, e, x, k ) @ #c)
+ ∧
+  ∀ I2 e2 x2 k2 #r. (W3Running( I2, R, e2, x2, k2 ) @ #r) ⇒ ¬(#r < #c)"
+*/
+by sorry
+
+lemma initiator_weak_agreement:
+  all-traces
+  "∀ I R e x k #c.
+    (W3Commit( I, R, e, x, k ) @ #c) ⇒
+    (∃ e2 x2 k2 #r. (W3Running( I, R, e2, x2, k2 ) @ #r) ∧ (#r < #c))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x k #c.
+  (W3Commit( I, R, e, x, k ) @ #c)
+ ∧
+  ∀ e2 x2 k2 #r. (W3Running( I, R, e2, x2, k2 ) @ #r) ⇒ ¬(#r < #c)"
+*/
+by sorry
+
+lemma initiator_noninjective_agreement:
+  all-traces
+  "∀ I R e x k #c.
+    (W3Commit( I, R, e, x, k ) @ #c) ⇒
+    (∃ #r. (W3Running( I, R, e, x, k ) @ #r) ∧ (#r < #c))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x k #c.
+  (W3Commit( I, R, e, x, k ) @ #c)
+ ∧
+  ∀ #r. (W3Running( I, R, e, x, k ) @ #r) ⇒ ¬(#r < #c)"
+*/
+by sorry
+
+lemma initiator_injective_agreement:
+  all-traces
+  "∀ I R e x k #c.
+    (W3Commit( I, R, e, x, k ) @ #c) ⇒
+    (∃ #r.
+      ((W3Running( I, R, e, x, k ) @ #r) ∧ (#r < #c)) ∧
+      (∀ #c2. (W3Commit( I, R, e, x, k ) @ #c2) ⇒ (#c2 = #c)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x k #c.
+  (W3Commit( I, R, e, x, k ) @ #c)
+ ∧
+  ∀ #r.
+   (W3Running( I, R, e, x, k ) @ #r)
+  ⇒
+   ((¬(#r < #c)) ∨
+    (∃ #c2. (W3Commit( I, R, e, x, k ) @ #c2) ∧ ¬(#c2 = #c)))"
+*/
+by sorry
+
+lemma data_origin_authentication:
+  all-traces
+  "∀ I R e x a b #c.
+    (W3DataAccepted( I, R, e, x, a, b ) @ #c) ⇒
+    (∃ #s. (W3DataSent( I, R, e, x, a, b ) @ #s) ∧ (#s < #c))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x a b #c.
+  (W3DataAccepted( I, R, e, x, a, b ) @ #c)
+ ∧
+  ∀ #s. (W3DataSent( I, R, e, x, a, b ) @ #s) ⇒ ¬(#s < #c)"
+*/
+by sorry
+
+lemma replay_acceptance_exclusion:
+  all-traces
+  "∀ I R e x a b #c1 #c2.
+    ((W3DataAccepted( I, R, e, x, a, b ) @ #c1) ∧
+     (W3DataAccepted( I, R, e, x, a, b ) @ #c2)) ⇒
+    (#c1 = #c2)"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x a b #c1 #c2.
+  (W3DataAccepted( I, R, e, x, a, b ) @ #c1) ∧
+  (W3DataAccepted( I, R, e, x, a, b ) @ #c2)
+ ∧
+  ¬(#c1 = #c2)"
+*/
+by sorry
+
+lemma reachable_two_distinct_contexts:
+  exists-trace
+  "∃ q1 q2 I1 I2 R1 R2 e #b1 #b2 #c1 #c2.
+    (((((((((W3Begin( q1, I1, R1, e ) @ #b1) ∧
+            (W3Begin( q2, I2, R2, e ) @ #b2)) ∧
+           (W3End( q1, I1, R1, e ) @ #c1)) ∧
+          (W3End( q2, I2, R2, e ) @ #c2)) ∧
+         (¬(q1 = q2))) ∧
+        ((¬(I1 = I2)) ∨ (¬(R1 = R2)))) ∧
+       (#b1 < #b2)) ∧
+      (#b2 < #c1)) ∧
+     (#b2 < #c2)) ∧
+    (¬(#c1 = #c2))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ q1 q2 I1 I2 R1 R2 e #b1 #b2 #c1 #c2.
+  (W3Begin( q1, I1, R1, e ) @ #b1) ∧
+  (W3Begin( q2, I2, R2, e ) @ #b2) ∧
+  (W3End( q1, I1, R1, e ) @ #c1) ∧
+  (W3End( q2, I2, R2, e ) @ #c2)
+ ∧
+  (¬(q1 = q2)) ∧
+  (((¬(I1 = I2)) ∨ (¬(R1 = R2)))) ∧
+  (#b1 < #b2) ∧
+  (#b2 < #c1) ∧
+  (#b2 < #c2) ∧
+  (¬(#c1 = #c2))"
+*/
+by sorry
+
+lemma unknown_key_share_exclusion:
+  all-traces
+  "∀ I R e x k I2 R2 e2 x2 #c #s.
+    ((W3Commit( I, R, e, x, k ) @ #c) ∧
+     (W3Running( I2, R2, e2, x2, k ) @ #s)) ⇒
+    (((I = I2) ∧ (R = R2)) ∧ (e = e2))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ I R e x k I2 R2 e2 x2 #c #s.
+  (W3Commit( I, R, e, x, k ) @ #c) ∧ (W3Running( I2, R2, e2, x2, k ) @ #s)
+ ∧
+  ((¬(I = I2)) ∨ (¬(R = R2)) ∨ (¬(e = e2)))"
+*/
+by sorry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.10.0
+Maude version 3.1
+Git revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master
+Compiled at: 2024-10-30 11:11:02.432289291 UTC
+*/
+
+end

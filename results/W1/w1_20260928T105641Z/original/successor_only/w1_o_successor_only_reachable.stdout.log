@@ -1,0 +1,33 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: original_reveal_matrix.spthy
+
+  output:          w1_o_successor_only_reachable.proof.spthy
+  processing time: 73.52s
+  
+  w1_o_baseline_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_baseline_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_baseline_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_identity_only_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_identity_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_identity_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_pce_only_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_pce_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_pce_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_pce_only_record_decrypt (exists-trace): analysis incomplete (1 steps)
+  w1_o_combined_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_combined_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_combined_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_combined_record_decrypt (exists-trace): analysis incomplete (1 steps)
+  w1_o_historical_pce_after_epoch_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_historical_pce_after_epoch_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_historical_pce_after_epoch_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_historical_pce_after_epoch_record_decrypt (exists-trace): analysis incomplete (1 steps)
+  w1_o_successor_only_reachable (exists-trace): verified (32 steps)
+  w1_o_successor_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_successor_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_session_key_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+
+==============================================================================

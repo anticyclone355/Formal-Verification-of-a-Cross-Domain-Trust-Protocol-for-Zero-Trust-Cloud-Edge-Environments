@@ -1,0 +1,46 @@
+{
+  "protocol": "original",
+  "profile": "multi_ablated_two",
+  "case": "initiator",
+  "lemma": "initiator_noninjective_agreement",
+  "trace": "all-traces",
+  "defines": [
+    "MULTI_PARTY"
+  ],
+  "model_sha256": "72A905E72534A6E02030AFAD763DDAA27018031DB4E0CD24B91D979929021D01",
+  "status": "verified",
+  "raw_summary": "verified (10 steps)",
+  "steps": 10,
+  "wall_seconds": 25.044,
+  "tamarin_processing_seconds": 24.75,
+  "started_utc": "2026-09-28T15:03:52.914458+00:00",
+  "finished_utc": "2026-09-28T15:04:17.958086+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_multi_ablated_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=initiator_noninjective_agreement",
+    "--output=initiator_noninjective_agreement.proof.spthy",
+    "--output-json=initiator_noninjective_agreement.trace.json",
+    "--output-dot=initiator_noninjective_agreement.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_ablated_two",
+  "artifacts": {
+    "stdout": "initiator_noninjective_agreement.stdout.log",
+    "stderr": "initiator_noninjective_agreement.stderr.log",
+    "time": "initiator_noninjective_agreement.time.txt",
+    "proof": "initiator_noninjective_agreement.proof.spthy",
+    "trace_json": "initiator_noninjective_agreement.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_original_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

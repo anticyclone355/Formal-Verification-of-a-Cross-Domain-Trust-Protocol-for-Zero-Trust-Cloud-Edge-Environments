@@ -1,0 +1,50 @@
+{
+  "protocol": "original",
+  "profile": "multi_restricted_two",
+  "case": "initiator",
+  "lemma": "data_origin_authentication",
+  "trace": "all-traces",
+  "defines": [
+    "MULTI_PARTY",
+    "KEEP_REQUEST",
+    "KEEP_GRANT",
+    "KEEP_SEND",
+    "KEEP_RECEIVE"
+  ],
+  "model_sha256": "9C1CA31AD45C87F8E0B6969470394C84F94DE3866C296EE0C79ECEE6A1E9C7EC",
+  "status": "verified",
+  "raw_summary": "verified (50 steps)",
+  "steps": 50,
+  "wall_seconds": 51.797,
+  "tamarin_processing_seconds": 51.43,
+  "started_utc": "2026-09-28T15:03:01.115776+00:00",
+  "finished_utc": "2026-09-28T15:03:52.912554+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_multi_restricted_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=data_origin_authentication",
+    "--output=data_origin_authentication.proof.spthy",
+    "--output-json=data_origin_authentication.trace.json",
+    "--output-dot=data_origin_authentication.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_restricted_two",
+  "artifacts": {
+    "stdout": "data_origin_authentication.stdout.log",
+    "stderr": "data_origin_authentication.stderr.log",
+    "time": "data_origin_authentication.time.txt",
+    "proof": "data_origin_authentication.proof.spthy",
+    "trace_json": "data_origin_authentication.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_original_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

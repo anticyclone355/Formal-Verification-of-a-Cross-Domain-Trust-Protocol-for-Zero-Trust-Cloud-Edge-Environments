@@ -1,0 +1,7 @@
+started_utc=2026-09-28T14:16:22.638886+00:00
+finished_utc=2026-09-28T14:16:32.320862+00:00
+wall_seconds=9.682
+timeout=False
+exit_code=0
+command=tamarin-prover policy_decomposition.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_proposal -DMULTI_CONTEXT +RTS -N2 -RTS --output=reachable_proposal.proof.spthy --output-json=reachable_proposal.trace.json --output-dot=reachable_proposal.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/alternative_context/reachability

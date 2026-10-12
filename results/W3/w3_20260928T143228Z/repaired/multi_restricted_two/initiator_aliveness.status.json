@@ -1,0 +1,50 @@
+{
+  "protocol": "repaired",
+  "profile": "multi_restricted_two",
+  "case": "initiator",
+  "lemma": "initiator_aliveness",
+  "trace": "all-traces",
+  "defines": [
+    "MULTI_PARTY",
+    "KEEP_REQUEST",
+    "KEEP_GRANT",
+    "KEEP_SEND",
+    "KEEP_RECEIVE"
+  ],
+  "model_sha256": "8E215453CB006B1932002067ED6EB9BF0F489015AFEDE6E1183DBB4970550F9B",
+  "status": "verified",
+  "raw_summary": "verified (50 steps)",
+  "steps": 50,
+  "wall_seconds": 173.447,
+  "tamarin_processing_seconds": 172.69,
+  "started_utc": "2026-09-28T15:06:44.319143+00:00",
+  "finished_utc": "2026-09-28T15:09:37.765913+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_multi_restricted_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=initiator_aliveness",
+    "--output=initiator_aliveness.proof.spthy",
+    "--output-json=initiator_aliveness.trace.json",
+    "--output-dot=initiator_aliveness.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_restricted_two",
+  "artifacts": {
+    "stdout": "initiator_aliveness.stdout.log",
+    "stderr": "initiator_aliveness.stderr.log",
+    "time": "initiator_aliveness.time.txt",
+    "proof": "initiator_aliveness.proof.spthy",
+    "trace_json": "initiator_aliveness.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

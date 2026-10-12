@@ -1,0 +1,47 @@
+{
+  "protocol": "original",
+  "profile": "multi_local_receiver_two",
+  "case": "initiator",
+  "lemma": "initiator_aliveness",
+  "trace": "all-traces",
+  "defines": [
+    "MULTI_PARTY",
+    "LOCAL_RECEIVER"
+  ],
+  "model_sha256": "4B87C79AC1533E35B8C271ECEC4266701E2F41DDAF5EC4D581F4C7D074B311B1",
+  "status": "verified",
+  "raw_summary": "verified (106 steps)",
+  "steps": 106,
+  "wall_seconds": 44.148,
+  "tamarin_processing_seconds": 43.88,
+  "started_utc": "2026-09-28T15:04:53.601886+00:00",
+  "finished_utc": "2026-09-28T15:05:37.750371+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_multi_local_receiver_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=initiator_aliveness",
+    "--output=initiator_aliveness.proof.spthy",
+    "--output-json=initiator_aliveness.trace.json",
+    "--output-dot=initiator_aliveness.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_local_receiver_two",
+  "artifacts": {
+    "stdout": "initiator_aliveness.stdout.log",
+    "stderr": "initiator_aliveness.stderr.log",
+    "time": "initiator_aliveness.time.txt",
+    "proof": "initiator_aliveness.proof.spthy",
+    "trace_json": "initiator_aliveness.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_original_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

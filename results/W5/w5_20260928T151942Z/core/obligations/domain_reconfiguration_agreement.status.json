@@ -1,0 +1,46 @@
+{
+  "profile": "core",
+  "case": "obligations",
+  "lemma": "domain_reconfiguration_agreement",
+  "trace": "all-traces",
+  "defines": [],
+  "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+  "status": "verified",
+  "raw_summary": "verified (30 steps)",
+  "steps": 30,
+  "wall_seconds": 1.476,
+  "tamarin_processing_seconds": 1.37,
+  "started_utc": "2026-09-28T15:19:48.598511+00:00",
+  "finished_utc": "2026-09-28T15:19:50.074096+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "epoch_successor.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=domain_reconfiguration_agreement",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=domain_reconfiguration_agreement.proof.spthy",
+    "--output-json=domain_reconfiguration_agreement.trace.json",
+    "--output-dot=domain_reconfiguration_agreement.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/obligations",
+  "artifacts": {
+    "stdout": "domain_reconfiguration_agreement.stdout.log",
+    "stderr": "domain_reconfiguration_agreement.stderr.log",
+    "time": "domain_reconfiguration_agreement.time.txt",
+    "proof": "domain_reconfiguration_agreement.proof.spthy",
+    "trace_json": "domain_reconfiguration_agreement.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W5_Epoch_Successor] Derivation checks started",
+    "[Theory W5_Epoch_Successor] Derivation checks ended",
+    "[Theory W5_Epoch_Successor] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

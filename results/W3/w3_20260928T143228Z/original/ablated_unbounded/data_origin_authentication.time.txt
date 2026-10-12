@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:32:51.756989+00:00
+finished_utc=2026-09-28T14:33:08.767385+00:00
+wall_seconds=17.010
+timeout=False
+exit_code=0
+profile=ablated_unbounded
+model=original_ablated_unbounded.spthy
+command=tamarin-prover original_ablated_unbounded.spthy --quit-on-warning --derivcheck-timeout=300 --prove=data_origin_authentication --output=data_origin_authentication.proof.spthy --output-json=data_origin_authentication.trace.json --output-dot=data_origin_authentication.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/ablated_unbounded

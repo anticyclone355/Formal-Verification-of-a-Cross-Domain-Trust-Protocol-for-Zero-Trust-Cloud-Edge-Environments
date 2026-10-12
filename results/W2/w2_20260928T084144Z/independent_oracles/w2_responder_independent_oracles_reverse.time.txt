@@ -1,0 +1,7 @@
+started_utc=2026-09-28T20:16:39.735488+00:00
+finished_utc=2026-09-28T21:16:41.889057+00:00
+wall_seconds=3602.154
+timeout=True
+exit_code=-9
+command=tamarin-prover repaired_state_lifecycle.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w2_responder_independent_oracles_reverse +RTS -N4 -RTS --output=w2_responder_independent_oracles_reverse.proof.spthy --output-json=w2_responder_independent_oracles_reverse.trace.json --output-dot=w2_responder_independent_oracles_reverse.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/independent_oracles

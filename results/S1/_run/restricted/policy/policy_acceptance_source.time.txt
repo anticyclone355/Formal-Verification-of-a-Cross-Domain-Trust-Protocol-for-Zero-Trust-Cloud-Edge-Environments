@@ -1,0 +1,8 @@
+started_utc=2026-09-29T08:00:38.059872+00:00
+finished_utc=2026-09-29T08:01:08.269712+00:00
+wall_seconds=30.210
+timeout=False
+exit_code=0
+profile=restricted
+command=tamarin-prover registration_policy_order.spthy --quit-on-warning --derivcheck-timeout=300 --prove=policy_acceptance_source -DKEEP_ORDER --output=policy_acceptance_source.proof.spthy --output-json=policy_acceptance_source.trace.json --output-dot=policy_acceptance_source.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/policy

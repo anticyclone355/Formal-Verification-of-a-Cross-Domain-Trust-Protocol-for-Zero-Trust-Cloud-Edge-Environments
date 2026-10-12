@@ -1,0 +1,50 @@
+{
+  "protocol": "repaired",
+  "profile": "multi_restricted_two",
+  "case": "initiator",
+  "lemma": "replay_acceptance_exclusion",
+  "trace": "all-traces",
+  "defines": [
+    "MULTI_PARTY",
+    "KEEP_REQUEST",
+    "KEEP_GRANT",
+    "KEEP_SEND",
+    "KEEP_RECEIVE"
+  ],
+  "model_sha256": "8E215453CB006B1932002067ED6EB9BF0F489015AFEDE6E1183DBB4970550F9B",
+  "status": "verified",
+  "raw_summary": "verified (36 steps)",
+  "steps": 36,
+  "wall_seconds": 173.195,
+  "tamarin_processing_seconds": 172.48,
+  "started_utc": "2026-09-28T15:10:49.599641+00:00",
+  "finished_utc": "2026-09-28T15:13:42.794659+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_multi_restricted_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=replay_acceptance_exclusion",
+    "--output=replay_acceptance_exclusion.proof.spthy",
+    "--output-json=replay_acceptance_exclusion.trace.json",
+    "--output-dot=replay_acceptance_exclusion.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_restricted_two",
+  "artifacts": {
+    "stdout": "replay_acceptance_exclusion.stdout.log",
+    "stderr": "replay_acceptance_exclusion.stderr.log",
+    "time": "replay_acceptance_exclusion.time.txt",
+    "proof": "replay_acceptance_exclusion.proof.spthy",
+    "trace_json": "replay_acceptance_exclusion.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

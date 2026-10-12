@@ -1,0 +1,9 @@
+started_utc=2026-09-28T15:04:50.099994+00:00
+finished_utc=2026-09-28T15:06:10.286810+00:00
+wall_seconds=80.187
+timeout=False
+exit_code=0
+profile=multi_local_receiver_two
+model=original_multi_local_receiver_two.spthy
+command=tamarin-prover original_multi_local_receiver_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_two_concurrent_sessions --output=reachable_two_concurrent_sessions.proof.spthy --output-json=reachable_two_concurrent_sessions.trace.json --output-dot=reachable_two_concurrent_sessions.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_local_receiver_two

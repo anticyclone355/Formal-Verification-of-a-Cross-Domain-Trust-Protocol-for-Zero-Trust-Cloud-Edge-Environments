@@ -1,0 +1,27 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: repaired_multi_restricted_two.spthy
+
+  output:          initiator_injective_agreement.proof.spthy
+  processing time: 202.94s
+  
+  reachable_session (exists-trace): analysis incomplete (1 steps)
+  reachable_two_concurrent_sessions (exists-trace): analysis incomplete (1 steps)
+  initiator_aliveness (all-traces): analysis incomplete (1 steps)
+  initiator_weak_agreement (all-traces): analysis incomplete (1 steps)
+  initiator_noninjective_agreement (all-traces): analysis incomplete (1 steps)
+  initiator_injective_agreement (all-traces): verified (114 steps)
+  responder_aliveness (all-traces): analysis incomplete (1 steps)
+  responder_weak_agreement (all-traces): analysis incomplete (1 steps)
+  responder_noninjective_request_agreement (all-traces): analysis incomplete (1 steps)
+  responder_injective_request_agreement (all-traces): analysis incomplete (1 steps)
+  repaired_data_origin_authentication (all-traces): analysis incomplete (1 steps)
+  replay_acceptance_exclusion (all-traces): analysis incomplete (1 steps)
+  responder_request_replay_exclusion (all-traces): analysis incomplete (1 steps)
+  authorization_before_send (all-traces): analysis incomplete (1 steps)
+  reachable_two_distinct_contexts (exists-trace): analysis incomplete (1 steps)
+  unknown_key_share_exclusion (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

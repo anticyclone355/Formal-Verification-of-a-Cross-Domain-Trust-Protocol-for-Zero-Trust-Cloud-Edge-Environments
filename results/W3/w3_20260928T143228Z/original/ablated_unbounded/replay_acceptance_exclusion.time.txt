@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:32:51.793428+00:00
+finished_utc=2026-09-28T14:33:08.609832+00:00
+wall_seconds=16.816
+timeout=False
+exit_code=0
+profile=ablated_unbounded
+model=original_ablated_unbounded.spthy
+command=tamarin-prover original_ablated_unbounded.spthy --quit-on-warning --derivcheck-timeout=300 --prove=replay_acceptance_exclusion --output=replay_acceptance_exclusion.proof.spthy --output-json=replay_acceptance_exclusion.trace.json --output-dot=replay_acceptance_exclusion.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/ablated_unbounded

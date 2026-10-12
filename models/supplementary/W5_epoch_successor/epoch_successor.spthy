@@ -1,0 +1,256 @@
+/* W5: bounded epoch / domain-key successor fragment.
+   One fixed domain, one update by default; SECOND_UPDATE allows two updates.
+   SPECIAL_ATTACK retains the v0 privileged signing transition verbatim
+   modulo generation bounds and diagnostic events. It does NOT reveal a key.
+   Network messages, checks, and persistent old credentials are unchanged.
+   Identity, policy, data transfer and consensus internals are out of scope.
+   One disclosure per concrete key; old Domain states and repeated acceptance remain.
+*/
+theory W5_Epoch_Successor
+begin
+
+builtins: signing, natural-numbers
+
+restriction Equality:
+ "All x y #i. Eq(x,y) @i ==> x = y"
+restriction W5_OneSetup:
+ "All #i #j. W5Setup() @i & W5Setup() @j ==> #i = #j"
+
+/* Original sequencing, retained. Its ablation belongs to a separate S1 run. */
+restriction Reconfig_sequence:
+"All x epoch #i. Domain_Reconfig_Event(x, epoch) @#i  ==> not(Ex #j. Update_epoch('epoch', epoch %+ %1)@#j & #j < #i)"
+
+#ifdef SPECIAL_ATTACK
+/* Same original restriction: a special and honest update cannot coexist
+   for the same target domain/epoch. The shared permit also bounds generation. */
+restriction Domain_Reconfiguration_adversary1:
+"All domain_id epoch #i.
+    Domain_Reconfig_adversary(domain_id, epoch %+ %1) @#i  ==> not(Ex #j. Domain_Reconfig_Event(domain_id, epoch %+ %1) @#j)"
+#endif
+
+#ifdef SECOND_UPDATE
+rule W5_Bounded_Environment:
+ [ ] --[ W5Setup() ]->
+ [ W5EpochStart(), W5DomainStart('domain_A')
+ , W5AdvancePermit(%1 %+ %1), W5GenerationPermit('domain_A',%1 %+ %1)
+ , W5AdvancePermit(%1), W5GenerationPermit('domain_A',%1) ]
+#else
+rule W5_Bounded_Environment:
+ [ ] --[ W5Setup() ]->
+ [ W5EpochStart(), W5DomainStart('domain_A')
+ , W5AdvancePermit(%1), W5GenerationPermit('domain_A',%1) ]
+#endif
+
+rule epoch_Init:
+    [ W5EpochStart() ]
+    --[ Epoch_init('epoch', %1) ]->
+    [ !Epoch('epoch', %1) ]
+
+rule epoch_update[role="epoch_update"]:
+    [ !Epoch('epoch', %n), W5AdvancePermit(%n) ]
+    --[ Update_epoch('epoch', %n %+ %1), W5EpochAdvanced(%n,%n %+ %1) ]->
+    [ !Epoch('epoch', %n %+ %1) ]
+
+rule Domain_Init:
+    [
+        Fr(~gsk), W5DomainStart($I)
+    ]
+    --[
+        InitDomain($I, %1), W5Created($I,%1,pk(~gsk)), W5Initial($I,%1,pk(~gsk))
+        , Domain1($I, %1, ~gsk, pk(~gsk))
+    ]->
+    [
+
+        !Domain($I, %1, ~gsk, pk(~gsk))
+        , W5RevealAvailable($I,%1,pk(~gsk))
+
+    ]
+
+rule Domain_Reconfiguration[role="Reconfiguration"]:
+    [
+        !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+        , !Epoch('epoch', %n)
+        , Fr(~new_gsk), W5GenerationPermit($domain_id,%epoch)
+    ]
+    --[
+        Domain_Reconfig_Event($domain_id, %epoch %+ %1)
+        , DDomain($domain_id, %epoch)
+        , W5Transition('honest',$domain_id,%epoch,%epoch %+ %1,pk(old_gsk),pk(~new_gsk))
+        , W5Created($domain_id,%epoch %+ %1,pk(~new_gsk))
+        , Eq(%epoch %+ %1, %n)
+     ]->
+    [
+
+        !Domain($domain_id, %epoch %+ %1, ~new_gsk, pk(~new_gsk))
+        , W5RevealAvailable($domain_id,%epoch %+ %1,pk(~new_gsk))
+        , Out(<pk(~new_gsk), sign(pk(~new_gsk), old_gsk), pk(old_gsk), 'Update domain public key'>)
+
+    ]
+
+rule Domain_Reconfiguration_Receive_Signature[role="Reconfiguration"]:
+    [
+        In(<Pkin, Pksign, OldPk, field>)
+        , !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+     ]
+    --[
+        Eq(field, 'Update domain public key')
+        , Eq(verify(Pksign, Pkin, OldPk), true)
+        , Eq(OldPk, pk(old_gsk))
+        , Domain_Pk_Trust($domain_id, %epoch %+ %1, Pkin)
+        , W5Accepted($domain_id,%epoch,%epoch %+ %1,pk(old_gsk),Pkin)
+     ]->
+    [
+
+     ]
+
+rule Reveal_Domain_sk[role="adversary"]:
+[ !Domain($I, %n, gsk, pk(gsk)), W5RevealAvailable($I,%n,pk(gsk)) ] --[ Reveal_Domain($I, %n), W5KeyReveal($I,%n,pk(gsk)) ]-> [ Out(gsk) ]
+
+#ifdef SPECIAL_ATTACK
+/* Privileged baseline behavior: old secret is read without a reveal event.
+   Fake private key remains internal, as in v0; do not claim attacker knows it. */
+rule Domain_Reconfig_be_adversary[role="adversary"]:
+    [
+        !Domain($domain_id, %epoch, old_gsk, pk(old_gsk))
+        , !Epoch('epoch', %n)
+        , Fr(~faker_gsk), W5GenerationPermit($domain_id,%epoch)
+    ]
+    --[
+        Domain_Reconfig_adversary($domain_id, %epoch %+ %1)
+        , DDomain($domain_id, %epoch)
+        , W5Transition('special',$domain_id,%epoch,%epoch %+ %1,pk(old_gsk),pk(~faker_gsk))
+        , W5Created($domain_id,%epoch %+ %1,pk(~faker_gsk))
+        , Eq(%epoch %+ %1, %n)
+        , Fakergsk_Reconfig_Broadcast($domain_id, %epoch %+ %1, ~faker_gsk)
+     ]->
+     [
+        !Domain($domain_id, %epoch %+ %1, ~faker_gsk, pk(~faker_gsk))
+        , W5RevealAvailable($domain_id,%epoch %+ %1,pk(~faker_gsk))
+        , Out(<pk(~faker_gsk), sign(pk(~faker_gsk),old_gsk), pk(old_gsk), 'Update domain public key'>)
+
+    ]
+#endif
+
+lemma reachable_honest_update:
+ exists-trace
+ "Ex D e ne op np #i #u #g #a.
+ W5Initial(D,e,op) @i & W5EpochAdvanced(e,ne) @u
+ & W5Transition('honest',D,e,ne,op,np) @g & W5Accepted(D,e,ne,op,np) @a
+ & #i < #g & #u < #g & #g < #a & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a)"
+
+lemma reachable_repeated_acceptance:
+ exists-trace
+ "Ex D e ne op np #g #a1 #a2.
+ W5Transition('honest',D,e,ne,op,np) @g
+ & W5Accepted(D,e,ne,op,np) @a1 & W5Accepted(D,e,ne,op,np) @a2
+ & #g < #a1 & #a1 < #a2 & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a2)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a2)"
+
+lemma epoch_successor_origin:
+ all-traces
+ "All kind D %e %ne op np #g. W5Transition(kind,D,%e,%ne,op,np) @g
+ ==> (%ne = %e %+ %1 & (Ex #u #source.
+ W5EpochAdvanced(%e,%ne) @u & W5Created(D,%e,op) @source
+ & #u < #g & #source < #g))"
+
+lemma domain_successor_key_authentication:
+ all-traces
+ "All D e ne op np #a. W5Accepted(D,e,ne,op,np) @a & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a)
+ ==> (Ex #g. W5Transition('honest',D,e,ne,op,np) @g & #g < #a)"
+
+lemma domain_reconfiguration_agreement:
+ all-traces
+ "All D e ne op np1 np2 #a1 #a2.
+ W5Accepted(D,e,ne,op,np1) @a1 & W5Accepted(D,e,ne,op,np2) @a2
+ & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a1)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a1) & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a2)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a2)
+ ==> (np1 = np2 & (Ex #g.
+ W5Transition('honest',D,e,ne,op,np1) @g & #g < #a1 & #g < #a2))"
+
+lemma classified_successor_origin:
+ all-traces
+ "All D e ne op np #a. W5Accepted(D,e,ne,op,np) @a
+ ==> ((Ex #g. W5Transition('honest',D,e,ne,op,np) @g & #g < #a)
+ | (Ex #r. W5KeyReveal(D,e,op) @r & #r < #a)
+ | (Ex #s. W5Transition('special',D,e,ne,op,np) @s & #s < #a))"
+
+lemma unconditional_successor_authentication_candidate:
+ all-traces
+ "All D e ne op np #a. W5Accepted(D,e,ne,op,np) @a
+ ==> (Ex #g. W5Transition('honest',D,e,ne,op,np) @g & #g < #a)"
+
+lemma successor_acceptance_injective_candidate:
+ all-traces
+ "All D e ne op np #a1 #a2.
+ W5Accepted(D,e,ne,op,np) @a1 & W5Accepted(D,e,ne,op,np) @a2
+ & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a1)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a1) & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a2)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a2) ==> #a1 = #a2"
+
+lemma accepted_epoch_has_started_candidate:
+ all-traces
+ "All D e ne op np #a. W5Accepted(D,e,ne,op,np) @a
+ ==> (Ex #u. W5EpochAdvanced(e,ne) @u & #u < #a)"
+
+lemma reachable_old_key_disclosure:
+ exists-trace
+ "Ex D e ne op np #g #r #a.
+ W5Transition('honest',D,e,ne,op,np) @g & W5KeyReveal(D,e,op) @r
+ & W5Accepted(D,e,ne,op,np) @a & #g < #r & #r < #a
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s)"
+
+lemma reachable_disclosure_before_acceptance:
+ exists-trace
+ "Ex D e ne op np #r #g #a.
+ W5KeyReveal(D,e,op) @r & W5Transition('honest',D,e,ne,op,np) @g
+ & W5Accepted(D,e,ne,op,np) @a & #r < #g & #g < #a
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s)"
+
+#ifdef SPECIAL_ATTACK
+lemma reachable_special_update:
+ exists-trace
+ "Ex D e ne op np #s #a.
+ W5Transition('special',D,e,ne,op,np) @s & W5Accepted(D,e,ne,op,np) @a
+ & #s < #a & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r)"
+
+lemma special_without_disclosure_authentication_candidate:
+ all-traces
+ "All D e ne op np #a.
+ W5Accepted(D,e,ne,op,np) @a
+ & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a)
+ ==> (Ex #g. W5Transition('honest',D,e,ne,op,np) @g & #g < #a)"
+#endif
+
+#ifdef SECOND_UPDATE
+lemma reachable_two_honest_updates:
+ exists-trace
+ "Ex D e1 e2 e3 pk1 pk2 pk3 #g1 #a1 #g2 #a2.
+ W5Transition('honest',D,e1,e2,pk1,pk2) @g1
+ & W5Accepted(D,e1,e2,pk1,pk2) @a1
+ & W5Transition('honest',D,e2,e3,pk2,pk3) @g2
+ & W5Accepted(D,e2,e3,pk2,pk3) @a2
+ & #g1 < #a1 & #a1 < #g2 & #g2 < #a2 & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a2)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a2)"
+
+lemma reachable_historical_reacceptance:
+ exists-trace
+ "Ex D e1 e2 e3 pk1 pk2 #g #a1 #advance #a2.
+ W5Transition('honest',D,e1,e2,pk1,pk2) @g
+ & W5Accepted(D,e1,e2,pk1,pk2) @a1
+ & W5EpochAdvanced(e2,e3) @advance
+ & W5Accepted(D,e1,e2,pk1,pk2) @a2
+ & #g < #a1 & #a1 < #advance & #advance < #a2 & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a2)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a2)"
+
+lemma historical_update_freshness_candidate:
+ all-traces
+ "All D e ne later op np #a #u.
+ W5Accepted(D,e,ne,op,np) @a & W5EpochAdvanced(ne,later) @u
+ & #u < #a & not (Ex D0 e0 pk0 #r. W5KeyReveal(D0,e0,pk0) @r & #r < #a)
+ & not (Ex D0 e0 e1 pk0 pk1 #s. W5Transition('special',D0,e0,e1,pk0,pk1) @s & #s < #a) ==> F"
+#endif
+
+end

@@ -1,0 +1,8 @@
+maude tool: 'maude'
+ checking version: 3.1. OK.
+ checking installation: OK.
+[Theory S1_Registration_Policy_Order] Theory loaded
+[Theory S1_Registration_Policy_Order] Theory translated
+[Theory S1_Registration_Policy_Order] Derivation checks started
+[Theory S1_Registration_Policy_Order] Derivation checks ended
+[Theory S1_Registration_Policy_Order] Theory closed

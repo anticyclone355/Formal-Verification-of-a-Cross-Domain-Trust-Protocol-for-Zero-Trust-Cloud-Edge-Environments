@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:21:05.219781+00:00
+finished_utc=2026-09-28T15:21:06.838693+00:00
+wall_seconds=1.619
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=epoch_successor_origin -DSPECIAL_ATTACK -DSECOND_UPDATE +RTS -N2 -RTS --output=epoch_successor_origin.proof.spthy --output-json=epoch_successor_origin.trace.json --output-dot=epoch_successor_origin.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/obligations

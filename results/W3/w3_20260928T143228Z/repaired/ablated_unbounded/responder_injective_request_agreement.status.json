@@ -1,0 +1,54 @@
+{
+  "protocol": "repaired",
+  "profile": "ablated_unbounded",
+  "case": "responder",
+  "lemma": "responder_injective_request_agreement",
+  "trace": "all-traces",
+  "defines": [
+    "UNBOUNDED"
+  ],
+  "model_sha256": "552B218D0FCC31149751E63F80AD1A6452B671E1072A6DDE297178F62238BA53",
+  "status": "falsified",
+  "raw_summary": "falsified - found trace (29 steps)",
+  "steps": 29,
+  "wall_seconds": 136.226,
+  "tamarin_processing_seconds": 135.83,
+  "started_utc": "2026-09-28T15:03:01.106920+00:00",
+  "finished_utc": "2026-09-28T15:05:17.332672+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_ablated_unbounded.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=responder_injective_request_agreement",
+    "--output=responder_injective_request_agreement.proof.spthy",
+    "--output-json=responder_injective_request_agreement.trace.json",
+    "--output-dot=responder_injective_request_agreement.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/ablated_unbounded",
+  "artifacts": {
+    "stdout": "responder_injective_request_agreement.stdout.log",
+    "stderr": "responder_injective_request_agreement.stderr.log",
+    "time": "responder_injective_request_agreement.time.txt",
+    "proof": "responder_injective_request_agreement.proof.spthy",
+    "trace_json": "responder_injective_request_agreement.trace.json",
+    "trace_dot": "responder_injective_request_agreement.trace.dot",
+    "trace_png": "responder_injective_request_agreement.trace.png",
+    "trace_svg": "responder_injective_request_agreement.trace.svg",
+    "trace_pdf": "responder_injective_request_agreement.trace.pdf"
+  },
+  "rendered_graphs": {
+    "png": "responder_injective_request_agreement.trace.png",
+    "svg": "responder_injective_request_agreement.trace.svg",
+    "pdf": "responder_injective_request_agreement.trace.pdf"
+  },
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

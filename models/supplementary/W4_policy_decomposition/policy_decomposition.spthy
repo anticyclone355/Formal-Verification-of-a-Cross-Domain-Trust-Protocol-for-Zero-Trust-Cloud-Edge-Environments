@@ -1,0 +1,308 @@
+/* W4: shared original/repaired policy fragment, one epoch and one root update.
+   Public messages, checks and private continuation facts are retained from v0.
+   Registration is a conditional honest interface, NOT the S1 experiment.
+   Root directions are initialized by separate transitions from the v0 genesis.
+   MULTI_CONTEXT adds a second eligible requester, NOT a second root update.
+   Independent identity/domain reveal interfaces are always available.
+*/
+theory W4_Policy_Decomposition
+begin
+
+builtins: hashing, signing, natural-numbers
+functions: ppk/1
+
+restriction Equality:
+ "All x y #i. Eq(x,y) @i ==> x = y"
+
+restriction W4_OneSetup:
+ "All #i #j. W4Init() @i & W4Init() @j ==> #i = #j"
+
+/* Optional source restrictions; core profile does not assume them. */
+#ifdef KEEP_POLICY_RESTRICTIONS
+restriction unique_Policy_register:
+"All S_a S_b n bit1 bit2 A B #i #j.
+    PolicyRegister(S_a, S_b, n, bit1, A, B) @ #i & PolicyRegister(S_a, S_b, n, bit2, A, B) @ #j ==> (#i = #j & bit1 = bit2)"
+
+restriction unique_ProcessPolicy:
+"All B A n Pb1 Pb2 mt1 mt2 new_mt_root_B1 new_mt_root_B2 #i #j.
+    ProcessPolicy(A, B, n, Pb1, mt1, new_mt_root_B1) @ #i & ProcessPolicy(A, B, n, Pb2, mt2, new_mt_root_B2) @ #j &(Pb1 = Pb2)==> (#i = #j & mt1 = mt2 & new_mt_root_B1 = new_mt_root_B2)"
+
+restriction W4_NoRepeatAfterEnd:
+"All A B n S_a S_b bit #i.PolicyRegister(S_a, S_b, n, bit, A, B)@#i
+==>not(Ex #j. PolicyRegisterEnd(S_a, S_b, n, bit, A, B)@#j & #j < #i)"
+
+#endif
+
+/* No Policy or matched updated roots are supplied by this interface. */
+#ifdef MULTI_CONTEXT
+rule W4_Registered_Environment:
+  [ Fr(~si), Fr(~pi), Fr(~sr), Fr(~pr), Fr(~da), Fr(~db), Fr(~si2), Fr(~pi2) ]
+  --[ W4Init()
+    , W4Registered('requester_2','domain_A',%1,pk(~si2))
+    , W4Registered('requester','domain_A',%1,pk(~si))
+    , W4Registered('owner','domain_B',%1,pk(~sr)) ]->
+  [ !Domain('domain_A',%1,~da,pk(~da))
+  , !Domain('domain_B',%1,~db,pk(~db))
+  , !Domain_id('domain_A'), !Domain_id('domain_B')
+  , !Subject('requester','domain_A',%1,~si,~pi,pk(~si),ppk(~pi))
+  , !Subject('owner','domain_B',%1,~sr,~pr,pk(~sr),ppk(~pr))
+  , !W4Context('requester','owner','domain_A','domain_B',%1)
+  , !Subject('requester_2','domain_A',%1,~si2,~pi2,pk(~si2),ppk(~pi2))
+  , !W4Context('requester_2','owner','domain_A','domain_B',%1)
+  , W4IdentityAvailable('requester_2',%1)
+  , Out(<pk(~si2),ppk(~pi2),%1,'Subject Pk'>)
+  , Out(<<pk(~si2),ppk(~pi2),%1>,sign(<pk(~si2),ppk(~pi2),%1>,~da),pk(~da),'SubjectCert'>)
+  , W4GenesisReady()
+  , W4RootSlot('domain_A','domain_B'), W4RootSlot('domain_B','domain_A')
+  , W4IdentityAvailable('requester',%1), W4IdentityAvailable('owner',%1)
+  , W4DomainAvailable('domain_A',%1), W4DomainAvailable('domain_B',%1)
+  , Out(<pk(~si),ppk(~pi),%1,'Subject Pk'>)
+  , Out(<pk(~sr),ppk(~pr),%1,'Subject Pk'>)
+  , Out(<<pk(~si),ppk(~pi),%1>,sign(<pk(~si),ppk(~pi),%1>,~da),pk(~da),'SubjectCert'>)
+  , Out(<<pk(~sr),ppk(~pr),%1>,sign(<pk(~sr),ppk(~pr),%1>,~db),pk(~db),'SubjectCert'>)
+  ]
+#else
+rule W4_Registered_Environment:
+  [ Fr(~si), Fr(~pi), Fr(~sr), Fr(~pr), Fr(~da), Fr(~db) ]
+  --[ W4Init()
+    , W4Registered('requester','domain_A',%1,pk(~si))
+    , W4Registered('owner','domain_B',%1,pk(~sr)) ]->
+  [ !Domain('domain_A',%1,~da,pk(~da))
+  , !Domain('domain_B',%1,~db,pk(~db))
+  , !Domain_id('domain_A'), !Domain_id('domain_B')
+  , !Subject('requester','domain_A',%1,~si,~pi,pk(~si),ppk(~pi))
+  , !Subject('owner','domain_B',%1,~sr,~pr,pk(~sr),ppk(~pr))
+  , !W4Context('requester','owner','domain_A','domain_B',%1)
+  , W4GenesisReady()
+  , W4RootSlot('domain_A','domain_B'), W4RootSlot('domain_B','domain_A')
+  , W4IdentityAvailable('requester',%1), W4IdentityAvailable('owner',%1)
+  , W4DomainAvailable('domain_A',%1), W4DomainAvailable('domain_B',%1)
+  , Out(<pk(~si),ppk(~pi),%1,'Subject Pk'>)
+  , Out(<pk(~sr),ppk(~pr),%1,'Subject Pk'>)
+  , Out(<<pk(~si),ppk(~pi),%1>,sign(<pk(~si),ppk(~pi),%1>,~da),pk(~da),'SubjectCert'>)
+  , Out(<<pk(~sr),ppk(~pr),%1>,sign(<pk(~sr),ppk(~pr),%1>,~db),pk(~db),'SubjectCert'>)
+  ]
+#endif
+
+rule W4_Initial_Root:
+ [ W4GenesisReady(), Fr(~root) ]
+ --[ W4Genesis(~root) ]->
+ [ !Initial_merkle_root(~root) ]
+
+/* Same root derivation as Initial_mt_root_between_domain in v0.
+   Slots restrict the environment to one initialization per ordered direction. */
+rule Initial_mt_root_between_domain:
+ [ !Domain_id($A), !Domain_id($B), !Initial_merkle_root(mt_root)
+ , W4RootSlot($A,$B) ]
+ --[ Initial_mt_root_between_domain($A,$B,mt_root)
+   , W4RootReady($A,$B,mt_root) ]->
+ [ MerkleRoot($A,$B,mt_root) ]
+
+rule W4_Reveal_Identity:
+ [ !Subject(I,D,e,sk,psk,pkS,ppkS), W4IdentityAvailable(I,e) ]
+ --[ W4KeyReveal('identity',I,e) ]-> [ Out(sk) ]
+
+rule W4_Reveal_Domain:
+ [ !Domain(D,e,sk,pkD), W4DomainAvailable(D,e) ]
+ --[ W4KeyReveal('domain',D,e) ]-> [ Out(sk) ]
+
+rule Object_Policy_Creation[role="Policy_Register"]:
+    let
+        bit = '1'
+
+        Pb = <pka, pkb, bit, %n>
+    in
+    [
+
+        !W4Context($S_a,$S_b,$A,$B,%n)
+        , !Domain($A, %n, gskA, gpkA)
+        , !Domain($B, %n, gskB, gpkB)
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , MerkleRoot($A, $B, mt_root1)
+        , MerkleRoot($B, $A, mt_root1)
+        , !Initial_merkle_root(mt_root)
+
+    ]
+    --[
+
+        PolicyRegister($S_a, $S_b, %n, bit, $A, $B)
+        , W4Proposed($S_a,$S_b,$A,$B,%n,Pb,mt_root)
+        , Eq(mt_root1, mt_root)
+        , Eq(bit, '1')
+
+    ]->
+    [
+
+        Out(<Pb, sign(Pb, pskb), pkb, 'PolicyRb'>)
+        , Create_policy($A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root)
+    ]
+
+rule DomainB_Policy_Processing[role="Policy_Register"]:
+    let
+        new_mt_root_B = h(<mt_root,PbIn>)
+        mrba = <PbIn, new_mt_root_B>
+    in
+    [
+        In(<PbIn, Pbsign, Pbpk, field>)
+        , Create_policy($A, $B, gskB, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root)
+     ]
+    --[
+        Eq(field, 'PolicyRb')
+        , Eq(Pbpk, pkb)
+        , Eq(verify(Pbsign, PbIn, pkb), true)
+        , Eq(PbIn, Pb)
+        , ProcessPolicy($A, $B, %n, PbIn, mt_root, new_mt_root_B)
+        , W4BRoot($A,$B,%n,PbIn,mt_root,new_mt_root_B)
+
+     ]->
+    [
+        Out(<mrba, sign(mrba, gskB), gpkB, 'MerkleRoot certification'>)
+        , B_Process_send($A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root, new_mt_root_B)
+     ]
+
+rule DomainA_Receive_Policy[role="Policy_Register"]:
+    let
+        PbIn = fst(mrba)
+        mtB = snd(mrba)
+        new_mt_root_A = h(<mt_root, PbIn>)
+
+    in
+    [
+        In(<mrba, mrbasign, mrbapk, field>)
+        , B_Process_send($A, $B, gpkB, $S_a, $S_b, %n, Pb, pka, pkb, bit, mt_root, new_mt_root_B)
+    ]
+    --[
+        Eq(field, 'MerkleRoot certification')
+        , Eq(mrbapk, gpkB)
+        , Eq(verify(mrbasign, mrba, gpkB), true)
+        , Eq(PbIn, Pb)
+        , Eq(mtB, new_mt_root_B)
+        , Eq(new_mt_root_B, new_mt_root_A)
+        , ProcessPolicyDomain($A, $B, %n, Pb, mt_root, new_mt_root_B)
+        , W4ARoot($A,$B,%n,PbIn,mt_root,new_mt_root_A)
+        , W4InstalledRoots($S_a,$S_b,$A,$B,%n,Pb,mt_root,new_mt_root_A,new_mt_root_B)
+        , PolicyRegisterEnd($S_a, $S_b, %n, bit, $A, $B)
+        , New_MerkleRoot($A, $B, %n, new_mt_root_A)
+        , New_MerkleRoot($B, $A, %n, new_mt_root_B)
+    ]->
+    [
+        MerkleRoot($A, $B, new_mt_root_A)
+        , MerkleRoot($B, $A, new_mt_root_B)
+
+    ]
+
+/* Six conditional obligations plus reachability and private-state diagnostics.
+   W4Registered denotes the setup interface, not an executed registration. */
+
+lemma reachable_roots:
+ exists-trace
+ "Ex root #g #ab #ba. W4Genesis(root) @g
+ & W4RootReady('domain_A','domain_B',root) @ab
+ & W4RootReady('domain_B','domain_A',root) @ba
+ & #g < #ab & #g < #ba & not(#ab = #ba)"
+
+lemma reachable_proposal:
+ exists-trace
+ "Ex I R A B e Pb old #p. W4Proposed(I,R,A,B,e,Pb,old) @p & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #p)"
+
+lemma reachable_b_processing:
+ exists-trace
+ "Ex I R A B e Pb old new #p #b.
+ W4Proposed(I,R,A,B,e,Pb,old) @p & ProcessPolicy(A,B,e,Pb,old,new) @b
+ & #p < #b & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #b)"
+
+lemma reachable_policy_installation:
+ exists-trace
+ "Ex I R A B e Pb old ra rb #p #b #a.
+ W4Proposed(I,R,A,B,e,Pb,old) @p
+ & ProcessPolicy(A,B,e,Pb,old,rb) @b
+ & W4InstalledRoots(I,R,A,B,e,Pb,old,ra,rb) @a
+ & #p < #b & #b < #a & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #a)"
+
+lemma w4_proposal_source:
+ all-traces
+ "All I R A B e Pb old #p. W4Proposed(I,R,A,B,e,Pb,old) @p
+ & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #p)
+ ==> (Ex pka pkb #ri #rr #ab #ba.
+ W4Registered(I,A,e,pka) @ri & W4Registered(R,B,e,pkb) @rr
+ & W4RootReady(A,B,old) @ab & W4RootReady(B,A,old) @ba
+ & Pb = <pka,pkb,'1',e>
+ & #ri < #p & #rr < #p & #ab < #p & #ba < #p)"
+
+lemma w4_b_processing_source:
+ all-traces
+ "All A B e Pb old new #b. ProcessPolicy(A,B,e,Pb,old,new) @b
+ & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #b)
+ ==> (Ex I R #p. W4Proposed(I,R,A,B,e,Pb,old) @p & #p < #b)"
+
+lemma w4_a_acceptance_source:
+ all-traces
+ "All A B e Pb old rb #a. ProcessPolicyDomain(A,B,e,Pb,old,rb) @a
+ & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #a)
+ ==> (Ex #b. ProcessPolicy(A,B,e,Pb,old,rb) @b & #b < #a)"
+
+lemma w4_b_to_a_root_derivation:
+ all-traces
+ "All A B e Pb old rb #b. W4BRoot(A,B,e,Pb,old,rb) @b
+ & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #b)
+ ==> (rb = h(<old,Pb>) & ProcessPolicy(A,B,e,Pb,old,rb) @b
+ & (Ex I R #p. W4Proposed(I,R,A,B,e,Pb,old) @p & #p < #b))"
+
+lemma w4_a_to_b_root_derivation:
+ all-traces
+ "All A B e Pb old ra #a. W4ARoot(A,B,e,Pb,old,ra) @a
+ & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #a)
+ ==> (ra = h(<old,Pb>) & New_MerkleRoot(A,B,e,ra) @a
+ & (Ex rb #b. W4BRoot(A,B,e,Pb,old,rb) @b & #b < #a))"
+
+lemma w4_matching_context_root_agreement:
+ all-traces
+ "All I R A B e Pb old ra rb #a. W4InstalledRoots(I,R,A,B,e,Pb,old,ra,rb) @a
+ & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #a)
+ ==> (ra = rb
+ & New_MerkleRoot(A,B,e,ra) @a & New_MerkleRoot(B,A,e,rb) @a
+ & W4ARoot(A,B,e,Pb,old,ra) @a
+ & (Ex #b. W4BRoot(A,B,e,Pb,old,rb) @b & #b < #a))"
+
+lemma reachable_owner_identity_compromise:
+ exists-trace
+ "Ex I R A B e Pb old ra rb #rev #p #b #a.
+ W4KeyReveal('identity',R,e) @rev & W4Proposed(I,R,A,B,e,Pb,old) @p
+ & ProcessPolicy(A,B,e,Pb,old,rb) @b
+ & W4InstalledRoots(I,R,A,B,e,Pb,old,ra,rb) @a
+ & #rev < #p & #p < #b & #b < #a
+ & (All kind who epoch #r. W4KeyReveal(kind,who,epoch) @r & #r < #a
+ ==> (kind = 'identity' & who = R & epoch = e))"
+
+lemma reachable_b_domain_compromise:
+ exists-trace
+ "Ex I R A B e Pb old ra rb #rev #p #b #a.
+ W4KeyReveal('domain',B,e) @rev & W4Proposed(I,R,A,B,e,Pb,old) @p
+ & ProcessPolicy(A,B,e,Pb,old,rb) @b
+ & W4InstalledRoots(I,R,A,B,e,Pb,old,ra,rb) @a
+ & #rev < #p & #p < #b & #b < #a
+ & (All kind who epoch #r. W4KeyReveal(kind,who,epoch) @r & #r < #a
+ ==> (kind = 'domain' & who = B & epoch = e))"
+
+lemma w4_private_b_continuation_source:
+ all-traces
+ "All A B e Pb old rb #b. ProcessPolicy(A,B,e,Pb,old,rb) @b
+ ==> (Ex I R #p. W4Proposed(I,R,A,B,e,Pb,old) @p & #p < #b)"
+
+lemma w4_private_a_continuation_source:
+ all-traces
+ "All A B e Pb old rb #a. ProcessPolicyDomain(A,B,e,Pb,old,rb) @a
+ ==> (Ex #b. ProcessPolicy(A,B,e,Pb,old,rb) @b & #b < #a)"
+
+#ifdef MULTI_CONTEXT
+lemma reachable_alternative_context:
+ exists-trace
+ "Ex A B e Pb old ra rb #p #b #a.
+ W4Proposed('requester_2','owner',A,B,e,Pb,old) @p
+ & ProcessPolicy(A,B,e,Pb,old,rb) @b
+ & W4InstalledRoots('requester_2','owner',A,B,e,Pb,old,ra,rb) @a
+ & #p < #b & #b < #a & not (Ex kind who epoch #rev. W4KeyReveal(kind,who,epoch) @rev & #rev < #a)"
+#endif
+
+end

@@ -1,0 +1,9 @@
+started_utc=2026-09-28T15:11:29.036939+00:00
+finished_utc=2026-09-28T15:31:29.372970+00:00
+wall_seconds=1200.336
+timeout=True
+exit_code=-9
+profile=multi_restricted_two
+model=repaired_multi_restricted_two.spthy
+command=tamarin-prover repaired_multi_restricted_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_two_distinct_contexts --output=reachable_two_distinct_contexts.proof.spthy --output-json=reachable_two_distinct_contexts.trace.json --output-dot=reachable_two_distinct_contexts.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_restricted_two

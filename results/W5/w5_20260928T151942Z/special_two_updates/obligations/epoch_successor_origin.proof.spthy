@@ -1,0 +1,645 @@
+theory W5_Epoch_Successor begin
+
+// Function signature and definition of the equational theory E
+
+builtins: natural-numbers
+functions: fst/1, pair/2, pk/1, sign/2, snd/1, true/0, verify/3
+equations:
+    fst(<x.1, x.2>) = x.1,
+    snd(<x.1, x.2>) = x.2,
+    verify(sign(x.1, x.2), x.1, pk(x.2)) = true
+
+
+
+
+
+
+
+
+
+restriction Equality:
+  "∀ x y #i. (Eq( x, y ) @ #i) ⇒ (x = y)"
+  // safety formula
+
+restriction W5_OneSetup:
+  "∀ #i #j. ((W5Setup( ) @ #i) ∧ (W5Setup( ) @ #j)) ⇒ (#i = #j)"
+  // safety formula
+
+restriction Reconfig_sequence:
+  "∀ x epoch #i.
+    (Domain_Reconfig_Event( x, epoch ) @ #i) ⇒
+    (¬(∃ #j. (Update_epoch( 'epoch', (epoch%+%1) ) @ #j) ∧ (#j < #i)))"
+  // safety formula
+
+restriction Domain_Reconfiguration_adversary1:
+  "∀ domain_id epoch #i.
+    (Domain_Reconfig_adversary( domain_id, (epoch%+%1) ) @ #i) ⇒
+    (¬(∃ #j. Domain_Reconfig_Event( domain_id, (epoch%+%1) ) @ #j))"
+  // safety formula
+
+rule (modulo E) W5_Bounded_Environment:
+   [ ]
+  --[ W5Setup( ) ]->
+   [
+   W5EpochStart( ), W5DomainStart( 'domain_A' ),
+   W5AdvancePermit( (%1%+%1) ), W5GenerationPermit( 'domain_A', (%1%+%1) ),
+   W5AdvancePermit( %1 ), W5GenerationPermit( 'domain_A', %1 )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) epoch_Init:
+   [ W5EpochStart( ) ]
+  --[ Epoch_init( 'epoch', %1 ) ]->
+   [ !Epoch( 'epoch', %1 ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) epoch_update[role=epoch_update]:
+   [ !Epoch( 'epoch', %n ), W5AdvancePermit( %n ) ]
+  --[ Update_epoch( 'epoch', (%n%+%1) ), W5EpochAdvanced( %n, (%n%+%1) )
+  ]->
+   [ !Epoch( 'epoch', (%n%+%1) ) ]
+
+  // loop breaker: [0]
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Init:
+   [ Fr( ~gsk ), W5DomainStart( $I ) ]
+  --[
+  InitDomain( $I, %1 ), W5Created( $I, %1, pk(~gsk) ),
+  W5Initial( $I, %1, pk(~gsk) ), Domain1( $I, %1, ~gsk, pk(~gsk) )
+  ]->
+   [
+   !Domain( $I, %1, ~gsk, pk(~gsk) ), W5RevealAvailable( $I, %1, pk(~gsk) )
+   ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Reconfiguration[role=Reconfiguration]:
+   [
+   !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) ),
+   !Epoch( 'epoch', %n ), Fr( ~new_gsk ),
+   W5GenerationPermit( $domain_id, %epoch )
+   ]
+  --[
+  Domain_Reconfig_Event( $domain_id, (%epoch%+%1) ),
+  DDomain( $domain_id, %epoch ),
+  W5Transition( 'honest', $domain_id, %epoch, (%epoch%+%1), pk(old_gsk),
+                pk(~new_gsk)
+  ),
+  W5Created( $domain_id, (%epoch%+%1), pk(~new_gsk) ),
+  Eq( (%epoch%+%1), %n )
+  ]->
+   [
+   !Domain( $domain_id, (%epoch%+%1), ~new_gsk, pk(~new_gsk) ),
+   W5RevealAvailable( $domain_id, (%epoch%+%1), pk(~new_gsk) ),
+   Out( <pk(~new_gsk), sign(pk(~new_gsk), old_gsk), pk(old_gsk), 
+         'Update domain public key'>
+   )
+   ]
+
+  // loop breaker: [0]
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Reconfiguration_Receive_Signature[role=Reconfiguration]:
+   [
+   In( <Pkin, Pksign, OldPk, field> ),
+   !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) )
+   ]
+  --[
+  Eq( field, 'Update domain public key' ),
+  Eq( verify(Pksign, Pkin, OldPk), true ), Eq( OldPk, pk(old_gsk) ),
+  Domain_Pk_Trust( $domain_id, (%epoch%+%1), Pkin ),
+  W5Accepted( $domain_id, %epoch, (%epoch%+%1), pk(old_gsk), Pkin )
+  ]->
+   [ ]
+
+  /*
+  rule (modulo AC) Domain_Reconfiguration_Receive_Signature[role=Reconfiguration]:
+     [
+     In( <Pkin, Pksign, OldPk, field> ),
+     !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) )
+     ]
+    --[
+    Eq( field, 'Update domain public key' ), Eq( z, true ),
+    Eq( OldPk, pk(old_gsk) ),
+    Domain_Pk_Trust( $domain_id, (%epoch%+%1), Pkin ),
+    W5Accepted( $domain_id, %epoch, (%epoch%+%1), pk(old_gsk), Pkin )
+    ]->
+     [ ]
+    variants (modulo AC)
+    1. OldPk = OldPk.11
+       Pkin  = Pkin.12
+       Pksign
+             = Pksign.13
+       z     = verify(Pksign.13, Pkin.12, OldPk.11)
+    
+    2. OldPk = pk(x.19)
+       Pkin  = Pkin.12
+       Pksign
+             = sign(Pkin.12, x.19)
+       z     = true
+  */
+
+rule (modulo E) Reveal_Domain_sk[role=adversary]:
+   [ !Domain( $I, %n, gsk, pk(gsk) ), W5RevealAvailable( $I, %n, pk(gsk) ) ]
+  --[ Reveal_Domain( $I, %n ), W5KeyReveal( $I, %n, pk(gsk) ) ]->
+   [ Out( gsk ) ]
+
+  /* has exactly the trivial AC variant */
+
+rule (modulo E) Domain_Reconfig_be_adversary[role=adversary]:
+   [
+   !Domain( $domain_id, %epoch, old_gsk, pk(old_gsk) ),
+   !Epoch( 'epoch', %n ), Fr( ~faker_gsk ),
+   W5GenerationPermit( $domain_id, %epoch )
+   ]
+  --[
+  Domain_Reconfig_adversary( $domain_id, (%epoch%+%1) ),
+  DDomain( $domain_id, %epoch ),
+  W5Transition( 'special', $domain_id, %epoch, (%epoch%+%1), pk(old_gsk),
+                pk(~faker_gsk)
+  ),
+  W5Created( $domain_id, (%epoch%+%1), pk(~faker_gsk) ),
+  Eq( (%epoch%+%1), %n ),
+  Fakergsk_Reconfig_Broadcast( $domain_id, (%epoch%+%1), ~faker_gsk )
+  ]->
+   [
+   !Domain( $domain_id, (%epoch%+%1), ~faker_gsk, pk(~faker_gsk) ),
+   W5RevealAvailable( $domain_id, (%epoch%+%1), pk(~faker_gsk) ),
+   Out( <pk(~faker_gsk), sign(pk(~faker_gsk), old_gsk), pk(old_gsk), 
+         'Update domain public key'>
+   )
+   ]
+
+  // loop breaker: [0]
+  /* has exactly the trivial AC variant */
+
+lemma reachable_honest_update:
+  exists-trace
+  "∃ D e ne op np #i #u #g #a.
+    ((((((((W5Initial( D, e, op ) @ #i) ∧ (W5EpochAdvanced( e, ne ) @ #u)) ∧
+          (W5Transition( 'honest', D, e, ne, op, np ) @ #g)) ∧
+         (W5Accepted( D, e, ne, op, np ) @ #a)) ∧
+        (#i < #g)) ∧
+       (#u < #g)) ∧
+      (#g < #a)) ∧
+     (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a)))) ∧
+    (¬(∃ D0 e0 e1 pk0 pk1 #s.
+        (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e ne op np #i #u #g #a.
+  (W5Initial( D, e, op ) @ #i) ∧
+  (W5EpochAdvanced( e, ne ) @ #u) ∧
+  (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (#i < #g) ∧
+  (#u < #g) ∧
+  (#g < #a) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a))"
+*/
+by sorry
+
+lemma reachable_repeated_acceptance:
+  exists-trace
+  "∃ D e ne op np #g #a1 #a2.
+    ((((((W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧
+         (W5Accepted( D, e, ne, op, np ) @ #a1)) ∧
+        (W5Accepted( D, e, ne, op, np ) @ #a2)) ∧
+       (#g < #a1)) ∧
+      (#a1 < #a2)) ∧
+     (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a2)))) ∧
+    (¬(∃ D0 e0 e1 pk0 pk1 #s.
+        (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a2)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e ne op np #g #a1 #a2.
+  (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a1) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a2)
+ ∧
+  (#g < #a1) ∧
+  (#a1 < #a2) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a2)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a2))"
+*/
+by sorry
+
+lemma epoch_successor_origin:
+  all-traces
+  "∀ kind D %e %ne op np #g.
+    (W5Transition( kind, D, %e, %ne, op, np ) @ #g) ⇒
+    ((%ne = (%e%+%1)) ∧
+     (∃ #u #source.
+       (((W5EpochAdvanced( %e, %ne ) @ #u) ∧
+         (W5Created( D, %e, op ) @ #source)) ∧
+        (#u < #g)) ∧
+       (#source < #g)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ kind D %e %ne op np #g.
+  (W5Transition( kind, D, %e, %ne, op, np ) @ #g)
+ ∧
+  ((¬(%ne = (%e%+%1))) ∨
+   (∀ #u #source.
+     (W5EpochAdvanced( %e, %ne ) @ #u) ∧ (W5Created( D, %e, op ) @ #source)
+    ⇒
+     ((¬(#u < #g)) ∨ (¬(#source < #g)))))"
+*/
+simplify
+solve( (¬(%ne = (%e%+%1)))  ∥
+       (∀ #u #source.
+         (W5EpochAdvanced( %e, %ne ) @ #u) ∧ (W5Created( D, %e, op ) @ #source)
+        ⇒
+         ((¬(#u < #g)) ∨ (¬(#source < #g)))) )
+  case case_1
+  solve( W5Transition( kind, D, %e, %ne, op, np ) @ #g )
+    case Domain_Reconfig_be_adversary
+    by contradiction /* from formulas */
+  next
+    case Domain_Reconfiguration
+    by contradiction /* from formulas */
+  qed
+next
+  case case_2
+  solve( W5Transition( kind, D, %e, %ne, op, np ) @ #g )
+    case Domain_Reconfig_be_adversary
+    solve( !Epoch( 'epoch', (%e%+%1) ) ▶₁ #g )
+      case epoch_update_case_1
+      solve( W5GenerationPermit( $domain_id, (%1%+%1) ) ▶₃ #g )
+        case W5_Bounded_Environment
+        solve( !Domain( 'domain_A', (%1%+%1), old_gsk, pk(old_gsk) ) ▶₀ #g )
+          case Domain_Reconfig_be_adversary
+          by contradiction /* from formulas */
+        next
+          case Domain_Reconfiguration
+          by contradiction /* from formulas */
+        qed
+      qed
+    next
+      case epoch_update_case_2
+      solve( W5GenerationPermit( $domain_id, %1 ) ▶₃ #g )
+        case W5_Bounded_Environment
+        solve( !Domain( 'domain_A', %1, old_gsk, pk(old_gsk) ) ▶₀ #g )
+          case Domain_Init
+          by contradiction /* from formulas */
+        qed
+      qed
+    qed
+  next
+    case Domain_Reconfiguration
+    solve( !Epoch( 'epoch', (%e%+%1) ) ▶₁ #g )
+      case epoch_update_case_1
+      solve( W5GenerationPermit( $domain_id, (%1%+%1) ) ▶₃ #g )
+        case W5_Bounded_Environment
+        solve( !Domain( 'domain_A', (%1%+%1), old_gsk, pk(old_gsk) ) ▶₀ #g )
+          case Domain_Reconfig_be_adversary
+          by contradiction /* from formulas */
+        next
+          case Domain_Reconfiguration
+          by contradiction /* from formulas */
+        qed
+      qed
+    next
+      case epoch_update_case_2
+      solve( W5GenerationPermit( $domain_id, %1 ) ▶₃ #g )
+        case W5_Bounded_Environment
+        solve( !Domain( 'domain_A', %1, old_gsk, pk(old_gsk) ) ▶₀ #g )
+          case Domain_Init
+          by contradiction /* from formulas */
+        qed
+      qed
+    qed
+  qed
+qed
+
+lemma domain_successor_key_authentication:
+  all-traces
+  "∀ D e ne op np #a.
+    (((W5Accepted( D, e, ne, op, np ) @ #a) ∧
+      (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a)))) ∧
+     (¬(∃ D0 e0 e1 pk0 pk1 #s.
+         (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a)))) ⇒
+    (∃ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧ (#g < #a))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np #a.
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a)) ∧
+  (∀ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ⇒ ¬(#g < #a))"
+*/
+by sorry
+
+lemma domain_reconfiguration_agreement:
+  all-traces
+  "∀ D e ne op np1 np2 #a1 #a2.
+    ((((((W5Accepted( D, e, ne, op, np1 ) @ #a1) ∧
+         (W5Accepted( D, e, ne, op, np2 ) @ #a2)) ∧
+        (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a1)))) ∧
+       (¬(∃ D0 e0 e1 pk0 pk1 #s.
+           (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a1)))) ∧
+      (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a2)))) ∧
+     (¬(∃ D0 e0 e1 pk0 pk1 #s.
+         (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a2)))) ⇒
+    ((np1 = np2) ∧
+     (∃ #g.
+       ((W5Transition( 'honest', D, e, ne, op, np1 ) @ #g) ∧ (#g < #a1)) ∧
+       (#g < #a2)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np1 np2 #a1 #a2.
+  (W5Accepted( D, e, ne, op, np1 ) @ #a1) ∧
+  (W5Accepted( D, e, ne, op, np2 ) @ #a2)
+ ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a1)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a1)) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a2)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a2)) ∧
+  (((¬(np1 = np2)) ∨
+    (∀ #g.
+      (W5Transition( 'honest', D, e, ne, op, np1 ) @ #g)
+     ⇒
+      ((¬(#g < #a1)) ∨ (¬(#g < #a2))))))"
+*/
+by sorry
+
+lemma classified_successor_origin:
+  all-traces
+  "∀ D e ne op np #a.
+    (W5Accepted( D, e, ne, op, np ) @ #a) ⇒
+    (((∃ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧ (#g < #a)) ∨
+      (∃ #r. (W5KeyReveal( D, e, op ) @ #r) ∧ (#r < #a))) ∨
+     (∃ #s. (W5Transition( 'special', D, e, ne, op, np ) @ #s) ∧ (#s < #a)))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np #a.
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (∀ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ⇒ ¬(#g < #a)) ∧
+  (∀ #r. (W5KeyReveal( D, e, op ) @ #r) ⇒ ¬(#r < #a)) ∧
+  (∀ #s. (W5Transition( 'special', D, e, ne, op, np ) @ #s) ⇒ ¬(#s < #a))"
+*/
+by sorry
+
+lemma unconditional_successor_authentication_candidate:
+  all-traces
+  "∀ D e ne op np #a.
+    (W5Accepted( D, e, ne, op, np ) @ #a) ⇒
+    (∃ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧ (#g < #a))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np #a.
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  ∀ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ⇒ ¬(#g < #a)"
+*/
+by sorry
+
+lemma successor_acceptance_injective_candidate:
+  all-traces
+  "∀ D e ne op np #a1 #a2.
+    ((((((W5Accepted( D, e, ne, op, np ) @ #a1) ∧
+         (W5Accepted( D, e, ne, op, np ) @ #a2)) ∧
+        (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a1)))) ∧
+       (¬(∃ D0 e0 e1 pk0 pk1 #s.
+           (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a1)))) ∧
+      (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a2)))) ∧
+     (¬(∃ D0 e0 e1 pk0 pk1 #s.
+         (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a2)))) ⇒
+    (#a1 = #a2)"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np #a1 #a2.
+  (W5Accepted( D, e, ne, op, np ) @ #a1) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a2)
+ ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a1)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a1)) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a2)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a2)) ∧
+  (¬(#a1 = #a2))"
+*/
+by sorry
+
+lemma accepted_epoch_has_started_candidate:
+  all-traces
+  "∀ D e ne op np #a.
+    (W5Accepted( D, e, ne, op, np ) @ #a) ⇒
+    (∃ #u. (W5EpochAdvanced( e, ne ) @ #u) ∧ (#u < #a))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np #a.
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  ∀ #u. (W5EpochAdvanced( e, ne ) @ #u) ⇒ ¬(#u < #a)"
+*/
+by sorry
+
+lemma reachable_old_key_disclosure:
+  exists-trace
+  "∃ D e ne op np #g #r #a.
+    (((((W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧
+        (W5KeyReveal( D, e, op ) @ #r)) ∧
+       (W5Accepted( D, e, ne, op, np ) @ #a)) ∧
+      (#g < #r)) ∧
+     (#r < #a)) ∧
+    (¬(∃ D0 e0 e1 pk0 pk1 #s.
+        W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e ne op np #g #r #a.
+  (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧
+  (W5KeyReveal( D, e, op ) @ #r) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (#g < #r) ∧
+  (#r < #a) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ⊥)"
+*/
+by sorry
+
+lemma reachable_disclosure_before_acceptance:
+  exists-trace
+  "∃ D e ne op np #r #g #a.
+    (((((W5KeyReveal( D, e, op ) @ #r) ∧
+        (W5Transition( 'honest', D, e, ne, op, np ) @ #g)) ∧
+       (W5Accepted( D, e, ne, op, np ) @ #a)) ∧
+      (#r < #g)) ∧
+     (#g < #a)) ∧
+    (¬(∃ D0 e0 e1 pk0 pk1 #s.
+        W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e ne op np #r #g #a.
+  (W5KeyReveal( D, e, op ) @ #r) ∧
+  (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (#r < #g) ∧
+  (#g < #a) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ⊥)"
+*/
+by sorry
+
+lemma reachable_special_update:
+  exists-trace
+  "∃ D e ne op np #s #a.
+    (((W5Transition( 'special', D, e, ne, op, np ) @ #s) ∧
+      (W5Accepted( D, e, ne, op, np ) @ #a)) ∧
+     (#s < #a)) ∧
+    (¬(∃ D0 e0 pk0 #r. W5KeyReveal( D0, e0, pk0 ) @ #r))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e ne op np #s #a.
+  (W5Transition( 'special', D, e, ne, op, np ) @ #s) ∧
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (#s < #a) ∧ (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ⊥)"
+*/
+by sorry
+
+lemma special_without_disclosure_authentication_candidate:
+  all-traces
+  "∀ D e ne op np #a.
+    ((W5Accepted( D, e, ne, op, np ) @ #a) ∧
+     (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a)))) ⇒
+    (∃ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ∧ (#g < #a))"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne op np #a.
+  (W5Accepted( D, e, ne, op, np ) @ #a)
+ ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a)) ∧
+  (∀ #g. (W5Transition( 'honest', D, e, ne, op, np ) @ #g) ⇒ ¬(#g < #a))"
+*/
+by sorry
+
+lemma reachable_two_honest_updates:
+  exists-trace
+  "∃ D e1 e2 e3 pk1 pk2 pk3 #g1 #a1 #g2 #a2.
+    ((((((((W5Transition( 'honest', D, e1, e2, pk1, pk2 ) @ #g1) ∧
+           (W5Accepted( D, e1, e2, pk1, pk2 ) @ #a1)) ∧
+          (W5Transition( 'honest', D, e2, e3, pk2, pk3 ) @ #g2)) ∧
+         (W5Accepted( D, e2, e3, pk2, pk3 ) @ #a2)) ∧
+        (#g1 < #a1)) ∧
+       (#a1 < #g2)) ∧
+      (#g2 < #a2)) ∧
+     (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a2)))) ∧
+    (¬(∃ D0 e0 e1.1 pk0 pk1.1 #s.
+        (W5Transition( 'special', D0, e0, e1.1, pk0, pk1.1 ) @ #s) ∧
+        (#s < #a2)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e1 e2 e3 pk1 pk2 pk3 #g1 #a1 #g2 #a2.
+  (W5Transition( 'honest', D, e1, e2, pk1, pk2 ) @ #g1) ∧
+  (W5Accepted( D, e1, e2, pk1, pk2 ) @ #a1) ∧
+  (W5Transition( 'honest', D, e2, e3, pk2, pk3 ) @ #g2) ∧
+  (W5Accepted( D, e2, e3, pk2, pk3 ) @ #a2)
+ ∧
+  (#g1 < #a1) ∧
+  (#a1 < #g2) ∧
+  (#g2 < #a2) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a2)) ∧
+  (∀ D0 e0 e1.1 pk0 pk1.1 #s.
+    (W5Transition( 'special', D0, e0, e1.1, pk0, pk1.1 ) @ #s)
+   ⇒
+    ¬(#s < #a2))"
+*/
+by sorry
+
+lemma reachable_historical_reacceptance:
+  exists-trace
+  "∃ D e1 e2 e3 pk1 pk2 #g #a1 #advance #a2.
+    ((((((((W5Transition( 'honest', D, e1, e2, pk1, pk2 ) @ #g) ∧
+           (W5Accepted( D, e1, e2, pk1, pk2 ) @ #a1)) ∧
+          (W5EpochAdvanced( e2, e3 ) @ #advance)) ∧
+         (W5Accepted( D, e1, e2, pk1, pk2 ) @ #a2)) ∧
+        (#g < #a1)) ∧
+       (#a1 < #advance)) ∧
+      (#advance < #a2)) ∧
+     (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a2)))) ∧
+    (¬(∃ D0 e0 e1.1 pk0 pk1.1 #s.
+        (W5Transition( 'special', D0, e0, e1.1, pk0, pk1.1 ) @ #s) ∧
+        (#s < #a2)))"
+/*
+guarded formula characterizing all satisfying traces:
+"∃ D e1 e2 e3 pk1 pk2 #g #a1 #advance #a2.
+  (W5Transition( 'honest', D, e1, e2, pk1, pk2 ) @ #g) ∧
+  (W5Accepted( D, e1, e2, pk1, pk2 ) @ #a1) ∧
+  (W5EpochAdvanced( e2, e3 ) @ #advance) ∧
+  (W5Accepted( D, e1, e2, pk1, pk2 ) @ #a2)
+ ∧
+  (#g < #a1) ∧
+  (#a1 < #advance) ∧
+  (#advance < #a2) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a2)) ∧
+  (∀ D0 e0 e1.1 pk0 pk1.1 #s.
+    (W5Transition( 'special', D0, e0, e1.1, pk0, pk1.1 ) @ #s)
+   ⇒
+    ¬(#s < #a2))"
+*/
+by sorry
+
+lemma historical_update_freshness_candidate:
+  all-traces
+  "∀ D e ne later op np #a #u.
+    (((((W5Accepted( D, e, ne, op, np ) @ #a) ∧
+        (W5EpochAdvanced( ne, later ) @ #u)) ∧
+       (#u < #a)) ∧
+      (¬(∃ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ∧ (#r < #a)))) ∧
+     (¬(∃ D0 e0 e1 pk0 pk1 #s.
+         (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ∧ (#s < #a)))) ⇒
+    (⊥)"
+/*
+guarded formula characterizing all counter-examples:
+"∃ D e ne later op np #a #u.
+  (W5Accepted( D, e, ne, op, np ) @ #a) ∧
+  (W5EpochAdvanced( ne, later ) @ #u)
+ ∧
+  (#u < #a) ∧
+  (∀ D0 e0 pk0 #r. (W5KeyReveal( D0, e0, pk0 ) @ #r) ⇒ ¬(#r < #a)) ∧
+  (∀ D0 e0 e1 pk0 pk1 #s.
+    (W5Transition( 'special', D0, e0, e1, pk0, pk1 ) @ #s) ⇒ ¬(#s < #a))"
+*/
+by sorry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* All wellformedness checks were successful. */
+
+/*
+Generated from:
+Tamarin version 1.10.0
+Maude version 3.1
+Git revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master
+Compiled at: 2024-10-30 11:11:02.432289291 UTC
+*/
+
+end

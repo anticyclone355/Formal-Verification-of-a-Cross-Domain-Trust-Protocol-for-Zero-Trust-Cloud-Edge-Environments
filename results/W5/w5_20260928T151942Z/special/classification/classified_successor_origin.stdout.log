@@ -1,0 +1,24 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: epoch_successor.spthy
+
+  output:          classified_successor_origin.proof.spthy
+  processing time: 1.46s
+  
+  reachable_honest_update (exists-trace): analysis incomplete (1 steps)
+  reachable_repeated_acceptance (exists-trace): analysis incomplete (1 steps)
+  epoch_successor_origin (all-traces): analysis incomplete (1 steps)
+  domain_successor_key_authentication (all-traces): analysis incomplete (1 steps)
+  domain_reconfiguration_agreement (all-traces): analysis incomplete (1 steps)
+  classified_successor_origin (all-traces): verified (15 steps)
+  unconditional_successor_authentication_candidate (all-traces): analysis incomplete (1 steps)
+  successor_acceptance_injective_candidate (all-traces): analysis incomplete (1 steps)
+  accepted_epoch_has_started_candidate (all-traces): analysis incomplete (1 steps)
+  reachable_old_key_disclosure (exists-trace): analysis incomplete (1 steps)
+  reachable_disclosure_before_acceptance (exists-trace): analysis incomplete (1 steps)
+  reachable_special_update (exists-trace): analysis incomplete (1 steps)
+  special_without_disclosure_authentication_candidate (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

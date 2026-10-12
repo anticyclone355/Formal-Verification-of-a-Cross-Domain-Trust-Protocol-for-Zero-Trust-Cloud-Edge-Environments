@@ -1,0 +1,7 @@
+started_utc=2026-09-28T14:14:37.242618+00:00
+finished_utc=2026-09-28T14:14:45.271169+00:00
+wall_seconds=8.028
+timeout=False
+exit_code=0
+command=tamarin-prover policy_decomposition.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w4_a_acceptance_source -DKEEP_POLICY_RESTRICTIONS +RTS -N2 -RTS --output=w4_a_acceptance_source.proof.spthy --output-json=w4_a_acceptance_source.trace.json --output-dot=w4_a_acceptance_source.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/restricted/obligations

@@ -1,0 +1,41 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: repaired_state_lifecycle.spthy
+
+  output:          w2_post_erasure_all_longterm_disclosures_reachable.proof.spthy
+  processing time: 1168.53s
+  
+  w2_normal_confirmation_and_erasure (exists-trace): analysis incomplete (1 steps)
+  key_confirmation_origin (all-traces): analysis incomplete (1 steps)
+  key_confirmation_agreement (all-traces): analysis incomplete (1 steps)
+  w2_responder_erases_before_acceptance (exists-trace): analysis incomplete (1 steps)
+  ephemeral_state_lifetime (all-traces): analysis incomplete (1 steps)
+  derived_key_lifetime (all-traces): analysis incomplete (1 steps)
+  pre_erasure_state_non_reuse (all-traces): analysis incomplete (1 steps)
+  pending_state_non_reuse_after_erasure (all-traces): analysis incomplete (1 steps)
+  erased_secrets_have_prior_creation (all-traces): analysis incomplete (1 steps)
+  session_erasure_requires_both_local_erasures (all-traces): analysis incomplete (1 steps)
+  ephemeral_unreadable_after_local_erasure (all-traces): analysis incomplete (1 steps)
+  data_key_unreadable_after_local_erasure (all-traces): analysis incomplete (1 steps)
+  confirmation_key_unreadable_after_local_erasure (all-traces): analysis incomplete (1 steps)
+  w2_initiator_ephemeral_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_initiator_data_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_initiator_confirmation_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_responder_ephemeral_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_responder_data_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_responder_confirmation_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_pending_ephemeral_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_initiator_independent_oracles_forward (exists-trace): analysis incomplete (1 steps)
+  w2_initiator_independent_oracles_reverse (exists-trace): analysis incomplete (1 steps)
+  w2_responder_independent_oracles_forward (exists-trace): analysis incomplete (1 steps)
+  w2_responder_independent_oracles_reverse (exists-trace): analysis incomplete (1 steps)
+  w2_post_erasure_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w2_post_erasure_data_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w2_post_erasure_all_longterm_disclosures_reachable (exists-trace): verified (36 steps)
+  w2_confirmation_key_exposure_reachable (exists-trace): analysis incomplete (1 steps)
+  w2_confirmation_key_exposure_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w2_confirmation_key_exposure_data_key_secrecy (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

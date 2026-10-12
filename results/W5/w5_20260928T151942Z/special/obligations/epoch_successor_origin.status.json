@@ -1,0 +1,49 @@
+{
+  "profile": "special",
+  "case": "obligations",
+  "lemma": "epoch_successor_origin",
+  "trace": "all-traces",
+  "defines": [
+    "SPECIAL_ATTACK"
+  ],
+  "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+  "status": "verified",
+  "raw_summary": "verified (14 steps)",
+  "steps": 14,
+  "wall_seconds": 1.521,
+  "tamarin_processing_seconds": 1.41,
+  "started_utc": "2026-09-28T15:20:04.768717+00:00",
+  "finished_utc": "2026-09-28T15:20:06.289624+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "epoch_successor.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=epoch_successor_origin",
+    "-DSPECIAL_ATTACK",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=epoch_successor_origin.proof.spthy",
+    "--output-json=epoch_successor_origin.trace.json",
+    "--output-dot=epoch_successor_origin.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/obligations",
+  "artifacts": {
+    "stdout": "epoch_successor_origin.stdout.log",
+    "stderr": "epoch_successor_origin.stderr.log",
+    "time": "epoch_successor_origin.time.txt",
+    "proof": "epoch_successor_origin.proof.spthy",
+    "trace_json": "epoch_successor_origin.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W5_Epoch_Successor] Derivation checks started",
+    "[Theory W5_Epoch_Successor] Derivation checks ended",
+    "[Theory W5_Epoch_Successor] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

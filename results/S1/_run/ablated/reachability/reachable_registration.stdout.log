@@ -1,0 +1,25 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: registration_policy_order.spthy
+
+  output:          reachable_registration.proof.spthy
+  processing time: 35.67s
+  
+  reachable_registration (exists-trace): verified (11 steps)
+  reachable_policy_installation (exists-trace): analysis incomplete (1 steps)
+  reachable_access_grant (exists-trace): analysis incomplete (1 steps)
+  reachable_same_domain_registration (exists-trace): analysis incomplete (1 steps)
+  reachable_request_before_policy (exists-trace): analysis incomplete (1 steps)
+  subject_before_policy_full_candidate (all-traces): analysis incomplete (1 steps)
+  registration_precedes_policy (all-traces): analysis incomplete (1 steps)
+  policy_domains_distinct (all-traces): analysis incomplete (1 steps)
+  registration_issuance_correspondence (all-traces): analysis incomplete (1 steps)
+  policy_processing_source (all-traces): analysis incomplete (1 steps)
+  policy_acceptance_source (all-traces): analysis incomplete (1 steps)
+  policy_context_root_agreement (all-traces): analysis incomplete (1 steps)
+  access_request_registration_source (all-traces): analysis incomplete (1 steps)
+  access_grant_correspondence (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

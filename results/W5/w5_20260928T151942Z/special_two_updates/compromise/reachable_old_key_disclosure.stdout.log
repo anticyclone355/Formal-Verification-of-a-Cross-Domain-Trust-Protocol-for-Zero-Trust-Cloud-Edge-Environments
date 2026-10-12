@@ -1,0 +1,27 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: epoch_successor.spthy
+
+  output:          reachable_old_key_disclosure.proof.spthy
+  processing time: 2.92s
+  
+  reachable_honest_update (exists-trace): analysis incomplete (1 steps)
+  reachable_repeated_acceptance (exists-trace): analysis incomplete (1 steps)
+  epoch_successor_origin (all-traces): analysis incomplete (1 steps)
+  domain_successor_key_authentication (all-traces): analysis incomplete (1 steps)
+  domain_reconfiguration_agreement (all-traces): analysis incomplete (1 steps)
+  classified_successor_origin (all-traces): analysis incomplete (1 steps)
+  unconditional_successor_authentication_candidate (all-traces): analysis incomplete (1 steps)
+  successor_acceptance_injective_candidate (all-traces): analysis incomplete (1 steps)
+  accepted_epoch_has_started_candidate (all-traces): analysis incomplete (1 steps)
+  reachable_old_key_disclosure (exists-trace): verified (13 steps)
+  reachable_disclosure_before_acceptance (exists-trace): analysis incomplete (1 steps)
+  reachable_special_update (exists-trace): analysis incomplete (1 steps)
+  special_without_disclosure_authentication_candidate (all-traces): analysis incomplete (1 steps)
+  reachable_two_honest_updates (exists-trace): analysis incomplete (1 steps)
+  reachable_historical_reacceptance (exists-trace): analysis incomplete (1 steps)
+  historical_update_freshness_candidate (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

@@ -1,0 +1,9 @@
+started_utc=2026-09-28T15:04:26.796814+00:00
+finished_utc=2026-09-28T15:04:53.600143+00:00
+wall_seconds=26.803
+timeout=False
+exit_code=0
+profile=multi_ablated_two
+model=original_multi_ablated_two.spthy
+command=tamarin-prover original_multi_ablated_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=unknown_key_share_exclusion --output=unknown_key_share_exclusion.proof.spthy --output-json=unknown_key_share_exclusion.trace.json --output-dot=unknown_key_share_exclusion.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/multi_ablated_two

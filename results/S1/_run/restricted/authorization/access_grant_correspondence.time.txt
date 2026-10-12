@@ -1,0 +1,8 @@
+started_utc=2026-09-29T08:01:01.386887+00:00
+finished_utc=2026-09-29T08:02:44.424677+00:00
+wall_seconds=103.038
+timeout=False
+exit_code=0
+profile=restricted
+command=tamarin-prover registration_policy_order.spthy --quit-on-warning --derivcheck-timeout=300 --prove=access_grant_correspondence -DKEEP_ORDER --output=access_grant_correspondence.proof.spthy --output-json=access_grant_correspondence.trace.json --output-dot=access_grant_correspondence.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/authorization

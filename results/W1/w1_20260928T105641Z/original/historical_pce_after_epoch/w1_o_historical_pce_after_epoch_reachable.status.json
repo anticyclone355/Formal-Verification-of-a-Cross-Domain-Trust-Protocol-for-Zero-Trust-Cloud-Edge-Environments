@@ -1,0 +1,52 @@
+{
+  "protocol": "original",
+  "case": "historical_pce_after_epoch",
+  "lemma": "w1_o_historical_pce_after_epoch_reachable",
+  "trace": "exists-trace",
+  "defines": [
+    "AFTER_EPOCH"
+  ],
+  "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5",
+  "status": "verified",
+  "raw_summary": "verified (30 steps)",
+  "steps": 30,
+  "wall_seconds": 77.098,
+  "tamarin_processing_seconds": 76.72,
+  "started_utc": "2026-09-28T10:56:42.740206+00:00",
+  "finished_utc": "2026-09-28T10:57:59.837831+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_reveal_matrix.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=w1_o_historical_pce_after_epoch_reachable",
+    "-DAFTER_EPOCH",
+    "--output=w1_o_historical_pce_after_epoch_reachable.proof.spthy",
+    "--output-json=w1_o_historical_pce_after_epoch_reachable.trace.json",
+    "--output-dot=w1_o_historical_pce_after_epoch_reachable.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T105641Z/original/historical_pce_after_epoch",
+  "artifacts": {
+    "stdout": "w1_o_historical_pce_after_epoch_reachable.stdout.log",
+    "stderr": "w1_o_historical_pce_after_epoch_reachable.stderr.log",
+    "time": "w1_o_historical_pce_after_epoch_reachable.time.txt",
+    "proof": "w1_o_historical_pce_after_epoch_reachable.proof.spthy",
+    "trace_json": "w1_o_historical_pce_after_epoch_reachable.trace.json",
+    "trace_dot": "w1_o_historical_pce_after_epoch_reachable.trace.dot",
+    "trace_png": "w1_o_historical_pce_after_epoch_reachable.trace.png",
+    "trace_svg": "w1_o_historical_pce_after_epoch_reachable.trace.svg"
+  },
+  "rendered_graphs": {
+    "png": "w1_o_historical_pce_after_epoch_reachable.trace.png",
+    "svg": "w1_o_historical_pce_after_epoch_reachable.trace.svg"
+  },
+  "stderr_tail": [
+    "[Theory W1_PCE_Reveal_Matrix] Derivation checks started",
+    "[Theory W1_PCE_Reveal_Matrix] Derivation checks ended",
+    "[Theory W1_PCE_Reveal_Matrix] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

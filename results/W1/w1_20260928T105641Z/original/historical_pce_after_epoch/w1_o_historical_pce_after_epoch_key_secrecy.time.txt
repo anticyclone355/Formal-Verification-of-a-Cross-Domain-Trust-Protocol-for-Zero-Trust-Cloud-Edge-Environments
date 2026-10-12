@@ -1,0 +1,7 @@
+started_utc=2026-09-28T08:32:16.828650+00:00
+finished_utc=2026-09-28T08:33:42.325184+00:00
+wall_seconds=85.497
+timeout=False
+exit_code=0
+command=tamarin-prover original_reveal_matrix.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w1_o_historical_pce_after_epoch_key_secrecy -DAFTER_EPOCH --output=w1_o_historical_pce_after_epoch_key_secrecy.proof.spthy --output-json=w1_o_historical_pce_after_epoch_key_secrecy.trace.json --output-dot=w1_o_historical_pce_after_epoch_key_secrecy.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T083216Z/original/historical_pce_after_epoch

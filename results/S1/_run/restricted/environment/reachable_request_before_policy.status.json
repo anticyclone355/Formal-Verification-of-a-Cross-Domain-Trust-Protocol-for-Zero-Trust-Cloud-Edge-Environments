@@ -1,0 +1,43 @@
+{
+  "profile": "restricted",
+  "case": "environment",
+  "lemma": "reachable_request_before_policy",
+  "trace": "exists-trace",
+  "defines": [
+    "KEEP_ORDER"
+  ],
+  "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+  "status": "verified",
+  "raw_summary": "verified (37 steps)",
+  "steps": 37,
+  "wall_seconds": 445.693,
+  "tamarin_processing_seconds": 445.22,
+  "started_utc": "2026-09-29T08:00:38.050817+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "registration_policy_order.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_request_before_policy",
+    "-DKEEP_ORDER",
+    "--output=reachable_request_before_policy.proof.spthy",
+    "--output-json=reachable_request_before_policy.trace.json",
+    "--output-dot=reachable_request_before_policy.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/environment",
+  "rendered_graphs": {
+    "png": "reachable_request_before_policy.trace.png",
+    "svg": "reachable_request_before_policy.trace.svg",
+    "pdf": "reachable_request_before_policy.trace.pdf"
+  },
+  "stderr_tail": [
+    "[Theory S1_Registration_Policy_Order] Theory translated",
+    "[Theory S1_Registration_Policy_Order] Derivation checks started",
+    "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+    "[Theory S1_Registration_Policy_Order] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

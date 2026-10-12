@@ -1,0 +1,36 @@
+{
+  "profile": "ablated",
+  "case": "authorization",
+  "lemma": "access_request_registration_source",
+  "trace": "all-traces",
+  "defines": [],
+  "model_sha256": "254AD0565A61DB5756F397C590925ADFD838D7AFF51DC4620FED7AE71B2EFDBB",
+  "status": "verified",
+  "raw_summary": "verified (9 steps)",
+  "steps": 9,
+  "wall_seconds": 29.262,
+  "tamarin_processing_seconds": 28.89,
+  "started_utc": "2026-09-29T08:02:01.019141+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "registration_policy_order.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=access_request_registration_source",
+    "--output=access_request_registration_source.proof.spthy",
+    "--output-json=access_request_registration_source.trace.json",
+    "--output-dot=access_request_registration_source.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/authorization",
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory S1_Registration_Policy_Order] Theory translated",
+    "[Theory S1_Registration_Policy_Order] Derivation checks started",
+    "[Theory S1_Registration_Policy_Order] Derivation checks ended",
+    "[Theory S1_Registration_Policy_Order] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

@@ -1,0 +1,7 @@
+started_utc=2026-09-28T14:21:29.251779+00:00
+finished_utc=2026-09-28T14:21:37.630310+00:00
+wall_seconds=8.378
+timeout=False
+exit_code=0
+command=tamarin-prover policy_decomposition.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w4_b_to_a_root_derivation -DMULTI_CONTEXT -DKEEP_POLICY_RESTRICTIONS +RTS -N2 -RTS --output=w4_b_to_a_root_derivation.proof.spthy --output-json=w4_b_to_a_root_derivation.trace.json --output-dot=w4_b_to_a_root_derivation.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/alternative_context_restricted/obligations

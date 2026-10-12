@@ -1,0 +1,52 @@
+{
+  "protocol": "repaired",
+  "profile": "ablated_two",
+  "case": "responder",
+  "lemma": "responder_injective_request_agreement",
+  "trace": "all-traces",
+  "defines": [],
+  "model_sha256": "5C8A230412F8C78B5B8CC1683AB026A31FF2FB5DDF23599DE6D871270CB5EB30",
+  "status": "falsified",
+  "raw_summary": "falsified - found trace (23 steps)",
+  "steps": 23,
+  "wall_seconds": 170.93,
+  "tamarin_processing_seconds": 170.49,
+  "started_utc": "2026-09-28T15:03:01.096971+00:00",
+  "finished_utc": "2026-09-28T15:05:52.027390+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_ablated_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=responder_injective_request_agreement",
+    "--output=responder_injective_request_agreement.proof.spthy",
+    "--output-json=responder_injective_request_agreement.trace.json",
+    "--output-dot=responder_injective_request_agreement.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/ablated_two",
+  "artifacts": {
+    "stdout": "responder_injective_request_agreement.stdout.log",
+    "stderr": "responder_injective_request_agreement.stderr.log",
+    "time": "responder_injective_request_agreement.time.txt",
+    "proof": "responder_injective_request_agreement.proof.spthy",
+    "trace_json": "responder_injective_request_agreement.trace.json",
+    "trace_dot": "responder_injective_request_agreement.trace.dot",
+    "trace_png": "responder_injective_request_agreement.trace.png",
+    "trace_svg": "responder_injective_request_agreement.trace.svg",
+    "trace_pdf": "responder_injective_request_agreement.trace.pdf"
+  },
+  "rendered_graphs": {
+    "png": "responder_injective_request_agreement.trace.png",
+    "svg": "responder_injective_request_agreement.trace.svg",
+    "pdf": "responder_injective_request_agreement.trace.pdf"
+  },
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

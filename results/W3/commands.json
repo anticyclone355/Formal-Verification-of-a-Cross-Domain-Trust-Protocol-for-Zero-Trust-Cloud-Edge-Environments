@@ -1,0 +1,1740 @@
+{
+  "started_utc": "20260928T153849Z",
+  "tamarin": "tamarin-prover",
+  "timeout_seconds_per_lemma": 3600,
+  "derivcheck_timeout_seconds": 300,
+  "parallel_jobs": 8,
+  "lemma_count": 144,
+  "run_dir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z",
+  "models": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W3_concurrent_agreement/generated_w3",
+  "entries": [
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "local_receiver_unbounded",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "LOCAL_RECEIVER",
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "responder",
+      "lemma": "responder_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "responder",
+      "lemma": "responder_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "responder",
+      "lemma": "responder_noninjective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "responder",
+      "lemma": "responder_injective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "repaired_data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "responder",
+      "lemma": "responder_request_replay_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "restricted_two",
+      "case": "initiator",
+      "lemma": "authorization_before_send",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "responder",
+      "lemma": "responder_aliveness",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "responder",
+      "lemma": "responder_weak_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "responder",
+      "lemma": "responder_noninjective_request_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "responder",
+      "lemma": "responder_injective_request_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "repaired_data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "responder",
+      "lemma": "responder_request_replay_exclusion",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_two",
+      "case": "initiator",
+      "lemma": "authorization_before_send",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "responder",
+      "lemma": "responder_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "responder",
+      "lemma": "responder_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "responder",
+      "lemma": "responder_noninjective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "responder",
+      "lemma": "responder_injective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "repaired_data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "responder",
+      "lemma": "responder_request_replay_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "ablated_unbounded",
+      "case": "initiator",
+      "lemma": "authorization_before_send",
+      "trace": "all-traces",
+      "defines": [
+        "UNBOUNDED"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_distinct_contexts",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "unknown_key_share_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_distinct_contexts",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "unknown_key_share_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_distinct_contexts",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "original",
+      "profile": "multi_local_receiver_two",
+      "case": "initiator",
+      "lemma": "unknown_key_share_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "LOCAL_RECEIVER"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "responder",
+      "lemma": "responder_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "responder",
+      "lemma": "responder_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "responder",
+      "lemma": "responder_noninjective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "responder",
+      "lemma": "responder_injective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "repaired_data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "responder",
+      "lemma": "responder_request_replay_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "authorization_before_send",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_distinct_contexts",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_restricted_two",
+      "case": "initiator",
+      "lemma": "unknown_key_share_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY",
+        "KEEP_REQUEST",
+        "KEEP_GRANT",
+        "KEEP_SEND",
+        "KEEP_RECEIVE"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "smoke",
+      "lemma": "reachable_session",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_concurrent_sessions",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_noninjective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "initiator_injective_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "responder",
+      "lemma": "responder_aliveness",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "responder",
+      "lemma": "responder_weak_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "responder",
+      "lemma": "responder_noninjective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "responder",
+      "lemma": "responder_injective_request_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "repaired_data_origin_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "replay_acceptance_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "responder",
+      "lemma": "responder_request_replay_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "authorization_before_send",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "concurrency",
+      "lemma": "reachable_two_distinct_contexts",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    },
+    {
+      "protocol": "repaired",
+      "profile": "multi_ablated_two",
+      "case": "initiator",
+      "lemma": "unknown_key_share_exclusion",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_PARTY"
+      ],
+      "status": "not_run"
+    }
+  ]
+}

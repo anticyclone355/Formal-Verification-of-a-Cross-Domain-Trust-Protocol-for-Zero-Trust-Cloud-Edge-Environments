@@ -1,0 +1,7 @@
+started_utc=2026-09-28T10:03:58.794712+00:00
+finished_utc=2026-09-28T10:20:50.844790+00:00
+wall_seconds=1012.050
+timeout=False
+exit_code=0
+command=tamarin-prover repaired_state_lifecycle.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w2_responder_erases_before_acceptance --output=w2_responder_erases_before_acceptance.proof.spthy --output-json=w2_responder_erases_before_acceptance.trace.json --output-dot=w2_responder_erases_before_acceptance.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/lifecycle

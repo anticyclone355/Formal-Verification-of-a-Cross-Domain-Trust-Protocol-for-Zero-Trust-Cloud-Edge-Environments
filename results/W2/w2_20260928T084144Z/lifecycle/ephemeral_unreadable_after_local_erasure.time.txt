@@ -1,0 +1,7 @@
+started_utc=2026-09-28T17:21:40.905411+00:00
+finished_utc=2026-09-28T18:21:43.868104+00:00
+wall_seconds=3602.963
+timeout=True
+exit_code=-9
+command=tamarin-prover repaired_state_lifecycle.spthy --quit-on-warning --derivcheck-timeout=300 --prove=ephemeral_unreadable_after_local_erasure +RTS -N4 -RTS --output=ephemeral_unreadable_after_local_erasure.proof.spthy --output-json=ephemeral_unreadable_after_local_erasure.trace.json --output-dot=ephemeral_unreadable_after_local_erasure.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/lifecycle

@@ -1,0 +1,57 @@
+{
+  "profile": "restricted",
+  "case": "reachability",
+  "lemma": "reachable_proposal",
+  "trace": "exists-trace",
+  "defines": [
+    "KEEP_POLICY_RESTRICTIONS"
+  ],
+  "model_sha256": "938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06",
+  "status": "verified",
+  "raw_summary": "verified (10 steps)",
+  "steps": 10,
+  "wall_seconds": 9.379,
+  "tamarin_processing_seconds": 9.26,
+  "started_utc": "2026-09-28T14:13:37.233128+00:00",
+  "finished_utc": "2026-09-28T14:13:46.612209+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "policy_decomposition.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_proposal",
+    "-DKEEP_POLICY_RESTRICTIONS",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=reachable_proposal.proof.spthy",
+    "--output-json=reachable_proposal.trace.json",
+    "--output-dot=reachable_proposal.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/restricted/reachability",
+  "artifacts": {
+    "stdout": "reachable_proposal.stdout.log",
+    "stderr": "reachable_proposal.stderr.log",
+    "time": "reachable_proposal.time.txt",
+    "proof": "reachable_proposal.proof.spthy",
+    "trace_json": "reachable_proposal.trace.json",
+    "trace_dot": "reachable_proposal.trace.dot",
+    "trace_pdf": "reachable_proposal.trace.pdf",
+    "trace_png": "reachable_proposal.trace.png",
+    "trace_svg": "reachable_proposal.trace.svg"
+  },
+  "rendered_graphs": {
+    "pdf": "reachable_proposal.trace.pdf",
+    "svg": "reachable_proposal.trace.svg",
+    "png": "reachable_proposal.trace.png"
+  },
+  "stderr_tail": [
+    "[Theory W4_Policy_Decomposition] Derivation checks started",
+    "[Theory W4_Policy_Decomposition] Derivation checks ended",
+    "[Theory W4_Policy_Decomposition] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

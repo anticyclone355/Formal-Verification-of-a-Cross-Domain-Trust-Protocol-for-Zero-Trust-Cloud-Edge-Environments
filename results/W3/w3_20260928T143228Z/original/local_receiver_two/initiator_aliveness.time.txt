@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:32:52.562232+00:00
+finished_utc=2026-09-28T14:33:10.184879+00:00
+wall_seconds=17.623
+timeout=False
+exit_code=0
+profile=local_receiver_two
+model=original_local_receiver_two.spthy
+command=tamarin-prover original_local_receiver_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=initiator_aliveness --output=initiator_aliveness.proof.spthy --output-json=initiator_aliveness.trace.json --output-dot=initiator_aliveness.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/local_receiver_two

@@ -1,0 +1,10 @@
+maude tool: 'maude'
+ checking version: 3.1. OK.
+ checking installation: OK.
+[Theory W4_Policy_Decomposition] Theory loaded
+[Theory W4_Policy_Decomposition] Theory translated
+[Theory W4_Policy_Decomposition] Derivation checks started
+[Theory W4_Policy_Decomposition] Derivation checks ended
+[Theory W4_Policy_Decomposition] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done

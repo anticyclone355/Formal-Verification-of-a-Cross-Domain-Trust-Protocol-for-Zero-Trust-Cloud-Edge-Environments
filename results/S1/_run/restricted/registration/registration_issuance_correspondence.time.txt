@@ -1,0 +1,8 @@
+started_utc=2026-09-29T08:00:38.054934+00:00
+finished_utc=2026-09-29T08:01:08.859736+00:00
+wall_seconds=30.805
+timeout=False
+exit_code=0
+profile=restricted
+command=tamarin-prover registration_policy_order.spthy --quit-on-warning --derivcheck-timeout=300 --prove=registration_issuance_correspondence -DKEEP_ORDER --output=registration_issuance_correspondence.proof.spthy --output-json=registration_issuance_correspondence.trace.json --output-dot=registration_issuance_correspondence.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/registration

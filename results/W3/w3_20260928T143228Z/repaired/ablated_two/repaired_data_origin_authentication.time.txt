@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:34:55.011617+00:00
+finished_utc=2026-09-28T14:36:05.701086+00:00
+wall_seconds=70.689
+timeout=False
+exit_code=0
+profile=ablated_two
+model=repaired_ablated_two.spthy
+command=tamarin-prover repaired_ablated_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=repaired_data_origin_authentication --output=repaired_data_origin_authentication.proof.spthy --output-json=repaired_data_origin_authentication.trace.json --output-dot=repaired_data_origin_authentication.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/ablated_two

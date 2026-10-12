@@ -1,0 +1,8 @@
+started_utc=2026-09-29T08:00:38.048652+00:00
+finished_utc=2026-09-29T08:01:18.794068+00:00
+wall_seconds=40.745
+timeout=False
+exit_code=0
+profile=restricted
+command=tamarin-prover registration_policy_order.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_same_domain_registration -DKEEP_ORDER --output=reachable_same_domain_registration.proof.spthy --output-json=reachable_same_domain_registration.trace.json --output-dot=reachable_same_domain_registration.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/restricted/environment

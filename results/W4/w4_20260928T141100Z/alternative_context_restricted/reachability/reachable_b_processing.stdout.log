@@ -1,0 +1,26 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: policy_decomposition.spthy
+
+  output:          reachable_b_processing.proof.spthy
+  processing time: 14.80s
+  
+  reachable_roots (exists-trace): analysis incomplete (1 steps)
+  reachable_proposal (exists-trace): analysis incomplete (1 steps)
+  reachable_b_processing (exists-trace): verified (14 steps)
+  reachable_policy_installation (exists-trace): analysis incomplete (1 steps)
+  w4_proposal_source (all-traces): analysis incomplete (1 steps)
+  w4_b_processing_source (all-traces): analysis incomplete (1 steps)
+  w4_a_acceptance_source (all-traces): analysis incomplete (1 steps)
+  w4_b_to_a_root_derivation (all-traces): analysis incomplete (1 steps)
+  w4_a_to_b_root_derivation (all-traces): analysis incomplete (1 steps)
+  w4_matching_context_root_agreement (all-traces): analysis incomplete (1 steps)
+  reachable_owner_identity_compromise (exists-trace): analysis incomplete (1 steps)
+  reachable_b_domain_compromise (exists-trace): analysis incomplete (1 steps)
+  w4_private_b_continuation_source (all-traces): analysis incomplete (1 steps)
+  w4_private_a_continuation_source (all-traces): analysis incomplete (1 steps)
+  reachable_alternative_context (exists-trace): analysis incomplete (1 steps)
+
+==============================================================================

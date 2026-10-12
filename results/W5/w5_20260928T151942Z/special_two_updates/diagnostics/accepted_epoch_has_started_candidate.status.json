@@ -1,0 +1,59 @@
+{
+  "profile": "special_two_updates",
+  "case": "diagnostics",
+  "lemma": "accepted_epoch_has_started_candidate",
+  "trace": "all-traces",
+  "defines": [
+    "SPECIAL_ATTACK",
+    "SECOND_UPDATE"
+  ],
+  "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+  "status": "falsified",
+  "raw_summary": "falsified - found trace (6 steps)",
+  "steps": 6,
+  "wall_seconds": 3.025,
+  "tamarin_processing_seconds": 2.9,
+  "started_utc": "2026-09-28T15:21:24.386997+00:00",
+  "finished_utc": "2026-09-28T15:21:27.411563+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "epoch_successor.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=accepted_epoch_has_started_candidate",
+    "-DSPECIAL_ATTACK",
+    "-DSECOND_UPDATE",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=accepted_epoch_has_started_candidate.proof.spthy",
+    "--output-json=accepted_epoch_has_started_candidate.trace.json",
+    "--output-dot=accepted_epoch_has_started_candidate.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/diagnostics",
+  "artifacts": {
+    "stdout": "accepted_epoch_has_started_candidate.stdout.log",
+    "stderr": "accepted_epoch_has_started_candidate.stderr.log",
+    "time": "accepted_epoch_has_started_candidate.time.txt",
+    "proof": "accepted_epoch_has_started_candidate.proof.spthy",
+    "trace_json": "accepted_epoch_has_started_candidate.trace.json",
+    "trace_dot": "accepted_epoch_has_started_candidate.trace.dot",
+    "trace_pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+    "trace_png": "accepted_epoch_has_started_candidate.trace.png",
+    "trace_svg": "accepted_epoch_has_started_candidate.trace.svg"
+  },
+  "rendered_graphs": {
+    "pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+    "svg": "accepted_epoch_has_started_candidate.trace.svg",
+    "png": "accepted_epoch_has_started_candidate.trace.png"
+  },
+  "stderr_tail": [
+    "[Theory W5_Epoch_Successor] Derivation checks started",
+    "[Theory W5_Epoch_Successor] Derivation checks ended",
+    "[Theory W5_Epoch_Successor] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

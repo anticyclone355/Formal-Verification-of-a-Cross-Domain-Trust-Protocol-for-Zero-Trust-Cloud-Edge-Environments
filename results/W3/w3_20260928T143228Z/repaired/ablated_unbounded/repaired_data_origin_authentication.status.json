@@ -1,0 +1,46 @@
+{
+  "protocol": "repaired",
+  "profile": "ablated_unbounded",
+  "case": "initiator",
+  "lemma": "repaired_data_origin_authentication",
+  "trace": "all-traces",
+  "defines": [
+    "UNBOUNDED"
+  ],
+  "model_sha256": "552B218D0FCC31149751E63F80AD1A6452B671E1072A6DDE297178F62238BA53",
+  "status": "verified",
+  "raw_summary": "verified (8 steps)",
+  "steps": 8,
+  "wall_seconds": 55.639,
+  "tamarin_processing_seconds": 55.3,
+  "started_utc": "2026-09-28T14:36:49.187446+00:00",
+  "finished_utc": "2026-09-28T14:37:44.826788+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_ablated_unbounded.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=repaired_data_origin_authentication",
+    "--output=repaired_data_origin_authentication.proof.spthy",
+    "--output-json=repaired_data_origin_authentication.trace.json",
+    "--output-dot=repaired_data_origin_authentication.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/ablated_unbounded",
+  "artifacts": {
+    "stdout": "repaired_data_origin_authentication.stdout.log",
+    "stderr": "repaired_data_origin_authentication.stderr.log",
+    "time": "repaired_data_origin_authentication.time.txt",
+    "proof": "repaired_data_origin_authentication.proof.spthy",
+    "trace_json": "repaired_data_origin_authentication.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

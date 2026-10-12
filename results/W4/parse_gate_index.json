@@ -1,0 +1,37 @@
+[
+  {
+    "profile": "core",
+    "defines": [],
+    "returncode": 0,
+    "log": "output_parse_core.log",
+    "wellformedness_warnings": 0
+  },
+  {
+    "profile": "restricted",
+    "defines": [
+      "KEEP_POLICY_RESTRICTIONS"
+    ],
+    "returncode": 0,
+    "log": "output_parse_restricted.log",
+    "wellformedness_warnings": 0
+  },
+  {
+    "profile": "alternative_context",
+    "defines": [
+      "MULTI_CONTEXT"
+    ],
+    "returncode": 0,
+    "log": "output_parse_alternative_context.log",
+    "wellformedness_warnings": 0
+  },
+  {
+    "profile": "alternative_context_restricted",
+    "defines": [
+      "MULTI_CONTEXT",
+      "KEEP_POLICY_RESTRICTIONS"
+    ],
+    "returncode": 0,
+    "log": "output_parse_alternative_context_restricted.log",
+    "wellformedness_warnings": 0
+  }
+]

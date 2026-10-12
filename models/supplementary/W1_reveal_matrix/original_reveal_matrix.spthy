@@ -1,0 +1,557 @@
+/* W1 auxiliary PCE credential-isolation model.
+   Source: v0/original/CDDS_PCE_original_full_v4.spthy.
+   Scope: one registered role pair, two domains, one target request/session.
+   Registration and policy synchronization are conditional setup interfaces.
+   Public message expressions/checks of the four data-path rules are retained.
+   Optional -DAFTER_EPOCH adds one bounded honest credential refresh.
+*/
+theory W1_PCE_Reveal_Matrix
+begin
+
+builtins: hashing, signing, symmetric-encryption, natural-numbers
+functions: PEnc/3, PDec/2, ppk/1
+equations: PDec(psk,PEnc(ppk(psk),k,r)) = k
+
+restriction Equality:
+  "All x y #i. Eq(x,y) @i ==> x = y"
+
+/* An explicit bounded experiment, not an injective-agreement assumption. */
+restriction W1_OneSetup:
+  "All #i #j. W1Init() @i & W1Init() @j ==> #i = #j"
+
+
+/* Conditional interface: two registered subjects, two domains, one allow policy.
+   Real public certificates are output. Only initialization is bounded globally. */
+rule W1_Setup:
+  [ Fr(~si), Fr(~pi), Fr(~sr), Fr(~pr), Fr(~da), Fr(~db) ]
+  --[ W1Init() ]->
+  [ !Subject('requester','domain_A',%1,~si,~pi,pk(~si),ppk(~pi))
+  , !Subject('owner','domain_B',%1,~sr,~pr,pk(~sr),ppk(~pr))
+  , !Domain('domain_A',%1,~da,pk(~da))
+  , !Domain('domain_B',%1,~db,pk(~db))
+  , !Policy('domain_A','domain_B',%1,'requester','owner','1')
+  , W1_RequestReady('requester','owner','domain_A','domain_B',%1)
+  , W1_IdAvailable('requester',%1), W1_PceAvailable('requester',%1)
+  , W1_IdAvailable('owner',%1), W1_PceAvailable('owner',%1)
+  , W1_DomainAvailable('domain_A',%1), W1_DomainAvailable('domain_B',%1)
+  , W1_ProbeReady()
+  , Out(<pk(~si),ppk(~pi),%1,'Subject Pk'>)
+  , Out(<pk(~sr),ppk(~pr),%1,'Subject Pk'>)
+  , Out(<<pk(~si),ppk(~pi),%1>,sign(<pk(~si),ppk(~pi),%1>,~da),pk(~da),'SubjectCert'>)
+  , Out(<<pk(~sr),ppk(~pr),%1>,sign(<pk(~sr),ppk(~pr),%1>,~db),pk(~db),'SubjectCert'>)
+  ]
+
+/* An independent observable endpoint for non-vacuity witnesses. */
+rule W1_Probe:
+  [ W1_ProbeReady() ] --[ W1Probe() ]-> []
+
+/* Each immutable credential may be revealed once, at any chosen time.
+   Learning the same immutable key repeatedly adds no attacker capability. */
+rule Reveal_IdentityKey:
+  [ !Subject($S,$D,%n,sk,psk,pkS,ppkS), W1_IdAvailable($S,%n) ]
+  --[ Reveal_IdentityKey($S,%n), W1LtkReveal('identity',$S,%n) ]->
+  [ Out(sk) ]
+
+rule Reveal_PCEKey:
+  [ !Subject($S,$D,%n,sk,psk,pkS,ppkS), W1_PceAvailable($S,%n) ]
+  --[ Reveal_PCEKey($S,%n), W1LtkReveal('pce',$S,%n) ]->
+  [ Out(psk) ]
+
+rule Reveal_DomainKey:
+  [ !Domain($D,%n,sk,pkD), W1_DomainAvailable($D,%n) ]
+  --[ Reveal_Domain($D,%n), W1LtkReveal('domain',$D,%n) ]->
+  [ Out(sk) ]
+
+/* Retained data path; additions are W1 observations and scenario tokens. */
+rule Subject_Access_Request[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = <CertA, CertaSign, SignPk>
+        AccessRa = <CertA_Pro, pkb, %n>
+    in
+    [
+        W1_RequestReady($S_a,$S_b,$A,$B,%n)
+        ,         !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , !Domain($A, %n, gskA, gpkA)
+        , !Domain($B, %n, gskB, gpkB)
+        , In(<CertA, CertaSign, SignPk, field>)
+    ]
+    --[
+        Eq(field, 'SubjectCert')
+        , Eq(SignPk,gpkA)
+        , Eq(verify(CertaSign,CertA,gpkA),true)
+        
+        , Eq(fst(CertA), pka)
+        , Eq(fst(snd(CertA)), ppka)
+        , Eq(snd(snd(CertA)), %n)
+        , AccessRequest($S_a, $S_b, %n, $A, $B, pska, pskb, gskA)
+    ]->
+    [
+
+        Out(<AccessRa,sign(AccessRa,pska),pka, 'AccessR_a'>)
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+    ]
+
+rule Domain_Access_Verification[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = fst(AccessRa)
+        pkbIn = fst(snd(AccessRa))
+        Epoch_Access = snd(snd(AccessRa))
+
+    in
+    [ 
+        In(<AccessRa,AccesssSign,AccessPKa, field>)
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+        , !Policy($A, $B, %n, $S_a, $S_b, bit)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+    ]
+    --[
+        Eq(field, 'AccessR_a')
+        , Eq(pka,AccessPKa)
+        , Eq(verify(AccesssSign, AccessRa, pka), true)
+        , Eq(pkbIn,pkb)
+        , Eq(Epoch_Access, %n)
+
+        , Eq(bit, '1')
+        , AccessGranted($S_a, $S_b, %n, pka, pkb, bit)                          
+    ]->
+    [ 
+        Out(<  <h(<pka, pkb, %n>)>, sign(h(<pka, pkb, %n>), gskB), pk(gskB) , 'AccessCert_ab' >)    
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+    ]
+
+rule Object_Data_Encryption[role="Authentication_and_Data_Sharing"]:
+    let 
+        d = < ~data, sign(~data,pskb),pk(pskb)>
+        alpha = PEnc(ppka, ~k, ~v)
+        
+        beta = senc(d, ~k)
+    in
+    [ 
+        In(<Hash1, Hashsign, Hashpk , field>)          
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+        , Fr(~data)                                                
+        , Fr(~k)                                                
+        , Fr(~v)                                                
+    ]
+    --[
+        Eq(field, 'AccessCert_ab')
+        , Eq(gpkB,Hashpk)
+        , Eq(verify(Hashsign, Hash1, gpkB), true)
+        , Eq(Hash1,h(<pka, pkb, %n>))
+        , DataSent($S_b, $S_a, %n, pskb, ppka, pka, ~data, ~k)
+        , W1Sent($S_a,$S_b,%n,~data,~k)
+        
+        , Secret(~data, %n)
+        , SessionKey(~k, %n)
+        , Honest($S_a, %n)
+        , Honest($S_b, %n)
+
+    ]->                                                     
+    [ 
+        Out(<alpha, beta, 'data'>)   
+        , X_send($S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, ~data, ~k)
+        , W1_KeyRevealAvailable('sender',~data)
+
+    ]
+
+rule Subject_Data_Decryption[role="Authentication_and_Data_Sharing"]:
+let 
+    k_in = PDec(ppska, alpha)
+    
+    d_in = sdec(beta, k_in)
+    x_in = fst(d_in)
+    pk_in = snd(snd(d_in))
+    sign_x = fst(snd(d_in))
+in
+[
+    In(<alpha, beta, field>)
+    , X_send($S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, data, k)
+
+]
+--[
+    Eq(field, 'data')
+    , Eq(k_in, k)
+    , Eq(d_in, d)
+    , Eq(pk_in, pkb)
+    , Eq(verify(sign_x, x_in, pkb), true)
+    , Eq(x_in,data)
+    , DataReceive($S_b, $S_a, %n, alpha, beta, ppska, pkb, k, data)
+    , W1Accepted($S_a,$S_b,%n,data,k)
+
+]->
+[
+    !Plaintext(data)
+    , W1_Closed()
+]
+
+/* Session-key disclosure exists only while the original X_send state exists.
+   The original baseline makes no secure-erasure claim. */
+rule Reveal_Original_SessionKey:
+  [ X_send($S_b,$S_a,%n,skB,pkB,pceB,skA,pceA,d,data,k)
+  , W1_KeyRevealAvailable('sender',data) ]
+  --[ W1SessionKeyReveal('sender',data,k) ]->
+  [ X_send($S_b,$S_a,%n,skB,pkB,pceB,skA,pceA,d,data,k), Out(k) ]
+
+#ifdef AFTER_EPOCH
+/* One honest credential-refresh interface after the historical session closes.
+   Old persistent credentials and unused reveal capabilities remain available.
+   No successor data session is created; W5 handles actual reconfiguration. */
+rule W1_Advance_Epoch:
+  [ W1_Closed()
+  , !Domain('domain_A',%1,oldA,pk(oldA))
+  , !Domain('domain_B',%1,oldB,pk(oldB))
+  , Fr(~si2), Fr(~pi2), Fr(~sr2), Fr(~pr2), Fr(~da2), Fr(~db2) ]
+  --[ W1EpochAdvanced(%1,%1 %+ %1) ]->
+  [ !Subject('requester','domain_A',%1 %+ %1,~si2,~pi2,pk(~si2),ppk(~pi2))
+  , !Subject('owner','domain_B',%1 %+ %1,~sr2,~pr2,pk(~sr2),ppk(~pr2))
+  , !Domain('domain_A',%1 %+ %1,~da2,pk(~da2))
+  , !Domain('domain_B',%1 %+ %1,~db2,pk(~db2))
+  , W1_IdAvailable('requester',%1 %+ %1), W1_PceAvailable('requester',%1 %+ %1)
+  , W1_IdAvailable('owner',%1 %+ %1), W1_PceAvailable('owner',%1 %+ %1)
+  , W1_DomainAvailable('domain_A',%1 %+ %1), W1_DomainAvailable('domain_B',%1 %+ %1)
+  , Out(<pk(~si2),ppk(~pi2),%1 %+ %1,'Subject Pk'>)
+  , Out(<pk(~sr2),ppk(~pr2),%1 %+ %1,'Subject Pk'>)
+  , Out(<<pk(~si2),ppk(~pi2),%1 %+ %1>,sign(<pk(~si2),ppk(~pi2),%1 %+ %1>,~da2),pk(~da2),'SubjectCert'>)
+  , Out(<<pk(~sr2),ppk(~pr2),%1 %+ %1>,sign(<pk(~sr2),ppk(~pr2),%1 %+ %1>,~db2),pk(~db2),'SubjectCert'>)
+  , Out(<pk(~da2),sign(pk(~da2),oldA),pk(oldA),'Update domain public key'>)
+  , Out(<pk(~db2),sign(pk(~db2),oldB),pk(oldB),'Update domain public key'>)
+  ]
+#endif
+
+/* Exact compromise cases: events are filtered only up to the observation time.
+   No requested disclosure is optional: each has its own positive occurrence.
+   Both direct data-key and ephemeral disclosure are excluded from LTK cases.
+   Candidate safety lemmas are not expected outcomes; all require actual runs. */
+lemma w1_o_baseline_reachable:
+  exists-trace
+  "Ex I R e x k #send #accept #check.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & not (Ex kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check)
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & W1Probe() @check"
+
+lemma w1_o_baseline_plaintext_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & not (Ex kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check)
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   ==> F"
+
+lemma w1_o_baseline_key_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & not (Ex kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check)
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(k) @check
+   ==> F"
+
+lemma w1_o_identity_only_reachable:
+  exists-trace
+  "Ex I R e x k #send #accept #check #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & W1Probe() @check"
+
+lemma w1_o_identity_only_plaintext_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   ==> F"
+
+lemma w1_o_identity_only_key_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(k) @check
+   ==> F"
+
+lemma w1_o_pce_only_reachable:
+  exists-trace
+  "Ex I R e x k #send #accept #check #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & W1Probe() @check"
+
+lemma w1_o_pce_only_plaintext_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   ==> F"
+
+lemma w1_o_pce_only_key_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(k) @check
+   ==> F"
+
+lemma w1_o_pce_only_record_decrypt:
+  exists-trace
+  "Ex I R e x k #send #accept #check #rev0 #key.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   & K(k) @key
+   & #rev0 < #key & #key < #check"
+
+lemma w1_o_combined_reachable:
+  exists-trace
+  "Ex I R e x k #send #accept #check #rev0 #rev1.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1) | (kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1) @rev1 & #accept < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & W1Probe() @check"
+
+lemma w1_o_combined_plaintext_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #rev0 #rev1.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1) | (kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1) @rev1 & #accept < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   ==> F"
+
+lemma w1_o_combined_key_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #rev0 #rev1.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1) | (kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1) @rev1 & #accept < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(k) @check
+   ==> F"
+
+lemma w1_o_combined_record_decrypt:
+  exists-trace
+  "Ex I R e x k #send #accept #check #rev0 #rev1 #key.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#accept < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1) | (kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('identity','requester',%1) @rev0 & #accept < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1) @rev1 & #accept < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   & K(k) @key
+   & #rev0 < #key & #rev1 < #key & #key < #check"
+
+#ifdef AFTER_EPOCH
+lemma w1_o_historical_pce_after_epoch_reachable:
+  exists-trace
+  "Ex I R e x k #send #accept #check #advance #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & W1Probe() @check"
+
+lemma w1_o_historical_pce_after_epoch_plaintext_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #advance #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   ==> F"
+
+lemma w1_o_historical_pce_after_epoch_key_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #advance #rev0.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(k) @check
+   ==> F"
+
+lemma w1_o_historical_pce_after_epoch_record_decrypt:
+  exists-trace
+  "Ex I R e x k #send #accept #check #advance #rev0 #key.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'pce' & principal = 'requester' & epoch = %1))))
+   & W1LtkReveal('pce','requester',%1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   & K(k) @key
+   & #rev0 < #key & #key < #check"
+
+#endif
+
+#ifdef AFTER_EPOCH
+lemma w1_o_successor_only_reachable:
+  exists-trace
+  "Ex I R e x k #send #accept #check #advance #rev0 #rev1.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1 %+ %1) | (kind = 'pce' & principal = 'requester' & epoch = %1 %+ %1))))
+   & W1LtkReveal('identity','requester',%1 %+ %1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1 %+ %1) @rev1 & #advance < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & W1Probe() @check"
+
+lemma w1_o_successor_only_plaintext_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #advance #rev0 #rev1.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1 %+ %1) | (kind = 'pce' & principal = 'requester' & epoch = %1 %+ %1))))
+   & W1LtkReveal('identity','requester',%1 %+ %1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1 %+ %1) @rev1 & #advance < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(x) @check
+   ==> F"
+
+lemma w1_o_successor_only_key_secrecy:
+  all-traces
+  "All I R e x k #send #accept #check #advance #rev0 #rev1.
+     W1Sent(I,R,e,x,k) @send
+   & W1Accepted(I,R,e,x,k) @accept
+   & #send < #accept
+   & #accept < #check
+   & W1EpochAdvanced(%1,%1 %+ %1) @advance
+   & #accept < #advance
+   & #advance < #check
+   & (All kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt & #lt < #check
+       ==> (#advance < #lt & ((kind = 'identity' & principal = 'requester' & epoch = %1 %+ %1) | (kind = 'pce' & principal = 'requester' & epoch = %1 %+ %1))))
+   & W1LtkReveal('identity','requester',%1 %+ %1) @rev0 & #advance < #rev0 & #rev0 < #check
+   & W1LtkReveal('pce','requester',%1 %+ %1) @rev1 & #advance < #rev1 & #rev1 < #check
+   & not (Ex role handle secret #dk. W1SessionKeyReveal(role,handle,secret) @dk & #dk < #check)
+   & K(k) @check
+   ==> F"
+
+#endif
+
+lemma w1_o_session_key_disclosure_reachable:
+  exists-trace
+  "Ex I R e x k #send #reveal #accept #learn.
+     W1Sent(I,R,e,x,k) @send
+   & W1SessionKeyReveal('sender',x,k) @reveal
+   & W1Accepted(I,R,e,x,k) @accept
+   & K(x) @learn
+   & #send < #reveal & #reveal < #accept & #accept < #learn
+   & not (Ex kind principal epoch #lt. W1LtkReveal(kind,principal,epoch) @lt)"
+
+end

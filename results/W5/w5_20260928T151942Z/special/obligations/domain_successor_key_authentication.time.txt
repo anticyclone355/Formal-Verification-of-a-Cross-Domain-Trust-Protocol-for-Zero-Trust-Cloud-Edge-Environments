@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:20:06.292022+00:00
+finished_utc=2026-09-28T15:20:07.924982+00:00
+wall_seconds=1.633
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=domain_successor_key_authentication -DSPECIAL_ATTACK +RTS -N2 -RTS --output=domain_successor_key_authentication.proof.spthy --output-json=domain_successor_key_authentication.trace.json --output-dot=domain_successor_key_authentication.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/obligations

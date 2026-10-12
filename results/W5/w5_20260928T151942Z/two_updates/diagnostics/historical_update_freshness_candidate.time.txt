@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:20:57.342215+00:00
+finished_utc=2026-09-28T15:20:58.910334+00:00
+wall_seconds=1.568
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=historical_update_freshness_candidate -DSECOND_UPDATE +RTS -N2 -RTS --output=historical_update_freshness_candidate.proof.spthy --output-json=historical_update_freshness_candidate.trace.json --output-dot=historical_update_freshness_candidate.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/diagnostics

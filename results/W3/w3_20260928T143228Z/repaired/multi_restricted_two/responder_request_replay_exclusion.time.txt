@@ -1,0 +1,9 @@
+started_utc=2026-09-28T15:11:05.252084+00:00
+finished_utc=2026-09-28T15:13:31.878425+00:00
+wall_seconds=146.626
+timeout=False
+exit_code=0
+profile=multi_restricted_two
+model=repaired_multi_restricted_two.spthy
+command=tamarin-prover repaired_multi_restricted_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=responder_request_replay_exclusion --output=responder_request_replay_exclusion.proof.spthy --output-json=responder_request_replay_exclusion.trace.json --output-dot=responder_request_replay_exclusion.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_restricted_two

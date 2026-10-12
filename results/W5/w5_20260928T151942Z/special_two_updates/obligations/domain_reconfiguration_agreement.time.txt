@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:21:08.861454+00:00
+finished_utc=2026-09-28T15:21:13.049041+00:00
+wall_seconds=4.188
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=domain_reconfiguration_agreement -DSPECIAL_ATTACK -DSECOND_UPDATE +RTS -N2 -RTS --output=domain_reconfiguration_agreement.proof.spthy --output-json=domain_reconfiguration_agreement.trace.json --output-dot=domain_reconfiguration_agreement.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/obligations

@@ -1,0 +1,43 @@
+{
+  "protocol": "repaired",
+  "case": "independent_oracles",
+  "lemma": "w2_initiator_independent_oracles_forward",
+  "trace": "exists-trace",
+  "defines": [],
+  "model_sha256": "14E941343C02EB549AC53CB568E14742E6B3F525A3873170A1160887BDEE19F9",
+  "status": "timeout",
+  "raw_summary": null,
+  "steps": null,
+  "wall_seconds": 3602.396,
+  "tamarin_processing_seconds": null,
+  "started_utc": "2026-09-28T19:27:33.493851+00:00",
+  "finished_utc": "2026-09-28T20:27:35.890348+00:00",
+  "timed_out": true,
+  "exit_code": -9,
+  "command": [
+    "tamarin-prover",
+    "repaired_state_lifecycle.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=w2_initiator_independent_oracles_forward",
+    "+RTS",
+    "-N4",
+    "-RTS",
+    "--output=w2_initiator_independent_oracles_forward.proof.spthy",
+    "--output-json=w2_initiator_independent_oracles_forward.trace.json",
+    "--output-dot=w2_initiator_independent_oracles_forward.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/independent_oracles",
+  "artifacts": {
+    "stderr": "w2_initiator_independent_oracles_forward.stderr.log",
+    "time": "w2_initiator_independent_oracles_forward.time.txt"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks started",
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks ended",
+    "[Theory W2_AECDHE_State_Lifecycle] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

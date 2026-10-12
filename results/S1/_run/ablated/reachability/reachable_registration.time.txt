@@ -1,0 +1,8 @@
+started_utc=2026-09-29T08:01:01.788826+00:00
+finished_utc=2026-09-29T08:01:37.777764+00:00
+wall_seconds=35.989
+timeout=False
+exit_code=0
+profile=ablated
+command=tamarin-prover registration_policy_order.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_registration --output=reachable_registration.proof.spthy --output-json=reachable_registration.trace.json --output-dot=reachable_registration.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/reachability

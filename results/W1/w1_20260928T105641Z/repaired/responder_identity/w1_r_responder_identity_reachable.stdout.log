@@ -1,0 +1,49 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: repaired_reveal_matrix.spthy
+
+  output:          w1_r_responder_identity_reachable.proof.spthy
+  processing time: 945.56s
+  
+  w1_r_baseline_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_baseline_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_baseline_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_identity_only_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_identity_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_identity_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_pce_only_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_pce_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_pce_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_combined_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_combined_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_combined_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_responder_identity_reachable (exists-trace): verified (27 steps)
+  w1_r_responder_identity_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_responder_identity_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_both_identity_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_both_identity_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_both_identity_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_requester_domain_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_requester_domain_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_requester_domain_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_responder_domain_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_responder_domain_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_responder_domain_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_both_domain_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_both_domain_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_both_domain_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_all_identity_domain_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_all_identity_domain_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_all_identity_domain_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_r_initiator_ephemeral_control_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_responder_ephemeral_control_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_initiator_session_key_control_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_responder_session_key_control_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_key_disclosure_after_erasure_unreachable (all-traces): analysis incomplete (1 steps)
+  w1_r_ephemeral_disclosure_after_erasure_unreachable (all-traces): analysis incomplete (1 steps)
+  w1_r_kci_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_r_kci_responder_origin (all-traces): analysis incomplete (1 steps)
+
+==============================================================================

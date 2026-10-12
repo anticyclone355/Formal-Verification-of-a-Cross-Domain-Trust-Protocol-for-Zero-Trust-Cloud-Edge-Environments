@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:35:50.376610+00:00
+finished_utc=2026-09-28T14:36:49.185262+00:00
+wall_seconds=58.809
+timeout=False
+exit_code=0
+profile=ablated_unbounded
+model=repaired_ablated_unbounded.spthy
+command=tamarin-prover repaired_ablated_unbounded.spthy --quit-on-warning --derivcheck-timeout=300 --prove=initiator_aliveness --output=initiator_aliveness.proof.spthy --output-json=initiator_aliveness.trace.json --output-dot=initiator_aliveness.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/ablated_unbounded

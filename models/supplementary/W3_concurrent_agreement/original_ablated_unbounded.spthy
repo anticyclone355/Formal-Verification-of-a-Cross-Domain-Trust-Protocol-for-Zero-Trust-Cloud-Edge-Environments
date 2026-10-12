@@ -1,0 +1,444 @@
+/* W3 original: clean-key concurrent authentication / restriction ablation.
+
+   Conditional honest registration and fixed allow policy; one epoch/domain pair.
+
+   Default: at most TWO request starts; -DUNBOUNDED removes only that bound.
+
+   KEEP_REQUEST/KEEP_GRANT/KEEP_SEND/KEEP_RECEIVE restore exact v0 restrictions.
+
+   Original only: -DLOCAL_RECEIVER replaces X_send with receiver-owned state.
+
+   No reveal oracles; W1/W2 cover compromise and lifecycle separately.
+
+*/
+
+theory W3_original_Concurrent_Agreement
+
+begin
+
+
+
+builtins: hashing, signing, symmetric-encryption, natural-numbers
+
+functions: PEnc/3, PDec/2, ppk/1
+
+equations: PDec(psk,PEnc(ppk(psk),k,r)) = k
+
+
+
+restriction Equality:
+
+  "All x y #i. Eq(x,y) @i ==> x = y"
+
+
+
+/* Fixed experimental environment, NOT a session-uniqueness property. */
+
+restriction W3_OneSetup:
+
+  "All #i #j. W3Init() @i & W3Init() @j ==> #i = #j"
+
+
+
+
+
+
+
+
+
+
+
+/* MULTI_PARTY: two requesters and two owners, the same two domains.
+
+   Four allow-policy pairs; still only two request starts in the bounded mode. */
+
+rule W3_Setup:
+
+  [ Fr(~si), Fr(~pi), Fr(~sr), Fr(~pr), Fr(~da), Fr(~db) ]
+
+  --[ W3Init() ]->
+
+  [ !Subject('requester','domain_A',%1,~si,~pi,pk(~si),ppk(~pi))
+
+  , !Subject('owner','domain_B',%1,~sr,~pr,pk(~sr),ppk(~pr))
+
+  , !Domain('domain_A',%1,~da,pk(~da))
+
+  , !Domain('domain_B',%1,~db,pk(~db))
+
+  , !Policy('domain_A','domain_B',%1,'requester','owner','1')
+
+  , !W3Ready('requester','owner','domain_A','domain_B',%1)
+
+  , W3Budget(), W3Budget()
+
+  , Out(<pk(~si),ppk(~pi),%1,'Subject Pk'>)
+
+  , Out(<pk(~sr),ppk(~pr),%1,'Subject Pk'>)
+
+  , Out(<<pk(~si),ppk(~pi),%1>,sign(<pk(~si),ppk(~pi),%1>,~da),pk(~da),'SubjectCert'>)
+
+  , Out(<<pk(~sr),ppk(~pr),%1>,sign(<pk(~sr),ppk(~pr),%1>,~db),pk(~db),'SubjectCert'>)
+
+  ]
+
+
+
+/* The bounded profile consumes one of two request-start tokens.
+
+   Requests consume budgets directly; no intermediate permission transition.
+
+   Tokens do not constrain message replay, order, or acceptance uniqueness. */
+
+
+
+rule Subject_Access_Request[role="Authentication_and_Data_Sharing"]:
+
+    let
+
+        CertA_Pro = <CertA, CertaSign, SignPk>
+
+        AccessRa = <CertA_Pro, pkb, %n>
+
+    in
+
+    [
+
+        !W3Ready($S_a,$S_b,$A,$B,%n)
+
+        , Fr(~rid)
+
+        ,         !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+
+        , !Domain($A, %n, gskA, gpkA)
+
+        , !Domain($B, %n, gskB, gpkB)
+
+        , In(<CertA, CertaSign, SignPk, field>)
+
+    ]
+
+    --[
+
+        Eq(field, 'SubjectCert')
+
+        , Eq(SignPk,gpkA)
+
+        , Eq(verify(CertaSign,CertA,gpkA),true)
+
+
+
+        , Eq(fst(CertA), pka)
+
+        , Eq(fst(snd(CertA)), ppka)
+
+        , Eq(snd(snd(CertA)), %n)
+
+        , W3Begin(~rid,$S_a,$S_b,%n)
+
+        , AccessRequest($S_a, $S_b, %n, $A, $B, pska, pskb, gskA)
+
+    ]->
+
+    [
+
+
+
+        Out(<AccessRa,sign(AccessRa,pska),pka, 'AccessR_a'>)
+
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka,~rid)
+
+    ]
+
+rule Domain_Access_Verification[role="Authentication_and_Data_Sharing"]:
+
+    let
+
+        CertA_Pro = fst(AccessRa)
+
+        pkbIn = fst(snd(AccessRa))
+
+        Epoch_Access = snd(snd(AccessRa))
+
+
+
+    in
+
+    [
+
+        In(<AccessRa,AccesssSign,AccessPKa, field>)
+
+        , Access_send($S_a, $S_b, %n, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka,rid)
+
+        , !Policy($A, $B, %n, $S_a, $S_b, bit)
+
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+
+    ]
+
+    --[
+
+        Eq(field, 'AccessR_a')
+
+        , Eq(pka,AccessPKa)
+
+        , Eq(verify(AccesssSign, AccessRa, pka), true)
+
+        , Eq(pkbIn,pkb)
+
+        , Eq(Epoch_Access, %n)
+
+
+
+        , Eq(bit, '1')
+
+        , AccessGranted($S_a, $S_b, %n, pka, pkb, bit)
+
+    ]->
+
+    [
+
+        Out(<  <h(<pka, pkb, %n>)>, sign(h(<pka, pkb, %n>), gskB), pk(gskB) , 'AccessCert_ab' >)
+
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB,rid)
+
+    ]
+
+
+
+rule Object_Data_Encryption[role="Authentication_and_Data_Sharing"]:
+
+    let
+
+        d = < ~x, sign(~x,pskb),pk(pskb)>
+
+        alpha = PEnc(ppka, ~k, ~v)
+
+
+
+        beta = senc(d, ~k)
+
+    in
+
+    [
+
+        In(<Hash1, Hashsign, Hashpk , field>)
+
+        , AccessCert_send($S_a, $S_b, %n, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB,rid)
+
+        , !Subject($S_a, $A, %n, pska, ppska, pka, ppka)
+
+        , !Subject($S_b, $B, %n, pskb, ppskb, pkb, ppkb)
+
+        , Fr(~x)
+
+        , Fr(~k)
+
+        , Fr(~v)
+
+    ]
+
+    --[
+
+        Eq(field, 'AccessCert_ab')
+
+        , Eq(gpkB,Hashpk)
+
+        , Eq(verify(Hashsign, Hash1, gpkB), true)
+
+        , Eq(Hash1,h(<pka, pkb, %n>))
+
+        , W3Running($S_a,$S_b,%n,~x,~k)
+
+        , W3DataSent($S_a,$S_b,%n,~x,alpha,beta)
+
+        , DataSent($S_b, $S_a, %n, pskb, ppka, pka, ~x, ~k)
+
+
+
+        , Secret(~x, %n)
+
+        , SessionKey(~k, %n)
+
+        , Honest($S_a, %n)
+
+        , Honest($S_b, %n)
+
+
+
+    ]->
+
+    [
+
+        Out(<alpha, beta, 'data'>)
+
+        , X_send($S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, ~x, ~k,rid)
+
+
+
+    ]
+
+
+
+rule Subject_Data_Decryption[role="Authentication_and_Data_Sharing"]:
+
+let
+
+    k_in = PDec(ppska, alpha)
+
+
+
+    d_in = sdec(beta, k_in)
+
+    x_in = fst(d_in)
+
+    pk_in = snd(snd(d_in))
+
+    sign_x = fst(snd(d_in))
+
+in
+
+[
+
+    In(<alpha, beta, field>)
+
+    , X_send($S_b, $S_a, %n, pskb, pkb, ppskb, pska, ppska, d, x, k,rid)
+
+
+
+]
+
+--[
+
+    Eq(field, 'data')
+
+    , Eq(k_in, k)
+
+    , Eq(d_in, d)
+
+    , Eq(pk_in, pkb)
+
+    , Eq(verify(sign_x, x_in, pkb), true)
+
+    , Eq(x_in,x)
+
+    , W3End(rid,$S_a,$S_b,%n)
+
+    , W3Commit($S_a,$S_b,%n,x,k)
+
+    , W3DataAccepted($S_a,$S_b,%n,x,alpha,beta)
+
+    , DataReceive($S_b, $S_a, %n, alpha, beta, ppska, pkb, k, x)
+
+
+
+]->
+
+[
+
+
+
+]
+
+
+
+/* No corruption rules in W3: all credentials and session secrets are honest.
+
+   Safety formulas are candidates, not pre-recorded outcomes. */
+
+
+
+lemma reachable_session:
+
+ exists-trace
+
+ "Ex q I R e #b #c. W3Begin(q,I,R,e) @b & W3End(q,I,R,e) @c & #b < #c"
+
+
+
+lemma reachable_two_concurrent_sessions:
+
+ exists-trace
+
+ "Ex q1 q2 I R e #b1 #b2 #c1 #c2.
+
+ W3Begin(q1,I,R,e) @b1 & W3Begin(q2,I,R,e) @b2
+
+ & W3End(q1,I,R,e) @c1 & W3End(q2,I,R,e) @c2
+
+ & not(q1 = q2) & #b1 < #b2 & #b2 < #c1 & #b2 < #c2
+
+ & not(#c1 = #c2)"
+
+
+
+lemma initiator_aliveness:
+
+ all-traces
+
+ "All I R e x k #c. W3Commit(I,R,e,x,k) @c
+
+ ==> (Ex I2 e2 x2 k2 #r. W3Running(I2,R,e2,x2,k2) @r & #r < #c)"
+
+
+
+lemma initiator_weak_agreement:
+
+ all-traces
+
+ "All I R e x k #c. W3Commit(I,R,e,x,k) @c
+
+ ==> (Ex e2 x2 k2 #r. W3Running(I,R,e2,x2,k2) @r & #r < #c)"
+
+
+
+lemma initiator_noninjective_agreement:
+
+ all-traces
+
+ "All I R e x k #c. W3Commit(I,R,e,x,k) @c
+
+ ==> (Ex #r. W3Running(I,R,e,x,k) @r & #r < #c)"
+
+
+
+lemma initiator_injective_agreement:
+
+ all-traces
+
+ "All I R e x k #c. W3Commit(I,R,e,x,k) @c
+
+ ==> (Ex #r. W3Running(I,R,e,x,k) @r & #r < #c
+
+ & (All #c2. W3Commit(I,R,e,x,k) @c2 ==> #c2 = #c))"
+
+
+
+lemma data_origin_authentication:
+
+ all-traces
+
+ "All I R e x a b #c. W3DataAccepted(I,R,e,x,a,b) @c
+
+ ==> (Ex #s. W3DataSent(I,R,e,x,a,b) @s & #s < #c)"
+
+
+
+lemma replay_acceptance_exclusion:
+
+ all-traces
+
+ "All I R e x a b #c1 #c2.
+
+ W3DataAccepted(I,R,e,x,a,b) @c1 & W3DataAccepted(I,R,e,x,a,b) @c2
+
+ ==> #c1 = #c2"
+
+
+
+
+
+end
+

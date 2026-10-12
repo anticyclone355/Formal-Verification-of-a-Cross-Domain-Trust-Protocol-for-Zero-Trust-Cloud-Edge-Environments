@@ -1,0 +1,8 @@
+started_utc=2026-09-29T08:01:31.303196+00:00
+finished_utc=2026-09-29T08:02:01.017376+00:00
+wall_seconds=29.714
+timeout=False
+exit_code=0
+profile=ablated
+command=tamarin-prover registration_policy_order.spthy --quit-on-warning --derivcheck-timeout=300 --prove=policy_domains_distinct --output=policy_domains_distinct.proof.spthy --output-json=policy_domains_distinct.trace.json --output-dot=policy_domains_distinct.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/S1_restriction_sensitivity/s1_20260929T080037Z/ablated/order

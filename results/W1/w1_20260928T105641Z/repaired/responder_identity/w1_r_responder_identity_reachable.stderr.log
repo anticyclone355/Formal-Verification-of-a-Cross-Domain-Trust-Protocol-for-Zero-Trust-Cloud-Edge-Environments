@@ -1,0 +1,10 @@
+maude tool: 'maude'
+ checking version: 3.1. OK.
+ checking installation: OK.
+[Theory W1_AECDHE_Reveal_Matrix] Theory loaded
+[Theory W1_AECDHE_Reveal_Matrix] Theory translated
+[Theory W1_AECDHE_Reveal_Matrix] Derivation checks started
+[Theory W1_AECDHE_Reveal_Matrix] Derivation checks ended
+[Theory W1_AECDHE_Reveal_Matrix] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Done

@@ -1,0 +1,71 @@
+{
+  "experiment": "W4_policy_decomposition",
+  "server_utc_start": "2026-09-28T14:10:26.193358+00:00",
+  "server_utc_end": "2026-09-28T14:24:04.442900+00:00",
+  "base_dir": "/home/lab701/qzy/CDDS补充实验",
+  "run_dir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z",
+  "output_dir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/output",
+  "driver_pid": "1025428",
+  "driver_exit_code": 0,
+  "model": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/policy_decomposition.spthy",
+  "model_sha256": "938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06",
+  "tamarin_version": [
+    "tamarin-prover 1.10.0, (C) David Basin, Cas Cremers, Jannik Dreier, Simon Meier, Ralf Sasse, Benedikt Schmidt, 2010-2023",
+    "",
+    "This program comes with ABSOLUTELY NO WARRANTY. It is free software, and you"
+  ],
+  "timeout_seconds_per_lemma": 1800,
+  "derivcheck_timeout_seconds": 300,
+  "threads_per_run": 2,
+  "parallel_jobs": 1,
+  "profiles": [
+    "alternative_context",
+    "alternative_context_restricted",
+    "core",
+    "restricted"
+  ],
+  "planned_entries": 58,
+  "finished_entries": 58,
+  "total_wall_seconds": 739.9,
+  "status_tally": {
+    "verified": 58
+  },
+  "parse_gate": [
+    {
+      "profile": "core",
+      "defines": [],
+      "returncode": 0,
+      "log": "output_parse_core.log",
+      "wellformedness_warnings": 0
+    },
+    {
+      "profile": "restricted",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "returncode": 0,
+      "log": "output_parse_restricted.log",
+      "wellformedness_warnings": 0
+    },
+    {
+      "profile": "alternative_context",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "returncode": 0,
+      "log": "output_parse_alternative_context.log",
+      "wellformedness_warnings": 0
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "returncode": 0,
+      "log": "output_parse_alternative_context_restricted.log",
+      "wellformedness_warnings": 0
+    }
+  ],
+  "provenance_notes": []
+}

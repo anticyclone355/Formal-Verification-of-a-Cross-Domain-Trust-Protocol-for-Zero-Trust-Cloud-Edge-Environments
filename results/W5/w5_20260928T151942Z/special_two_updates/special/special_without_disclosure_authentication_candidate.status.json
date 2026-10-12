@@ -1,0 +1,59 @@
+{
+  "profile": "special_two_updates",
+  "case": "special",
+  "lemma": "special_without_disclosure_authentication_candidate",
+  "trace": "all-traces",
+  "defines": [
+    "SPECIAL_ATTACK",
+    "SECOND_UPDATE"
+  ],
+  "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+  "status": "falsified",
+  "raw_summary": "falsified - found trace (8 steps)",
+  "steps": 8,
+  "wall_seconds": 3.584,
+  "tamarin_processing_seconds": 3.48,
+  "started_utc": "2026-09-28T15:21:38.343177+00:00",
+  "finished_utc": "2026-09-28T15:21:41.927234+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "epoch_successor.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=special_without_disclosure_authentication_candidate",
+    "-DSPECIAL_ATTACK",
+    "-DSECOND_UPDATE",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=special_without_disclosure_authentication_candidate.proof.spthy",
+    "--output-json=special_without_disclosure_authentication_candidate.trace.json",
+    "--output-dot=special_without_disclosure_authentication_candidate.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/special",
+  "artifacts": {
+    "stdout": "special_without_disclosure_authentication_candidate.stdout.log",
+    "stderr": "special_without_disclosure_authentication_candidate.stderr.log",
+    "time": "special_without_disclosure_authentication_candidate.time.txt",
+    "proof": "special_without_disclosure_authentication_candidate.proof.spthy",
+    "trace_json": "special_without_disclosure_authentication_candidate.trace.json",
+    "trace_dot": "special_without_disclosure_authentication_candidate.trace.dot",
+    "trace_pdf": "special_without_disclosure_authentication_candidate.trace.pdf",
+    "trace_png": "special_without_disclosure_authentication_candidate.trace.png",
+    "trace_svg": "special_without_disclosure_authentication_candidate.trace.svg"
+  },
+  "rendered_graphs": {
+    "pdf": "special_without_disclosure_authentication_candidate.trace.pdf",
+    "svg": "special_without_disclosure_authentication_candidate.trace.svg",
+    "png": "special_without_disclosure_authentication_candidate.trace.png"
+  },
+  "stderr_tail": [
+    "[Theory W5_Epoch_Successor] Derivation checks started",
+    "[Theory W5_Epoch_Successor] Derivation checks ended",
+    "[Theory W5_Epoch_Successor] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

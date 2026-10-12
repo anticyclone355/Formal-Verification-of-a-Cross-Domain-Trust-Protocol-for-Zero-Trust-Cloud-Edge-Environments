@@ -1,0 +1,43 @@
+{
+  "protocol": "repaired",
+  "case": "lifecycle",
+  "lemma": "ephemeral_state_lifetime",
+  "trace": "all-traces",
+  "defines": [],
+  "model_sha256": "14E941343C02EB549AC53CB568E14742E6B3F525A3873170A1160887BDEE19F9",
+  "status": "timeout",
+  "raw_summary": null,
+  "steps": null,
+  "wall_seconds": 3602.241,
+  "tamarin_processing_seconds": null,
+  "started_utc": "2026-09-28T17:16:32.148998+00:00",
+  "finished_utc": "2026-09-28T18:16:34.389710+00:00",
+  "timed_out": true,
+  "exit_code": -9,
+  "command": [
+    "tamarin-prover",
+    "repaired_state_lifecycle.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=ephemeral_state_lifetime",
+    "+RTS",
+    "-N4",
+    "-RTS",
+    "--output=ephemeral_state_lifetime.proof.spthy",
+    "--output-json=ephemeral_state_lifetime.trace.json",
+    "--output-dot=ephemeral_state_lifetime.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/lifecycle",
+  "artifacts": {
+    "stderr": "ephemeral_state_lifetime.stderr.log",
+    "time": "ephemeral_state_lifetime.time.txt"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks started",
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks ended",
+    "[Theory W2_AECDHE_State_Lifecycle] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

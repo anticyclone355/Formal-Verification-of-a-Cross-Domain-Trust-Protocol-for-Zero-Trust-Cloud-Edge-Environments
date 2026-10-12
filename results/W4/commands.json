@@ -1,0 +1,589 @@
+{
+  "experiment": "W4_policy_decomposition",
+  "started_utc": "20260928T141100Z",
+  "model": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/policy_decomposition.spthy",
+  "model_sha256": "938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06",
+  "tamarin": "tamarin-prover",
+  "tamarin_version": "tamarin-prover 1.10.0, (C) David Basin, Cas Cremers, Jannik Dreier, Simon Meier, Ralf Sasse, Benedikt Schmidt, 2010-2023\n\nThis program comes with ABSOLUTELY NO WARRANTY. It is free software, and you\nare welcome to redistribute it according to its LICENSE, see\n'https://github.com/tamarin-prover/tamarin-prover/blob/master/LICENSE'.\n\nGenerated from:\nTamarin version 1.10.0\nMaude version 3.1\nGit revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master\nCompiled at: 2024-10-30 11:11:02.432289291 UTC\nmaude tool: 'maude'\n checking version: 3.1. OK.\n checking installation: OK.\n",
+  "timeout_seconds_per_lemma": 1800,
+  "derivcheck_timeout_seconds": 300,
+  "threads_per_run": 2,
+  "parallel_jobs": 1,
+  "entry_count": 58,
+  "profiles": [
+    "alternative_context",
+    "alternative_context_restricted",
+    "core",
+    "restricted"
+  ],
+  "run_dir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z",
+  "entries": [
+    {
+      "profile": "core",
+      "case": "reachability",
+      "lemma": "reachable_roots",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "reachability",
+      "lemma": "reachable_proposal",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "reachability",
+      "lemma": "reachable_b_processing",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "reachability",
+      "lemma": "reachable_policy_installation",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "w4_proposal_source",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "w4_b_processing_source",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "w4_a_acceptance_source",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "w4_b_to_a_root_derivation",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "w4_a_to_b_root_derivation",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "w4_matching_context_root_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "compromise",
+      "lemma": "reachable_owner_identity_compromise",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "compromise",
+      "lemma": "reachable_b_domain_compromise",
+      "trace": "exists-trace",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "structural",
+      "lemma": "w4_private_b_continuation_source",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "core",
+      "case": "structural",
+      "lemma": "w4_private_a_continuation_source",
+      "trace": "all-traces",
+      "defines": [],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_roots",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_proposal",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_b_processing",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "reachability",
+      "lemma": "reachable_policy_installation",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "obligations",
+      "lemma": "w4_proposal_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "obligations",
+      "lemma": "w4_b_processing_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "obligations",
+      "lemma": "w4_a_acceptance_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "obligations",
+      "lemma": "w4_b_to_a_root_derivation",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "obligations",
+      "lemma": "w4_a_to_b_root_derivation",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "obligations",
+      "lemma": "w4_matching_context_root_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "compromise",
+      "lemma": "reachable_owner_identity_compromise",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "compromise",
+      "lemma": "reachable_b_domain_compromise",
+      "trace": "exists-trace",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "structural",
+      "lemma": "w4_private_b_continuation_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "restricted",
+      "case": "structural",
+      "lemma": "w4_private_a_continuation_source",
+      "trace": "all-traces",
+      "defines": [
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "reachability",
+      "lemma": "reachable_roots",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "reachability",
+      "lemma": "reachable_proposal",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "reachability",
+      "lemma": "reachable_b_processing",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "reachability",
+      "lemma": "reachable_policy_installation",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "obligations",
+      "lemma": "w4_proposal_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "obligations",
+      "lemma": "w4_b_processing_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "obligations",
+      "lemma": "w4_a_acceptance_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "obligations",
+      "lemma": "w4_b_to_a_root_derivation",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "obligations",
+      "lemma": "w4_a_to_b_root_derivation",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "obligations",
+      "lemma": "w4_matching_context_root_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "compromise",
+      "lemma": "reachable_owner_identity_compromise",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "compromise",
+      "lemma": "reachable_b_domain_compromise",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "structural",
+      "lemma": "w4_private_b_continuation_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "structural",
+      "lemma": "w4_private_a_continuation_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context",
+      "case": "reachability",
+      "lemma": "reachable_alternative_context",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "reachability",
+      "lemma": "reachable_roots",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "reachability",
+      "lemma": "reachable_proposal",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "reachability",
+      "lemma": "reachable_b_processing",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "reachability",
+      "lemma": "reachable_policy_installation",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "obligations",
+      "lemma": "w4_proposal_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "obligations",
+      "lemma": "w4_b_processing_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "obligations",
+      "lemma": "w4_a_acceptance_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "obligations",
+      "lemma": "w4_b_to_a_root_derivation",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "obligations",
+      "lemma": "w4_a_to_b_root_derivation",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "obligations",
+      "lemma": "w4_matching_context_root_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "compromise",
+      "lemma": "reachable_owner_identity_compromise",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "compromise",
+      "lemma": "reachable_b_domain_compromise",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "structural",
+      "lemma": "w4_private_b_continuation_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "structural",
+      "lemma": "w4_private_a_continuation_source",
+      "trace": "all-traces",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    },
+    {
+      "profile": "alternative_context_restricted",
+      "case": "reachability",
+      "lemma": "reachable_alternative_context",
+      "trace": "exists-trace",
+      "defines": [
+        "MULTI_CONTEXT",
+        "KEEP_POLICY_RESTRICTIONS"
+      ],
+      "status": "not_run"
+    }
+  ]
+}

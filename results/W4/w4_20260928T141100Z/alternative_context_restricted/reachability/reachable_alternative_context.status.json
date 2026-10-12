@@ -1,0 +1,59 @@
+{
+  "profile": "alternative_context_restricted",
+  "case": "reachability",
+  "lemma": "reachable_alternative_context",
+  "trace": "exists-trace",
+  "defines": [
+    "MULTI_CONTEXT",
+    "KEEP_POLICY_RESTRICTIONS"
+  ],
+  "model_sha256": "938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06",
+  "status": "verified",
+  "raw_summary": "verified (24 steps)",
+  "steps": 24,
+  "wall_seconds": 15.741,
+  "tamarin_processing_seconds": 15.66,
+  "started_utc": "2026-09-28T14:23:04.080815+00:00",
+  "finished_utc": "2026-09-28T14:23:19.822290+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "policy_decomposition.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_alternative_context",
+    "-DMULTI_CONTEXT",
+    "-DKEEP_POLICY_RESTRICTIONS",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=reachable_alternative_context.proof.spthy",
+    "--output-json=reachable_alternative_context.trace.json",
+    "--output-dot=reachable_alternative_context.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/alternative_context_restricted/reachability",
+  "artifacts": {
+    "stdout": "reachable_alternative_context.stdout.log",
+    "stderr": "reachable_alternative_context.stderr.log",
+    "time": "reachable_alternative_context.time.txt",
+    "proof": "reachable_alternative_context.proof.spthy",
+    "trace_json": "reachable_alternative_context.trace.json",
+    "trace_dot": "reachable_alternative_context.trace.dot",
+    "trace_pdf": "reachable_alternative_context.trace.pdf",
+    "trace_png": "reachable_alternative_context.trace.png",
+    "trace_svg": "reachable_alternative_context.trace.svg"
+  },
+  "rendered_graphs": {
+    "pdf": "reachable_alternative_context.trace.pdf",
+    "svg": "reachable_alternative_context.trace.svg",
+    "png": "reachable_alternative_context.trace.png"
+  },
+  "stderr_tail": [
+    "[Theory W4_Policy_Decomposition] Derivation checks started",
+    "[Theory W4_Policy_Decomposition] Derivation checks ended",
+    "[Theory W4_Policy_Decomposition] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

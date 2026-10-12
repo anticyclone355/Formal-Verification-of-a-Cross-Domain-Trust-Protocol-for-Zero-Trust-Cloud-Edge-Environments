@@ -1,0 +1,7 @@
+started_utc=2026-09-28T08:45:27.019491+00:00
+finished_utc=2026-09-28T09:04:08.540807+00:00
+wall_seconds=1121.521
+timeout=False
+exit_code=0
+command=tamarin-prover repaired_reveal_matrix.spthy --quit-on-warning --derivcheck-timeout=300 --prove=w1_r_initiator_session_key_control_reachable --output=w1_r_initiator_session_key_control_reachable.proof.spthy --output-json=w1_r_initiator_session_key_control_reachable.trace.json --output-dot=w1_r_initiator_session_key_control_reachable.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T083216Z/repaired/initiator_session_key_control

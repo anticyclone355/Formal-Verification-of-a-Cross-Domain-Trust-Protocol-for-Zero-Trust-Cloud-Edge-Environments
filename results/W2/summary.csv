@@ -1,0 +1,29 @@
+case,lemma,expected_trace,status,wall_seconds,tamarin_processing_seconds,steps,raw_summary
+confirmation,key_confirmation_agreement,,driver_error,None,,,
+confirmation,key_confirmation_origin,all-traces,timeout,3601.915,,,None
+disclosure_controls,w2_initiator_confirmation_disclosure_reachable,exists-trace,timeout,3600.638,,,None
+disclosure_controls,w2_initiator_data_disclosure_reachable,exists-trace,verified,1460.55,1459.6,31,verified (31 steps)
+disclosure_controls,w2_initiator_ephemeral_disclosure_reachable,exists-trace,verified,1230.938,1229.76,32,verified (32 steps)
+disclosure_controls,w2_pending_ephemeral_disclosure_reachable,exists-trace,timeout,3602.086,,,None
+disclosure_controls,w2_responder_confirmation_disclosure_reachable,exists-trace,verified,1445.662,1444.51,30,verified (30 steps)
+disclosure_controls,w2_responder_data_disclosure_reachable,exists-trace,verified,1389.103,1388.04,31,verified (31 steps)
+disclosure_controls,w2_responder_ephemeral_disclosure_reachable,exists-trace,verified,1094.609,1093.67,32,verified (32 steps)
+independent_oracles,w2_initiator_independent_oracles_forward,exists-trace,timeout,3602.396,,,None
+independent_oracles,w2_initiator_independent_oracles_reverse,exists-trace,timeout,3602.88,,,None
+independent_oracles,w2_responder_independent_oracles_forward,exists-trace,timeout,3602.062,,,None
+independent_oracles,w2_responder_independent_oracles_reverse,exists-trace,timeout,3602.154,,,None
+key_separation,w2_confirmation_key_exposure_data_key_secrecy,all-traces,timeout,3601.432,,,None
+key_separation,w2_confirmation_key_exposure_plaintext_secrecy,all-traces,timeout,3601.05,,,None
+key_separation,w2_confirmation_key_exposure_reachable,exists-trace,verified,1184.158,1182.89,27,verified (27 steps)
+lifecycle,confirmation_key_unreadable_after_local_erasure,all-traces,timeout,3603.245,,,None
+lifecycle,data_key_unreadable_after_local_erasure,all-traces,timeout,3602.511,,,None
+lifecycle,derived_key_lifetime,,driver_error,None,,,
+lifecycle,ephemeral_state_lifetime,all-traces,timeout,3602.241,,,None
+lifecycle,ephemeral_unreadable_after_local_erasure,all-traces,timeout,3602.963,,,None
+lifecycle,erased_secrets_have_prior_creation,all-traces,timeout,3602.393,,,None
+lifecycle,pending_state_non_reuse_after_erasure,,driver_error,None,,,
+lifecycle,pre_erasure_state_non_reuse,,driver_error,None,,,
+lifecycle,session_erasure_requires_both_local_erasures,all-traces,verified,308.749,307.86,79,verified (79 steps)
+post_erasure,w2_post_erasure_all_longterm_disclosures_reachable,exists-trace,verified,1169.771,1168.53,36,verified (36 steps)
+post_erasure,w2_post_erasure_data_key_secrecy,all-traces,verified,510.987,509.89,194,verified (194 steps)
+post_erasure,w2_post_erasure_plaintext_secrecy,all-traces,verified,533.358,532.2,207,verified (207 steps)

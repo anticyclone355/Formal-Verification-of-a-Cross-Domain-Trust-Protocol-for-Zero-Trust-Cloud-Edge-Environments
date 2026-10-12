@@ -1,0 +1,49 @@
+{
+  "protocol": "original",
+  "profile": "restricted_two",
+  "case": "initiator",
+  "lemma": "initiator_weak_agreement",
+  "trace": "all-traces",
+  "defines": [
+    "KEEP_REQUEST",
+    "KEEP_GRANT",
+    "KEEP_SEND",
+    "KEEP_RECEIVE"
+  ],
+  "model_sha256": "EDB51BBFCE2EBAF1B7124F877487698CC2F164CB98CE49564C7EFFEA5AD4F079",
+  "status": "verified",
+  "raw_summary": "verified (4 steps)",
+  "steps": 4,
+  "wall_seconds": 21.685,
+  "tamarin_processing_seconds": 21.43,
+  "started_utc": "2026-09-28T14:32:30.106727+00:00",
+  "finished_utc": "2026-09-28T14:32:51.791792+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_restricted_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=initiator_weak_agreement",
+    "--output=initiator_weak_agreement.proof.spthy",
+    "--output-json=initiator_weak_agreement.trace.json",
+    "--output-dot=initiator_weak_agreement.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/original/restricted_two",
+  "artifacts": {
+    "stdout": "initiator_weak_agreement.stdout.log",
+    "stderr": "initiator_weak_agreement.stderr.log",
+    "time": "initiator_weak_agreement.time.txt",
+    "proof": "initiator_weak_agreement.proof.spthy",
+    "trace_json": "initiator_weak_agreement.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_original_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

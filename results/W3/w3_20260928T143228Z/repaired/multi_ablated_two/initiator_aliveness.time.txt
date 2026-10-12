@@ -1,0 +1,9 @@
+started_utc=2026-09-28T15:13:08.160141+00:00
+finished_utc=2026-09-28T15:16:05.197060+00:00
+wall_seconds=177.037
+timeout=False
+exit_code=0
+profile=multi_ablated_two
+model=repaired_multi_ablated_two.spthy
+command=tamarin-prover repaired_multi_ablated_two.spthy --quit-on-warning --derivcheck-timeout=300 --prove=initiator_aliveness --output=initiator_aliveness.proof.spthy --output-json=initiator_aliveness.trace.json --output-dot=initiator_aliveness.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_ablated_two

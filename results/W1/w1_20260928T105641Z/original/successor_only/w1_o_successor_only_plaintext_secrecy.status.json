@@ -1,0 +1,46 @@
+{
+  "protocol": "original",
+  "case": "successor_only",
+  "lemma": "w1_o_successor_only_plaintext_secrecy",
+  "trace": "all-traces",
+  "defines": [
+    "AFTER_EPOCH"
+  ],
+  "model_sha256": "24A034C4684072BDCC89E073404302D93E5B9EB2D4A936DAF160E479914DF7C5",
+  "status": "verified",
+  "raw_summary": "verified (37 steps)",
+  "steps": 37,
+  "wall_seconds": 49.021,
+  "tamarin_processing_seconds": 48.64,
+  "started_utc": "2026-09-28T10:56:42.741509+00:00",
+  "finished_utc": "2026-09-28T10:57:31.762999+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "original_reveal_matrix.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=w1_o_successor_only_plaintext_secrecy",
+    "-DAFTER_EPOCH",
+    "--output=w1_o_successor_only_plaintext_secrecy.proof.spthy",
+    "--output-json=w1_o_successor_only_plaintext_secrecy.trace.json",
+    "--output-dot=w1_o_successor_only_plaintext_secrecy.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T105641Z/original/successor_only",
+  "artifacts": {
+    "stdout": "w1_o_successor_only_plaintext_secrecy.stdout.log",
+    "stderr": "w1_o_successor_only_plaintext_secrecy.stderr.log",
+    "time": "w1_o_successor_only_plaintext_secrecy.time.txt",
+    "proof": "w1_o_successor_only_plaintext_secrecy.proof.spthy",
+    "trace_json": "w1_o_successor_only_plaintext_secrecy.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W1_PCE_Reveal_Matrix] Derivation checks started",
+    "[Theory W1_PCE_Reveal_Matrix] Derivation checks ended",
+    "[Theory W1_PCE_Reveal_Matrix] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

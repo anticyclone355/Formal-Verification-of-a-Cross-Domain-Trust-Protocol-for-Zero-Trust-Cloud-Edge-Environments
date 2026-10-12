@@ -1,0 +1,54 @@
+{
+  "profile": "core",
+  "case": "reachability",
+  "lemma": "reachable_policy_installation",
+  "trace": "exists-trace",
+  "defines": [],
+  "model_sha256": "938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06",
+  "status": "verified",
+  "raw_summary": "verified (26 steps)",
+  "steps": 26,
+  "wall_seconds": 17.442,
+  "tamarin_processing_seconds": 17.34,
+  "started_utc": "2026-09-28T14:11:26.164660+00:00",
+  "finished_utc": "2026-09-28T14:11:43.607082+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "policy_decomposition.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_policy_installation",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=reachable_policy_installation.proof.spthy",
+    "--output-json=reachable_policy_installation.trace.json",
+    "--output-dot=reachable_policy_installation.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/core/reachability",
+  "artifacts": {
+    "stdout": "reachable_policy_installation.stdout.log",
+    "stderr": "reachable_policy_installation.stderr.log",
+    "time": "reachable_policy_installation.time.txt",
+    "proof": "reachable_policy_installation.proof.spthy",
+    "trace_json": "reachable_policy_installation.trace.json",
+    "trace_dot": "reachable_policy_installation.trace.dot",
+    "trace_pdf": "reachable_policy_installation.trace.pdf",
+    "trace_png": "reachable_policy_installation.trace.png",
+    "trace_svg": "reachable_policy_installation.trace.svg"
+  },
+  "rendered_graphs": {
+    "pdf": "reachable_policy_installation.trace.pdf",
+    "svg": "reachable_policy_installation.trace.svg",
+    "png": "reachable_policy_installation.trace.png"
+  },
+  "stderr_tail": [
+    "[Theory W4_Policy_Decomposition] Derivation checks started",
+    "[Theory W4_Policy_Decomposition] Derivation checks ended",
+    "[Theory W4_Policy_Decomposition] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "protocol": "repaired",
+  "profile": "multi_restricted_two",
+  "case": "responder",
+  "lemma": "responder_injective_request_agreement",
+  "trace": "all-traces",
+  "defines": [
+    "MULTI_PARTY",
+    "KEEP_REQUEST",
+    "KEEP_GRANT",
+    "KEEP_SEND",
+    "KEEP_RECEIVE"
+  ],
+  "model_sha256": "8E215453CB006B1932002067ED6EB9BF0F489015AFEDE6E1183DBB4970550F9B",
+  "status": "verified",
+  "raw_summary": "verified (138 steps)",
+  "steps": 138,
+  "wall_seconds": 234.511,
+  "tamarin_processing_seconds": 233.77,
+  "started_utc": "2026-09-28T15:09:58.241059+00:00",
+  "finished_utc": "2026-09-28T15:13:52.752570+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_multi_restricted_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=responder_injective_request_agreement",
+    "--output=responder_injective_request_agreement.proof.spthy",
+    "--output-json=responder_injective_request_agreement.trace.json",
+    "--output-dot=responder_injective_request_agreement.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_restricted_two",
+  "artifacts": {
+    "stdout": "responder_injective_request_agreement.stdout.log",
+    "stderr": "responder_injective_request_agreement.stderr.log",
+    "time": "responder_injective_request_agreement.time.txt",
+    "proof": "responder_injective_request_agreement.proof.spthy",
+    "trace_json": "responder_injective_request_agreement.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

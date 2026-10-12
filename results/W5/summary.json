@@ -1,0 +1,2964 @@
+{
+  "experiment": "W5_epoch_successor",
+  "run_dir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z",
+  "total_wall_seconds": 130.39,
+  "entry_count": 54,
+  "status_tally": {
+    "verified": 38,
+    "falsified": 16
+  },
+  "tamarin_version": "tamarin-prover 1.10.0, (C) David Basin, Cas Cremers, Jannik Dreier, Simon Meier, Ralf Sasse, Benedikt Schmidt, 2010-2023\n\nThis program comes with ABSOLUTELY NO WARRANTY. It is free software, and you\nare welcome to redistribute it according to its LICENSE, see\n'https://github.com/tamarin-prover/tamarin-prover/blob/master/LICENSE'.\n\nGenerated from:\nTamarin version 1.10.0\nMaude version 3.1\nGit revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master\nCompiled at: 2024-10-30 11:11:02.432289291 UTC\nmaude tool: 'maude'\n checking version: 3.1. OK.\n checking installation: OK.\n",
+  "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+  "finished_utc": "2026-09-28T15:21:53.350260+00:00",
+  "results": [
+    {
+      "profile": "core",
+      "case": "classification",
+      "lemma": "classified_successor_origin",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (10 steps)",
+      "steps": 10,
+      "wall_seconds": 0.967,
+      "tamarin_processing_seconds": 0.87,
+      "started_utc": "2026-09-28T15:19:50.076185+00:00",
+      "finished_utc": "2026-09-28T15:19:51.042778+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=classified_successor_origin",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=classified_successor_origin.proof.spthy",
+        "--output-json=classified_successor_origin.trace.json",
+        "--output-dot=classified_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/classification",
+      "artifacts": {
+        "stdout": "classified_successor_origin.stdout.log",
+        "stderr": "classified_successor_origin.stderr.log",
+        "time": "classified_successor_origin.time.txt",
+        "proof": "classified_successor_origin.proof.spthy",
+        "trace_json": "classified_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "compromise",
+      "lemma": "reachable_disclosure_before_acceptance",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.418,
+      "tamarin_processing_seconds": 1.33,
+      "started_utc": "2026-09-28T15:19:57.917389+00:00",
+      "finished_utc": "2026-09-28T15:19:59.335488+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_disclosure_before_acceptance",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_disclosure_before_acceptance.proof.spthy",
+        "--output-json=reachable_disclosure_before_acceptance.trace.json",
+        "--output-dot=reachable_disclosure_before_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/compromise",
+      "artifacts": {
+        "stdout": "reachable_disclosure_before_acceptance.stdout.log",
+        "stderr": "reachable_disclosure_before_acceptance.stderr.log",
+        "time": "reachable_disclosure_before_acceptance.time.txt",
+        "proof": "reachable_disclosure_before_acceptance.proof.spthy",
+        "trace_json": "reachable_disclosure_before_acceptance.trace.json",
+        "trace_dot": "reachable_disclosure_before_acceptance.trace.dot",
+        "trace_pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "trace_png": "reachable_disclosure_before_acceptance.trace.png",
+        "trace_svg": "reachable_disclosure_before_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "svg": "reachable_disclosure_before_acceptance.trace.svg",
+        "png": "reachable_disclosure_before_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "compromise",
+      "lemma": "reachable_old_key_disclosure",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.318,
+      "tamarin_processing_seconds": 1.2,
+      "started_utc": "2026-09-28T15:19:56.153295+00:00",
+      "finished_utc": "2026-09-28T15:19:57.470948+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_old_key_disclosure",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_old_key_disclosure.proof.spthy",
+        "--output-json=reachable_old_key_disclosure.trace.json",
+        "--output-dot=reachable_old_key_disclosure.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/compromise",
+      "artifacts": {
+        "stdout": "reachable_old_key_disclosure.stdout.log",
+        "stderr": "reachable_old_key_disclosure.stderr.log",
+        "time": "reachable_old_key_disclosure.time.txt",
+        "proof": "reachable_old_key_disclosure.proof.spthy",
+        "trace_json": "reachable_old_key_disclosure.trace.json",
+        "trace_dot": "reachable_old_key_disclosure.trace.dot",
+        "trace_pdf": "reachable_old_key_disclosure.trace.pdf",
+        "trace_png": "reachable_old_key_disclosure.trace.png",
+        "trace_svg": "reachable_old_key_disclosure.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_old_key_disclosure.trace.pdf",
+        "svg": "reachable_old_key_disclosure.trace.svg",
+        "png": "reachable_old_key_disclosure.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "diagnostics",
+      "lemma": "accepted_epoch_has_started_candidate",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (6 steps)",
+      "steps": 6,
+      "wall_seconds": 1.067,
+      "tamarin_processing_seconds": 0.98,
+      "started_utc": "2026-09-28T15:19:54.789492+00:00",
+      "finished_utc": "2026-09-28T15:19:55.856593+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=accepted_epoch_has_started_candidate",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=accepted_epoch_has_started_candidate.proof.spthy",
+        "--output-json=accepted_epoch_has_started_candidate.trace.json",
+        "--output-dot=accepted_epoch_has_started_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/diagnostics",
+      "artifacts": {
+        "stdout": "accepted_epoch_has_started_candidate.stdout.log",
+        "stderr": "accepted_epoch_has_started_candidate.stderr.log",
+        "time": "accepted_epoch_has_started_candidate.time.txt",
+        "proof": "accepted_epoch_has_started_candidate.proof.spthy",
+        "trace_json": "accepted_epoch_has_started_candidate.trace.json",
+        "trace_dot": "accepted_epoch_has_started_candidate.trace.dot",
+        "trace_pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "trace_png": "accepted_epoch_has_started_candidate.trace.png",
+        "trace_svg": "accepted_epoch_has_started_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "svg": "accepted_epoch_has_started_candidate.trace.svg",
+        "png": "accepted_epoch_has_started_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "diagnostics",
+      "lemma": "successor_acceptance_injective_candidate",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (10 steps)",
+      "steps": 10,
+      "wall_seconds": 1.571,
+      "tamarin_processing_seconds": 1.48,
+      "started_utc": "2026-09-28T15:19:52.672287+00:00",
+      "finished_utc": "2026-09-28T15:19:54.242980+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=successor_acceptance_injective_candidate",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=successor_acceptance_injective_candidate.proof.spthy",
+        "--output-json=successor_acceptance_injective_candidate.trace.json",
+        "--output-dot=successor_acceptance_injective_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/diagnostics",
+      "artifacts": {
+        "stdout": "successor_acceptance_injective_candidate.stdout.log",
+        "stderr": "successor_acceptance_injective_candidate.stderr.log",
+        "time": "successor_acceptance_injective_candidate.time.txt",
+        "proof": "successor_acceptance_injective_candidate.proof.spthy",
+        "trace_json": "successor_acceptance_injective_candidate.trace.json",
+        "trace_dot": "successor_acceptance_injective_candidate.trace.dot",
+        "trace_pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "trace_png": "successor_acceptance_injective_candidate.trace.png",
+        "trace_svg": "successor_acceptance_injective_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "svg": "successor_acceptance_injective_candidate.trace.svg",
+        "png": "successor_acceptance_injective_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "diagnostics",
+      "lemma": "unconditional_successor_authentication_candidate",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (8 steps)",
+      "steps": 8,
+      "wall_seconds": 1.219,
+      "tamarin_processing_seconds": 1.12,
+      "started_utc": "2026-09-28T15:19:51.046001+00:00",
+      "finished_utc": "2026-09-28T15:19:52.265088+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=unconditional_successor_authentication_candidate",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=unconditional_successor_authentication_candidate.proof.spthy",
+        "--output-json=unconditional_successor_authentication_candidate.trace.json",
+        "--output-dot=unconditional_successor_authentication_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/diagnostics",
+      "artifacts": {
+        "stdout": "unconditional_successor_authentication_candidate.stdout.log",
+        "stderr": "unconditional_successor_authentication_candidate.stderr.log",
+        "time": "unconditional_successor_authentication_candidate.time.txt",
+        "proof": "unconditional_successor_authentication_candidate.proof.spthy",
+        "trace_json": "unconditional_successor_authentication_candidate.trace.json",
+        "trace_dot": "unconditional_successor_authentication_candidate.trace.dot",
+        "trace_pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "trace_png": "unconditional_successor_authentication_candidate.trace.png",
+        "trace_svg": "unconditional_successor_authentication_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "svg": "unconditional_successor_authentication_candidate.trace.svg",
+        "png": "unconditional_successor_authentication_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "domain_reconfiguration_agreement",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (30 steps)",
+      "steps": 30,
+      "wall_seconds": 1.476,
+      "tamarin_processing_seconds": 1.37,
+      "started_utc": "2026-09-28T15:19:48.598511+00:00",
+      "finished_utc": "2026-09-28T15:19:50.074096+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_reconfiguration_agreement",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_reconfiguration_agreement.proof.spthy",
+        "--output-json=domain_reconfiguration_agreement.trace.json",
+        "--output-dot=domain_reconfiguration_agreement.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/obligations",
+      "artifacts": {
+        "stdout": "domain_reconfiguration_agreement.stdout.log",
+        "stderr": "domain_reconfiguration_agreement.stderr.log",
+        "time": "domain_reconfiguration_agreement.time.txt",
+        "proof": "domain_reconfiguration_agreement.proof.spthy",
+        "trace_json": "domain_reconfiguration_agreement.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "domain_successor_key_authentication",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (10 steps)",
+      "steps": 10,
+      "wall_seconds": 0.917,
+      "tamarin_processing_seconds": 0.85,
+      "started_utc": "2026-09-28T15:19:47.679406+00:00",
+      "finished_utc": "2026-09-28T15:19:48.596229+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_successor_key_authentication",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_successor_key_authentication.proof.spthy",
+        "--output-json=domain_successor_key_authentication.trace.json",
+        "--output-dot=domain_successor_key_authentication.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/obligations",
+      "artifacts": {
+        "stdout": "domain_successor_key_authentication.stdout.log",
+        "stderr": "domain_successor_key_authentication.stderr.log",
+        "time": "domain_successor_key_authentication.time.txt",
+        "proof": "domain_successor_key_authentication.proof.spthy",
+        "trace_json": "domain_successor_key_authentication.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "obligations",
+      "lemma": "epoch_successor_origin",
+      "trace": "all-traces",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (5 steps)",
+      "steps": 5,
+      "wall_seconds": 0.967,
+      "tamarin_processing_seconds": 0.87,
+      "started_utc": "2026-09-28T15:19:46.710016+00:00",
+      "finished_utc": "2026-09-28T15:19:47.677041+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=epoch_successor_origin",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=epoch_successor_origin.proof.spthy",
+        "--output-json=epoch_successor_origin.trace.json",
+        "--output-dot=epoch_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/obligations",
+      "artifacts": {
+        "stdout": "epoch_successor_origin.stdout.log",
+        "stderr": "epoch_successor_origin.stderr.log",
+        "time": "epoch_successor_origin.time.txt",
+        "proof": "epoch_successor_origin.proof.spthy",
+        "trace_json": "epoch_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "reachability",
+      "lemma": "reachable_honest_update",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.376,
+      "tamarin_processing_seconds": 1.27,
+      "started_utc": "2026-09-28T15:19:42.962772+00:00",
+      "finished_utc": "2026-09-28T15:19:44.338439+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_honest_update",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_honest_update.proof.spthy",
+        "--output-json=reachable_honest_update.trace.json",
+        "--output-dot=reachable_honest_update.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/reachability",
+      "artifacts": {
+        "stdout": "reachable_honest_update.stdout.log",
+        "stderr": "reachable_honest_update.stderr.log",
+        "time": "reachable_honest_update.time.txt",
+        "proof": "reachable_honest_update.proof.spthy",
+        "trace_json": "reachable_honest_update.trace.json",
+        "trace_dot": "reachable_honest_update.trace.dot",
+        "trace_pdf": "reachable_honest_update.trace.pdf",
+        "trace_png": "reachable_honest_update.trace.png",
+        "trace_svg": "reachable_honest_update.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_honest_update.trace.pdf",
+        "svg": "reachable_honest_update.trace.svg",
+        "png": "reachable_honest_update.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "core",
+      "case": "reachability",
+      "lemma": "reachable_repeated_acceptance",
+      "trace": "exists-trace",
+      "defines": [],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (11 steps)",
+      "steps": 11,
+      "wall_seconds": 1.473,
+      "tamarin_processing_seconds": 1.37,
+      "started_utc": "2026-09-28T15:19:44.788791+00:00",
+      "finished_utc": "2026-09-28T15:19:46.262103+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_repeated_acceptance",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_repeated_acceptance.proof.spthy",
+        "--output-json=reachable_repeated_acceptance.trace.json",
+        "--output-dot=reachable_repeated_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/core/reachability",
+      "artifacts": {
+        "stdout": "reachable_repeated_acceptance.stdout.log",
+        "stderr": "reachable_repeated_acceptance.stderr.log",
+        "time": "reachable_repeated_acceptance.time.txt",
+        "proof": "reachable_repeated_acceptance.proof.spthy",
+        "trace_json": "reachable_repeated_acceptance.trace.json",
+        "trace_dot": "reachable_repeated_acceptance.trace.dot",
+        "trace_pdf": "reachable_repeated_acceptance.trace.pdf",
+        "trace_png": "reachable_repeated_acceptance.trace.png",
+        "trace_svg": "reachable_repeated_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_repeated_acceptance.trace.pdf",
+        "svg": "reachable_repeated_acceptance.trace.svg",
+        "png": "reachable_repeated_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "classification",
+      "lemma": "classified_successor_origin",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (15 steps)",
+      "steps": 15,
+      "wall_seconds": 1.569,
+      "tamarin_processing_seconds": 1.46,
+      "started_utc": "2026-09-28T15:20:10.002039+00:00",
+      "finished_utc": "2026-09-28T15:20:11.570791+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=classified_successor_origin",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=classified_successor_origin.proof.spthy",
+        "--output-json=classified_successor_origin.trace.json",
+        "--output-dot=classified_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/classification",
+      "artifacts": {
+        "stdout": "classified_successor_origin.stdout.log",
+        "stderr": "classified_successor_origin.stderr.log",
+        "time": "classified_successor_origin.time.txt",
+        "proof": "classified_successor_origin.proof.spthy",
+        "trace_json": "classified_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "compromise",
+      "lemma": "reachable_disclosure_before_acceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 1.72,
+      "tamarin_processing_seconds": 1.65,
+      "started_utc": "2026-09-28T15:20:21.412652+00:00",
+      "finished_utc": "2026-09-28T15:20:23.133118+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_disclosure_before_acceptance",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_disclosure_before_acceptance.proof.spthy",
+        "--output-json=reachable_disclosure_before_acceptance.trace.json",
+        "--output-dot=reachable_disclosure_before_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/compromise",
+      "artifacts": {
+        "stdout": "reachable_disclosure_before_acceptance.stdout.log",
+        "stderr": "reachable_disclosure_before_acceptance.stderr.log",
+        "time": "reachable_disclosure_before_acceptance.time.txt",
+        "proof": "reachable_disclosure_before_acceptance.proof.spthy",
+        "trace_json": "reachable_disclosure_before_acceptance.trace.json",
+        "trace_dot": "reachable_disclosure_before_acceptance.trace.dot",
+        "trace_pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "trace_png": "reachable_disclosure_before_acceptance.trace.png",
+        "trace_svg": "reachable_disclosure_before_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "svg": "reachable_disclosure_before_acceptance.trace.svg",
+        "png": "reachable_disclosure_before_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "compromise",
+      "lemma": "reachable_old_key_disclosure",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 2.126,
+      "tamarin_processing_seconds": 2.05,
+      "started_utc": "2026-09-28T15:20:18.890807+00:00",
+      "finished_utc": "2026-09-28T15:20:21.016359+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_old_key_disclosure",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_old_key_disclosure.proof.spthy",
+        "--output-json=reachable_old_key_disclosure.trace.json",
+        "--output-dot=reachable_old_key_disclosure.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/compromise",
+      "artifacts": {
+        "stdout": "reachable_old_key_disclosure.stdout.log",
+        "stderr": "reachable_old_key_disclosure.stderr.log",
+        "time": "reachable_old_key_disclosure.time.txt",
+        "proof": "reachable_old_key_disclosure.proof.spthy",
+        "trace_json": "reachable_old_key_disclosure.trace.json",
+        "trace_dot": "reachable_old_key_disclosure.trace.dot",
+        "trace_pdf": "reachable_old_key_disclosure.trace.pdf",
+        "trace_png": "reachable_old_key_disclosure.trace.png",
+        "trace_svg": "reachable_old_key_disclosure.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_old_key_disclosure.trace.pdf",
+        "svg": "reachable_old_key_disclosure.trace.svg",
+        "png": "reachable_old_key_disclosure.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "diagnostics",
+      "lemma": "accepted_epoch_has_started_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (6 steps)",
+      "steps": 6,
+      "wall_seconds": 1.923,
+      "tamarin_processing_seconds": 1.8,
+      "started_utc": "2026-09-28T15:20:16.671004+00:00",
+      "finished_utc": "2026-09-28T15:20:18.594495+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=accepted_epoch_has_started_candidate",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=accepted_epoch_has_started_candidate.proof.spthy",
+        "--output-json=accepted_epoch_has_started_candidate.trace.json",
+        "--output-dot=accepted_epoch_has_started_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/diagnostics",
+      "artifacts": {
+        "stdout": "accepted_epoch_has_started_candidate.stdout.log",
+        "stderr": "accepted_epoch_has_started_candidate.stderr.log",
+        "time": "accepted_epoch_has_started_candidate.time.txt",
+        "proof": "accepted_epoch_has_started_candidate.proof.spthy",
+        "trace_json": "accepted_epoch_has_started_candidate.trace.json",
+        "trace_dot": "accepted_epoch_has_started_candidate.trace.dot",
+        "trace_pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "trace_png": "accepted_epoch_has_started_candidate.trace.png",
+        "trace_svg": "accepted_epoch_has_started_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "svg": "accepted_epoch_has_started_candidate.trace.svg",
+        "png": "accepted_epoch_has_started_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "diagnostics",
+      "lemma": "successor_acceptance_injective_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (10 steps)",
+      "steps": 10,
+      "wall_seconds": 2.126,
+      "tamarin_processing_seconds": 2.03,
+      "started_utc": "2026-09-28T15:20:13.995836+00:00",
+      "finished_utc": "2026-09-28T15:20:16.121412+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=successor_acceptance_injective_candidate",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=successor_acceptance_injective_candidate.proof.spthy",
+        "--output-json=successor_acceptance_injective_candidate.trace.json",
+        "--output-dot=successor_acceptance_injective_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/diagnostics",
+      "artifacts": {
+        "stdout": "successor_acceptance_injective_candidate.stdout.log",
+        "stderr": "successor_acceptance_injective_candidate.stderr.log",
+        "time": "successor_acceptance_injective_candidate.time.txt",
+        "proof": "successor_acceptance_injective_candidate.proof.spthy",
+        "trace_json": "successor_acceptance_injective_candidate.trace.json",
+        "trace_dot": "successor_acceptance_injective_candidate.trace.dot",
+        "trace_pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "trace_png": "successor_acceptance_injective_candidate.trace.png",
+        "trace_svg": "successor_acceptance_injective_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "svg": "successor_acceptance_injective_candidate.trace.svg",
+        "png": "successor_acceptance_injective_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "diagnostics",
+      "lemma": "unconditional_successor_authentication_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (8 steps)",
+      "steps": 8,
+      "wall_seconds": 1.919,
+      "tamarin_processing_seconds": 1.82,
+      "started_utc": "2026-09-28T15:20:11.572595+00:00",
+      "finished_utc": "2026-09-28T15:20:13.491849+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=unconditional_successor_authentication_candidate",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=unconditional_successor_authentication_candidate.proof.spthy",
+        "--output-json=unconditional_successor_authentication_candidate.trace.json",
+        "--output-dot=unconditional_successor_authentication_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/diagnostics",
+      "artifacts": {
+        "stdout": "unconditional_successor_authentication_candidate.stdout.log",
+        "stderr": "unconditional_successor_authentication_candidate.stderr.log",
+        "time": "unconditional_successor_authentication_candidate.time.txt",
+        "proof": "unconditional_successor_authentication_candidate.proof.spthy",
+        "trace_json": "unconditional_successor_authentication_candidate.trace.json",
+        "trace_dot": "unconditional_successor_authentication_candidate.trace.dot",
+        "trace_pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "trace_png": "unconditional_successor_authentication_candidate.trace.png",
+        "trace_svg": "unconditional_successor_authentication_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "svg": "unconditional_successor_authentication_candidate.trace.svg",
+        "png": "unconditional_successor_authentication_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "obligations",
+      "lemma": "domain_reconfiguration_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (34 steps)",
+      "steps": 34,
+      "wall_seconds": 2.073,
+      "tamarin_processing_seconds": 1.98,
+      "started_utc": "2026-09-28T15:20:07.927229+00:00",
+      "finished_utc": "2026-09-28T15:20:10.000552+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_reconfiguration_agreement",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_reconfiguration_agreement.proof.spthy",
+        "--output-json=domain_reconfiguration_agreement.trace.json",
+        "--output-dot=domain_reconfiguration_agreement.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/obligations",
+      "artifacts": {
+        "stdout": "domain_reconfiguration_agreement.stdout.log",
+        "stderr": "domain_reconfiguration_agreement.stderr.log",
+        "time": "domain_reconfiguration_agreement.time.txt",
+        "proof": "domain_reconfiguration_agreement.proof.spthy",
+        "trace_json": "domain_reconfiguration_agreement.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "obligations",
+      "lemma": "domain_successor_key_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.633,
+      "tamarin_processing_seconds": 1.5,
+      "started_utc": "2026-09-28T15:20:06.292022+00:00",
+      "finished_utc": "2026-09-28T15:20:07.924982+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_successor_key_authentication",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_successor_key_authentication.proof.spthy",
+        "--output-json=domain_successor_key_authentication.trace.json",
+        "--output-dot=domain_successor_key_authentication.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/obligations",
+      "artifacts": {
+        "stdout": "domain_successor_key_authentication.stdout.log",
+        "stderr": "domain_successor_key_authentication.stderr.log",
+        "time": "domain_successor_key_authentication.time.txt",
+        "proof": "domain_successor_key_authentication.proof.spthy",
+        "trace_json": "domain_successor_key_authentication.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "obligations",
+      "lemma": "epoch_successor_origin",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (14 steps)",
+      "steps": 14,
+      "wall_seconds": 1.521,
+      "tamarin_processing_seconds": 1.41,
+      "started_utc": "2026-09-28T15:20:04.768717+00:00",
+      "finished_utc": "2026-09-28T15:20:06.289624+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=epoch_successor_origin",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=epoch_successor_origin.proof.spthy",
+        "--output-json=epoch_successor_origin.trace.json",
+        "--output-dot=epoch_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/obligations",
+      "artifacts": {
+        "stdout": "epoch_successor_origin.stdout.log",
+        "stderr": "epoch_successor_origin.stderr.log",
+        "time": "epoch_successor_origin.time.txt",
+        "proof": "epoch_successor_origin.proof.spthy",
+        "trace_json": "epoch_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "reachability",
+      "lemma": "reachable_honest_update",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 1.971,
+      "tamarin_processing_seconds": 1.86,
+      "started_utc": "2026-09-28T15:19:59.832277+00:00",
+      "finished_utc": "2026-09-28T15:20:01.802975+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_honest_update",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_honest_update.proof.spthy",
+        "--output-json=reachable_honest_update.trace.json",
+        "--output-dot=reachable_honest_update.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/reachability",
+      "artifacts": {
+        "stdout": "reachable_honest_update.stdout.log",
+        "stderr": "reachable_honest_update.stderr.log",
+        "time": "reachable_honest_update.time.txt",
+        "proof": "reachable_honest_update.proof.spthy",
+        "trace_json": "reachable_honest_update.trace.json",
+        "trace_dot": "reachable_honest_update.trace.dot",
+        "trace_pdf": "reachable_honest_update.trace.pdf",
+        "trace_png": "reachable_honest_update.trace.png",
+        "trace_svg": "reachable_honest_update.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_honest_update.trace.pdf",
+        "svg": "reachable_honest_update.trace.svg",
+        "png": "reachable_honest_update.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "reachability",
+      "lemma": "reachable_repeated_acceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.869,
+      "tamarin_processing_seconds": 1.79,
+      "started_utc": "2026-09-28T15:20:02.402341+00:00",
+      "finished_utc": "2026-09-28T15:20:04.271565+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_repeated_acceptance",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_repeated_acceptance.proof.spthy",
+        "--output-json=reachable_repeated_acceptance.trace.json",
+        "--output-dot=reachable_repeated_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/reachability",
+      "artifacts": {
+        "stdout": "reachable_repeated_acceptance.stdout.log",
+        "stderr": "reachable_repeated_acceptance.stderr.log",
+        "time": "reachable_repeated_acceptance.time.txt",
+        "proof": "reachable_repeated_acceptance.proof.spthy",
+        "trace_json": "reachable_repeated_acceptance.trace.json",
+        "trace_dot": "reachable_repeated_acceptance.trace.dot",
+        "trace_pdf": "reachable_repeated_acceptance.trace.pdf",
+        "trace_png": "reachable_repeated_acceptance.trace.png",
+        "trace_svg": "reachable_repeated_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_repeated_acceptance.trace.pdf",
+        "svg": "reachable_repeated_acceptance.trace.svg",
+        "png": "reachable_repeated_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "special",
+      "lemma": "reachable_special_update",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (11 steps)",
+      "steps": 11,
+      "wall_seconds": 1.872,
+      "tamarin_processing_seconds": 1.78,
+      "started_utc": "2026-09-28T15:20:23.633040+00:00",
+      "finished_utc": "2026-09-28T15:20:25.505122+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_special_update",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_special_update.proof.spthy",
+        "--output-json=reachable_special_update.trace.json",
+        "--output-dot=reachable_special_update.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/special",
+      "artifacts": {
+        "stdout": "reachable_special_update.stdout.log",
+        "stderr": "reachable_special_update.stderr.log",
+        "time": "reachable_special_update.time.txt",
+        "proof": "reachable_special_update.proof.spthy",
+        "trace_json": "reachable_special_update.trace.json",
+        "trace_dot": "reachable_special_update.trace.dot",
+        "trace_pdf": "reachable_special_update.trace.pdf",
+        "trace_png": "reachable_special_update.trace.png",
+        "trace_svg": "reachable_special_update.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_special_update.trace.pdf",
+        "svg": "reachable_special_update.trace.svg",
+        "png": "reachable_special_update.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special",
+      "case": "special",
+      "lemma": "special_without_disclosure_authentication_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (8 steps)",
+      "steps": 8,
+      "wall_seconds": 2.024,
+      "tamarin_processing_seconds": 1.94,
+      "started_utc": "2026-09-28T15:20:26.114221+00:00",
+      "finished_utc": "2026-09-28T15:20:28.137823+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=special_without_disclosure_authentication_candidate",
+        "-DSPECIAL_ATTACK",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=special_without_disclosure_authentication_candidate.proof.spthy",
+        "--output-json=special_without_disclosure_authentication_candidate.trace.json",
+        "--output-dot=special_without_disclosure_authentication_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special/special",
+      "artifacts": {
+        "stdout": "special_without_disclosure_authentication_candidate.stdout.log",
+        "stderr": "special_without_disclosure_authentication_candidate.stderr.log",
+        "time": "special_without_disclosure_authentication_candidate.time.txt",
+        "proof": "special_without_disclosure_authentication_candidate.proof.spthy",
+        "trace_json": "special_without_disclosure_authentication_candidate.trace.json",
+        "trace_dot": "special_without_disclosure_authentication_candidate.trace.dot",
+        "trace_pdf": "special_without_disclosure_authentication_candidate.trace.pdf",
+        "trace_png": "special_without_disclosure_authentication_candidate.trace.png",
+        "trace_svg": "special_without_disclosure_authentication_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "special_without_disclosure_authentication_candidate.trace.pdf",
+        "svg": "special_without_disclosure_authentication_candidate.trace.svg",
+        "png": "special_without_disclosure_authentication_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "chain",
+      "lemma": "reachable_historical_reacceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (14 steps)",
+      "steps": 14,
+      "wall_seconds": 2.877,
+      "tamarin_processing_seconds": 2.75,
+      "started_utc": "2026-09-28T15:21:46.849393+00:00",
+      "finished_utc": "2026-09-28T15:21:49.726324+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_historical_reacceptance",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_historical_reacceptance.proof.spthy",
+        "--output-json=reachable_historical_reacceptance.trace.json",
+        "--output-dot=reachable_historical_reacceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/chain",
+      "artifacts": {
+        "stdout": "reachable_historical_reacceptance.stdout.log",
+        "stderr": "reachable_historical_reacceptance.stderr.log",
+        "time": "reachable_historical_reacceptance.time.txt",
+        "proof": "reachable_historical_reacceptance.proof.spthy",
+        "trace_json": "reachable_historical_reacceptance.trace.json",
+        "trace_dot": "reachable_historical_reacceptance.trace.dot",
+        "trace_pdf": "reachable_historical_reacceptance.trace.pdf",
+        "trace_png": "reachable_historical_reacceptance.trace.png",
+        "trace_svg": "reachable_historical_reacceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_historical_reacceptance.trace.pdf",
+        "svg": "reachable_historical_reacceptance.trace.svg",
+        "png": "reachable_historical_reacceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "chain",
+      "lemma": "reachable_two_honest_updates",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (17 steps)",
+      "steps": 17,
+      "wall_seconds": 3.575,
+      "tamarin_processing_seconds": 3.45,
+      "started_utc": "2026-09-28T15:21:42.626362+00:00",
+      "finished_utc": "2026-09-28T15:21:46.201503+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_two_honest_updates",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_two_honest_updates.proof.spthy",
+        "--output-json=reachable_two_honest_updates.trace.json",
+        "--output-dot=reachable_two_honest_updates.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/chain",
+      "artifacts": {
+        "stdout": "reachable_two_honest_updates.stdout.log",
+        "stderr": "reachable_two_honest_updates.stderr.log",
+        "time": "reachable_two_honest_updates.time.txt",
+        "proof": "reachable_two_honest_updates.proof.spthy",
+        "trace_json": "reachable_two_honest_updates.trace.json",
+        "trace_dot": "reachable_two_honest_updates.trace.dot",
+        "trace_pdf": "reachable_two_honest_updates.trace.pdf",
+        "trace_png": "reachable_two_honest_updates.trace.png",
+        "trace_svg": "reachable_two_honest_updates.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_two_honest_updates.trace.pdf",
+        "svg": "reachable_two_honest_updates.trace.svg",
+        "png": "reachable_two_honest_updates.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "classification",
+      "lemma": "classified_successor_origin",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (35 steps)",
+      "steps": 35,
+      "wall_seconds": 2.374,
+      "tamarin_processing_seconds": 2.25,
+      "started_utc": "2026-09-28T15:21:13.050446+00:00",
+      "finished_utc": "2026-09-28T15:21:15.424589+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=classified_successor_origin",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=classified_successor_origin.proof.spthy",
+        "--output-json=classified_successor_origin.trace.json",
+        "--output-dot=classified_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/classification",
+      "artifacts": {
+        "stdout": "classified_successor_origin.stdout.log",
+        "stderr": "classified_successor_origin.stderr.log",
+        "time": "classified_successor_origin.time.txt",
+        "proof": "classified_successor_origin.proof.spthy",
+        "trace_json": "classified_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "compromise",
+      "lemma": "reachable_disclosure_before_acceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 2.927,
+      "tamarin_processing_seconds": 2.82,
+      "started_utc": "2026-09-28T15:21:31.344066+00:00",
+      "finished_utc": "2026-09-28T15:21:34.270940+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_disclosure_before_acceptance",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_disclosure_before_acceptance.proof.spthy",
+        "--output-json=reachable_disclosure_before_acceptance.trace.json",
+        "--output-dot=reachable_disclosure_before_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/compromise",
+      "artifacts": {
+        "stdout": "reachable_disclosure_before_acceptance.stdout.log",
+        "stderr": "reachable_disclosure_before_acceptance.stderr.log",
+        "time": "reachable_disclosure_before_acceptance.time.txt",
+        "proof": "reachable_disclosure_before_acceptance.proof.spthy",
+        "trace_json": "reachable_disclosure_before_acceptance.trace.json",
+        "trace_dot": "reachable_disclosure_before_acceptance.trace.dot",
+        "trace_pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "trace_png": "reachable_disclosure_before_acceptance.trace.png",
+        "trace_svg": "reachable_disclosure_before_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "svg": "reachable_disclosure_before_acceptance.trace.svg",
+        "png": "reachable_disclosure_before_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "compromise",
+      "lemma": "reachable_old_key_disclosure",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 3.039,
+      "tamarin_processing_seconds": 2.92,
+      "started_utc": "2026-09-28T15:21:27.808404+00:00",
+      "finished_utc": "2026-09-28T15:21:30.847532+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_old_key_disclosure",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_old_key_disclosure.proof.spthy",
+        "--output-json=reachable_old_key_disclosure.trace.json",
+        "--output-dot=reachable_old_key_disclosure.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/compromise",
+      "artifacts": {
+        "stdout": "reachable_old_key_disclosure.stdout.log",
+        "stderr": "reachable_old_key_disclosure.stderr.log",
+        "time": "reachable_old_key_disclosure.time.txt",
+        "proof": "reachable_old_key_disclosure.proof.spthy",
+        "trace_json": "reachable_old_key_disclosure.trace.json",
+        "trace_dot": "reachable_old_key_disclosure.trace.dot",
+        "trace_pdf": "reachable_old_key_disclosure.trace.pdf",
+        "trace_png": "reachable_old_key_disclosure.trace.png",
+        "trace_svg": "reachable_old_key_disclosure.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_old_key_disclosure.trace.pdf",
+        "svg": "reachable_old_key_disclosure.trace.svg",
+        "png": "reachable_old_key_disclosure.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "diagnostics",
+      "lemma": "accepted_epoch_has_started_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (6 steps)",
+      "steps": 6,
+      "wall_seconds": 3.025,
+      "tamarin_processing_seconds": 2.9,
+      "started_utc": "2026-09-28T15:21:24.386997+00:00",
+      "finished_utc": "2026-09-28T15:21:27.411563+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=accepted_epoch_has_started_candidate",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=accepted_epoch_has_started_candidate.proof.spthy",
+        "--output-json=accepted_epoch_has_started_candidate.trace.json",
+        "--output-dot=accepted_epoch_has_started_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "accepted_epoch_has_started_candidate.stdout.log",
+        "stderr": "accepted_epoch_has_started_candidate.stderr.log",
+        "time": "accepted_epoch_has_started_candidate.time.txt",
+        "proof": "accepted_epoch_has_started_candidate.proof.spthy",
+        "trace_json": "accepted_epoch_has_started_candidate.trace.json",
+        "trace_dot": "accepted_epoch_has_started_candidate.trace.dot",
+        "trace_pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "trace_png": "accepted_epoch_has_started_candidate.trace.png",
+        "trace_svg": "accepted_epoch_has_started_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "svg": "accepted_epoch_has_started_candidate.trace.svg",
+        "png": "accepted_epoch_has_started_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "diagnostics",
+      "lemma": "historical_update_freshness_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (10 steps)",
+      "steps": 10,
+      "wall_seconds": 2.575,
+      "tamarin_processing_seconds": 2.5,
+      "started_utc": "2026-09-28T15:21:50.378937+00:00",
+      "finished_utc": "2026-09-28T15:21:52.953674+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=historical_update_freshness_candidate",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=historical_update_freshness_candidate.proof.spthy",
+        "--output-json=historical_update_freshness_candidate.trace.json",
+        "--output-dot=historical_update_freshness_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "historical_update_freshness_candidate.stdout.log",
+        "stderr": "historical_update_freshness_candidate.stderr.log",
+        "time": "historical_update_freshness_candidate.time.txt",
+        "proof": "historical_update_freshness_candidate.proof.spthy",
+        "trace_json": "historical_update_freshness_candidate.trace.json",
+        "trace_dot": "historical_update_freshness_candidate.trace.dot",
+        "trace_pdf": "historical_update_freshness_candidate.trace.pdf",
+        "trace_png": "historical_update_freshness_candidate.trace.png",
+        "trace_svg": "historical_update_freshness_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "historical_update_freshness_candidate.trace.pdf",
+        "svg": "historical_update_freshness_candidate.trace.svg",
+        "png": "historical_update_freshness_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "diagnostics",
+      "lemma": "successor_acceptance_injective_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (10 steps)",
+      "steps": 10,
+      "wall_seconds": 3.827,
+      "tamarin_processing_seconds": 3.73,
+      "started_utc": "2026-09-28T15:21:19.910808+00:00",
+      "finished_utc": "2026-09-28T15:21:23.738055+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=successor_acceptance_injective_candidate",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=successor_acceptance_injective_candidate.proof.spthy",
+        "--output-json=successor_acceptance_injective_candidate.trace.json",
+        "--output-dot=successor_acceptance_injective_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "successor_acceptance_injective_candidate.stdout.log",
+        "stderr": "successor_acceptance_injective_candidate.stderr.log",
+        "time": "successor_acceptance_injective_candidate.time.txt",
+        "proof": "successor_acceptance_injective_candidate.proof.spthy",
+        "trace_json": "successor_acceptance_injective_candidate.trace.json",
+        "trace_dot": "successor_acceptance_injective_candidate.trace.dot",
+        "trace_pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "trace_png": "successor_acceptance_injective_candidate.trace.png",
+        "trace_svg": "successor_acceptance_injective_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "svg": "successor_acceptance_injective_candidate.trace.svg",
+        "png": "successor_acceptance_injective_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "diagnostics",
+      "lemma": "unconditional_successor_authentication_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (8 steps)",
+      "steps": 8,
+      "wall_seconds": 3.778,
+      "tamarin_processing_seconds": 3.7,
+      "started_utc": "2026-09-28T15:21:15.426381+00:00",
+      "finished_utc": "2026-09-28T15:21:19.204410+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=unconditional_successor_authentication_candidate",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=unconditional_successor_authentication_candidate.proof.spthy",
+        "--output-json=unconditional_successor_authentication_candidate.trace.json",
+        "--output-dot=unconditional_successor_authentication_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "unconditional_successor_authentication_candidate.stdout.log",
+        "stderr": "unconditional_successor_authentication_candidate.stderr.log",
+        "time": "unconditional_successor_authentication_candidate.time.txt",
+        "proof": "unconditional_successor_authentication_candidate.proof.spthy",
+        "trace_json": "unconditional_successor_authentication_candidate.trace.json",
+        "trace_dot": "unconditional_successor_authentication_candidate.trace.dot",
+        "trace_pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "trace_png": "unconditional_successor_authentication_candidate.trace.png",
+        "trace_svg": "unconditional_successor_authentication_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "svg": "unconditional_successor_authentication_candidate.trace.svg",
+        "png": "unconditional_successor_authentication_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "obligations",
+      "lemma": "domain_reconfiguration_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (82 steps)",
+      "steps": 82,
+      "wall_seconds": 4.188,
+      "tamarin_processing_seconds": 4.09,
+      "started_utc": "2026-09-28T15:21:08.861454+00:00",
+      "finished_utc": "2026-09-28T15:21:13.049041+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_reconfiguration_agreement",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_reconfiguration_agreement.proof.spthy",
+        "--output-json=domain_reconfiguration_agreement.trace.json",
+        "--output-dot=domain_reconfiguration_agreement.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/obligations",
+      "artifacts": {
+        "stdout": "domain_reconfiguration_agreement.stdout.log",
+        "stderr": "domain_reconfiguration_agreement.stderr.log",
+        "time": "domain_reconfiguration_agreement.time.txt",
+        "proof": "domain_reconfiguration_agreement.proof.spthy",
+        "trace_json": "domain_reconfiguration_agreement.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "obligations",
+      "lemma": "domain_successor_key_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (23 steps)",
+      "steps": 23,
+      "wall_seconds": 2.019,
+      "tamarin_processing_seconds": 1.9,
+      "started_utc": "2026-09-28T15:21:06.840309+00:00",
+      "finished_utc": "2026-09-28T15:21:08.859587+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_successor_key_authentication",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_successor_key_authentication.proof.spthy",
+        "--output-json=domain_successor_key_authentication.trace.json",
+        "--output-dot=domain_successor_key_authentication.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/obligations",
+      "artifacts": {
+        "stdout": "domain_successor_key_authentication.stdout.log",
+        "stderr": "domain_successor_key_authentication.stderr.log",
+        "time": "domain_successor_key_authentication.time.txt",
+        "proof": "domain_successor_key_authentication.proof.spthy",
+        "trace_json": "domain_successor_key_authentication.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "obligations",
+      "lemma": "epoch_successor_origin",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (22 steps)",
+      "steps": 22,
+      "wall_seconds": 1.619,
+      "tamarin_processing_seconds": 1.52,
+      "started_utc": "2026-09-28T15:21:05.219781+00:00",
+      "finished_utc": "2026-09-28T15:21:06.838693+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=epoch_successor_origin",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=epoch_successor_origin.proof.spthy",
+        "--output-json=epoch_successor_origin.trace.json",
+        "--output-dot=epoch_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/obligations",
+      "artifacts": {
+        "stdout": "epoch_successor_origin.stdout.log",
+        "stderr": "epoch_successor_origin.stderr.log",
+        "time": "epoch_successor_origin.time.txt",
+        "proof": "epoch_successor_origin.proof.spthy",
+        "trace_json": "epoch_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "reachability",
+      "lemma": "reachable_honest_update",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 2.282,
+      "tamarin_processing_seconds": 2.18,
+      "started_utc": "2026-09-28T15:20:59.312585+00:00",
+      "finished_utc": "2026-09-28T15:21:01.594785+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_honest_update",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_honest_update.proof.spthy",
+        "--output-json=reachable_honest_update.trace.json",
+        "--output-dot=reachable_honest_update.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/reachability",
+      "artifacts": {
+        "stdout": "reachable_honest_update.stdout.log",
+        "stderr": "reachable_honest_update.stderr.log",
+        "time": "reachable_honest_update.time.txt",
+        "proof": "reachable_honest_update.proof.spthy",
+        "trace_json": "reachable_honest_update.trace.json",
+        "trace_dot": "reachable_honest_update.trace.dot",
+        "trace_pdf": "reachable_honest_update.trace.pdf",
+        "trace_png": "reachable_honest_update.trace.png",
+        "trace_svg": "reachable_honest_update.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_honest_update.trace.pdf",
+        "svg": "reachable_honest_update.trace.svg",
+        "png": "reachable_honest_update.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "reachability",
+      "lemma": "reachable_repeated_acceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 2.526,
+      "tamarin_processing_seconds": 2.46,
+      "started_utc": "2026-09-28T15:21:02.195152+00:00",
+      "finished_utc": "2026-09-28T15:21:04.721009+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_repeated_acceptance",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_repeated_acceptance.proof.spthy",
+        "--output-json=reachable_repeated_acceptance.trace.json",
+        "--output-dot=reachable_repeated_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/reachability",
+      "artifacts": {
+        "stdout": "reachable_repeated_acceptance.stdout.log",
+        "stderr": "reachable_repeated_acceptance.stderr.log",
+        "time": "reachable_repeated_acceptance.time.txt",
+        "proof": "reachable_repeated_acceptance.proof.spthy",
+        "trace_json": "reachable_repeated_acceptance.trace.json",
+        "trace_dot": "reachable_repeated_acceptance.trace.dot",
+        "trace_pdf": "reachable_repeated_acceptance.trace.pdf",
+        "trace_png": "reachable_repeated_acceptance.trace.png",
+        "trace_svg": "reachable_repeated_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_repeated_acceptance.trace.pdf",
+        "svg": "reachable_repeated_acceptance.trace.svg",
+        "png": "reachable_repeated_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "special",
+      "lemma": "reachable_special_update",
+      "trace": "exists-trace",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (11 steps)",
+      "steps": 11,
+      "wall_seconds": 2.823,
+      "tamarin_processing_seconds": 2.7,
+      "started_utc": "2026-09-28T15:21:34.921173+00:00",
+      "finished_utc": "2026-09-28T15:21:37.744474+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_special_update",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_special_update.proof.spthy",
+        "--output-json=reachable_special_update.trace.json",
+        "--output-dot=reachable_special_update.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/special",
+      "artifacts": {
+        "stdout": "reachable_special_update.stdout.log",
+        "stderr": "reachable_special_update.stderr.log",
+        "time": "reachable_special_update.time.txt",
+        "proof": "reachable_special_update.proof.spthy",
+        "trace_json": "reachable_special_update.trace.json",
+        "trace_dot": "reachable_special_update.trace.dot",
+        "trace_pdf": "reachable_special_update.trace.pdf",
+        "trace_png": "reachable_special_update.trace.png",
+        "trace_svg": "reachable_special_update.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_special_update.trace.pdf",
+        "svg": "reachable_special_update.trace.svg",
+        "png": "reachable_special_update.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "special_two_updates",
+      "case": "special",
+      "lemma": "special_without_disclosure_authentication_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SPECIAL_ATTACK",
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (8 steps)",
+      "steps": 8,
+      "wall_seconds": 3.584,
+      "tamarin_processing_seconds": 3.48,
+      "started_utc": "2026-09-28T15:21:38.343177+00:00",
+      "finished_utc": "2026-09-28T15:21:41.927234+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=special_without_disclosure_authentication_candidate",
+        "-DSPECIAL_ATTACK",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=special_without_disclosure_authentication_candidate.proof.spthy",
+        "--output-json=special_without_disclosure_authentication_candidate.trace.json",
+        "--output-dot=special_without_disclosure_authentication_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/special_two_updates/special",
+      "artifacts": {
+        "stdout": "special_without_disclosure_authentication_candidate.stdout.log",
+        "stderr": "special_without_disclosure_authentication_candidate.stderr.log",
+        "time": "special_without_disclosure_authentication_candidate.time.txt",
+        "proof": "special_without_disclosure_authentication_candidate.proof.spthy",
+        "trace_json": "special_without_disclosure_authentication_candidate.trace.json",
+        "trace_dot": "special_without_disclosure_authentication_candidate.trace.dot",
+        "trace_pdf": "special_without_disclosure_authentication_candidate.trace.pdf",
+        "trace_png": "special_without_disclosure_authentication_candidate.trace.png",
+        "trace_svg": "special_without_disclosure_authentication_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "special_without_disclosure_authentication_candidate.trace.pdf",
+        "svg": "special_without_disclosure_authentication_candidate.trace.svg",
+        "png": "special_without_disclosure_authentication_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "chain",
+      "lemma": "reachable_historical_reacceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 2.025,
+      "tamarin_processing_seconds": 1.94,
+      "started_utc": "2026-09-28T15:20:54.819318+00:00",
+      "finished_utc": "2026-09-28T15:20:56.843955+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_historical_reacceptance",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_historical_reacceptance.proof.spthy",
+        "--output-json=reachable_historical_reacceptance.trace.json",
+        "--output-dot=reachable_historical_reacceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/chain",
+      "artifacts": {
+        "stdout": "reachable_historical_reacceptance.stdout.log",
+        "stderr": "reachable_historical_reacceptance.stderr.log",
+        "time": "reachable_historical_reacceptance.time.txt",
+        "proof": "reachable_historical_reacceptance.proof.spthy",
+        "trace_json": "reachable_historical_reacceptance.trace.json",
+        "trace_dot": "reachable_historical_reacceptance.trace.dot",
+        "trace_pdf": "reachable_historical_reacceptance.trace.pdf",
+        "trace_png": "reachable_historical_reacceptance.trace.png",
+        "trace_svg": "reachable_historical_reacceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_historical_reacceptance.trace.pdf",
+        "svg": "reachable_historical_reacceptance.trace.svg",
+        "png": "reachable_historical_reacceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "chain",
+      "lemma": "reachable_two_honest_updates",
+      "trace": "exists-trace",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (17 steps)",
+      "steps": 17,
+      "wall_seconds": 2.473,
+      "tamarin_processing_seconds": 2.35,
+      "started_utc": "2026-09-28T15:20:51.648351+00:00",
+      "finished_utc": "2026-09-28T15:20:54.120921+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_two_honest_updates",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_two_honest_updates.proof.spthy",
+        "--output-json=reachable_two_honest_updates.trace.json",
+        "--output-dot=reachable_two_honest_updates.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/chain",
+      "artifacts": {
+        "stdout": "reachable_two_honest_updates.stdout.log",
+        "stderr": "reachable_two_honest_updates.stderr.log",
+        "time": "reachable_two_honest_updates.time.txt",
+        "proof": "reachable_two_honest_updates.proof.spthy",
+        "trace_json": "reachable_two_honest_updates.trace.json",
+        "trace_dot": "reachable_two_honest_updates.trace.dot",
+        "trace_pdf": "reachable_two_honest_updates.trace.pdf",
+        "trace_png": "reachable_two_honest_updates.trace.png",
+        "trace_svg": "reachable_two_honest_updates.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_two_honest_updates.trace.pdf",
+        "svg": "reachable_two_honest_updates.trace.svg",
+        "png": "reachable_two_honest_updates.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "classification",
+      "lemma": "classified_successor_origin",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (17 steps)",
+      "steps": 17,
+      "wall_seconds": 1.323,
+      "tamarin_processing_seconds": 1.19,
+      "started_utc": "2026-09-28T15:20:39.056342+00:00",
+      "finished_utc": "2026-09-28T15:20:40.379544+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=classified_successor_origin",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=classified_successor_origin.proof.spthy",
+        "--output-json=classified_successor_origin.trace.json",
+        "--output-dot=classified_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/classification",
+      "artifacts": {
+        "stdout": "classified_successor_origin.stdout.log",
+        "stderr": "classified_successor_origin.stderr.log",
+        "time": "classified_successor_origin.time.txt",
+        "proof": "classified_successor_origin.proof.spthy",
+        "trace_json": "classified_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "compromise",
+      "lemma": "reachable_disclosure_before_acceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.82,
+      "tamarin_processing_seconds": 1.72,
+      "started_utc": "2026-09-28T15:20:49.330445+00:00",
+      "finished_utc": "2026-09-28T15:20:51.150806+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_disclosure_before_acceptance",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_disclosure_before_acceptance.proof.spthy",
+        "--output-json=reachable_disclosure_before_acceptance.trace.json",
+        "--output-dot=reachable_disclosure_before_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/compromise",
+      "artifacts": {
+        "stdout": "reachable_disclosure_before_acceptance.stdout.log",
+        "stderr": "reachable_disclosure_before_acceptance.stderr.log",
+        "time": "reachable_disclosure_before_acceptance.time.txt",
+        "proof": "reachable_disclosure_before_acceptance.proof.spthy",
+        "trace_json": "reachable_disclosure_before_acceptance.trace.json",
+        "trace_dot": "reachable_disclosure_before_acceptance.trace.dot",
+        "trace_pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "trace_png": "reachable_disclosure_before_acceptance.trace.png",
+        "trace_svg": "reachable_disclosure_before_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_disclosure_before_acceptance.trace.pdf",
+        "svg": "reachable_disclosure_before_acceptance.trace.svg",
+        "png": "reachable_disclosure_before_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "compromise",
+      "lemma": "reachable_old_key_disclosure",
+      "trace": "exists-trace",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (14 steps)",
+      "steps": 14,
+      "wall_seconds": 1.873,
+      "tamarin_processing_seconds": 1.77,
+      "started_utc": "2026-09-28T15:20:46.904069+00:00",
+      "finished_utc": "2026-09-28T15:20:48.777183+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_old_key_disclosure",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_old_key_disclosure.proof.spthy",
+        "--output-json=reachable_old_key_disclosure.trace.json",
+        "--output-dot=reachable_old_key_disclosure.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/compromise",
+      "artifacts": {
+        "stdout": "reachable_old_key_disclosure.stdout.log",
+        "stderr": "reachable_old_key_disclosure.stderr.log",
+        "time": "reachable_old_key_disclosure.time.txt",
+        "proof": "reachable_old_key_disclosure.proof.spthy",
+        "trace_json": "reachable_old_key_disclosure.trace.json",
+        "trace_dot": "reachable_old_key_disclosure.trace.dot",
+        "trace_pdf": "reachable_old_key_disclosure.trace.pdf",
+        "trace_png": "reachable_old_key_disclosure.trace.png",
+        "trace_svg": "reachable_old_key_disclosure.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_old_key_disclosure.trace.pdf",
+        "svg": "reachable_old_key_disclosure.trace.svg",
+        "png": "reachable_old_key_disclosure.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "diagnostics",
+      "lemma": "accepted_epoch_has_started_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (6 steps)",
+      "steps": 6,
+      "wall_seconds": 1.523,
+      "tamarin_processing_seconds": 1.41,
+      "started_utc": "2026-09-28T15:20:45.083222+00:00",
+      "finished_utc": "2026-09-28T15:20:46.606396+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=accepted_epoch_has_started_candidate",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=accepted_epoch_has_started_candidate.proof.spthy",
+        "--output-json=accepted_epoch_has_started_candidate.trace.json",
+        "--output-dot=accepted_epoch_has_started_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "accepted_epoch_has_started_candidate.stdout.log",
+        "stderr": "accepted_epoch_has_started_candidate.stderr.log",
+        "time": "accepted_epoch_has_started_candidate.time.txt",
+        "proof": "accepted_epoch_has_started_candidate.proof.spthy",
+        "trace_json": "accepted_epoch_has_started_candidate.trace.json",
+        "trace_dot": "accepted_epoch_has_started_candidate.trace.dot",
+        "trace_pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "trace_png": "accepted_epoch_has_started_candidate.trace.png",
+        "trace_svg": "accepted_epoch_has_started_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "accepted_epoch_has_started_candidate.trace.pdf",
+        "svg": "accepted_epoch_has_started_candidate.trace.svg",
+        "png": "accepted_epoch_has_started_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "diagnostics",
+      "lemma": "historical_update_freshness_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (10 steps)",
+      "steps": 10,
+      "wall_seconds": 1.568,
+      "tamarin_processing_seconds": 1.48,
+      "started_utc": "2026-09-28T15:20:57.342215+00:00",
+      "finished_utc": "2026-09-28T15:20:58.910334+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=historical_update_freshness_candidate",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=historical_update_freshness_candidate.proof.spthy",
+        "--output-json=historical_update_freshness_candidate.trace.json",
+        "--output-dot=historical_update_freshness_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "historical_update_freshness_candidate.stdout.log",
+        "stderr": "historical_update_freshness_candidate.stderr.log",
+        "time": "historical_update_freshness_candidate.time.txt",
+        "proof": "historical_update_freshness_candidate.proof.spthy",
+        "trace_json": "historical_update_freshness_candidate.trace.json",
+        "trace_dot": "historical_update_freshness_candidate.trace.dot",
+        "trace_pdf": "historical_update_freshness_candidate.trace.pdf",
+        "trace_png": "historical_update_freshness_candidate.trace.png",
+        "trace_svg": "historical_update_freshness_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "historical_update_freshness_candidate.trace.pdf",
+        "svg": "historical_update_freshness_candidate.trace.svg",
+        "png": "historical_update_freshness_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "diagnostics",
+      "lemma": "successor_acceptance_injective_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (10 steps)",
+      "steps": 10,
+      "wall_seconds": 2.173,
+      "tamarin_processing_seconds": 2.1,
+      "started_utc": "2026-09-28T15:20:42.412809+00:00",
+      "finished_utc": "2026-09-28T15:20:44.585534+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=successor_acceptance_injective_candidate",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=successor_acceptance_injective_candidate.proof.spthy",
+        "--output-json=successor_acceptance_injective_candidate.trace.json",
+        "--output-dot=successor_acceptance_injective_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "successor_acceptance_injective_candidate.stdout.log",
+        "stderr": "successor_acceptance_injective_candidate.stderr.log",
+        "time": "successor_acceptance_injective_candidate.time.txt",
+        "proof": "successor_acceptance_injective_candidate.proof.spthy",
+        "trace_json": "successor_acceptance_injective_candidate.trace.json",
+        "trace_dot": "successor_acceptance_injective_candidate.trace.dot",
+        "trace_pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "trace_png": "successor_acceptance_injective_candidate.trace.png",
+        "trace_svg": "successor_acceptance_injective_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "successor_acceptance_injective_candidate.trace.pdf",
+        "svg": "successor_acceptance_injective_candidate.trace.svg",
+        "png": "successor_acceptance_injective_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "diagnostics",
+      "lemma": "unconditional_successor_authentication_candidate",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "falsified",
+      "raw_summary": "falsified - found trace (8 steps)",
+      "steps": 8,
+      "wall_seconds": 1.632,
+      "tamarin_processing_seconds": 1.52,
+      "started_utc": "2026-09-28T15:20:40.381013+00:00",
+      "finished_utc": "2026-09-28T15:20:42.012853+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=unconditional_successor_authentication_candidate",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=unconditional_successor_authentication_candidate.proof.spthy",
+        "--output-json=unconditional_successor_authentication_candidate.trace.json",
+        "--output-dot=unconditional_successor_authentication_candidate.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/diagnostics",
+      "artifacts": {
+        "stdout": "unconditional_successor_authentication_candidate.stdout.log",
+        "stderr": "unconditional_successor_authentication_candidate.stderr.log",
+        "time": "unconditional_successor_authentication_candidate.time.txt",
+        "proof": "unconditional_successor_authentication_candidate.proof.spthy",
+        "trace_json": "unconditional_successor_authentication_candidate.trace.json",
+        "trace_dot": "unconditional_successor_authentication_candidate.trace.dot",
+        "trace_pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "trace_png": "unconditional_successor_authentication_candidate.trace.png",
+        "trace_svg": "unconditional_successor_authentication_candidate.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "unconditional_successor_authentication_candidate.trace.pdf",
+        "svg": "unconditional_successor_authentication_candidate.trace.svg",
+        "png": "unconditional_successor_authentication_candidate.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "obligations",
+      "lemma": "domain_reconfiguration_agreement",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (66 steps)",
+      "steps": 66,
+      "wall_seconds": 2.431,
+      "tamarin_processing_seconds": 2.28,
+      "started_utc": "2026-09-28T15:20:36.623428+00:00",
+      "finished_utc": "2026-09-28T15:20:39.054207+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_reconfiguration_agreement",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_reconfiguration_agreement.proof.spthy",
+        "--output-json=domain_reconfiguration_agreement.trace.json",
+        "--output-dot=domain_reconfiguration_agreement.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/obligations",
+      "artifacts": {
+        "stdout": "domain_reconfiguration_agreement.stdout.log",
+        "stderr": "domain_reconfiguration_agreement.stderr.log",
+        "time": "domain_reconfiguration_agreement.time.txt",
+        "proof": "domain_reconfiguration_agreement.proof.spthy",
+        "trace_json": "domain_reconfiguration_agreement.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "obligations",
+      "lemma": "domain_successor_key_authentication",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (17 steps)",
+      "steps": 17,
+      "wall_seconds": 1.425,
+      "tamarin_processing_seconds": 1.33,
+      "started_utc": "2026-09-28T15:20:35.196952+00:00",
+      "finished_utc": "2026-09-28T15:20:36.621583+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=domain_successor_key_authentication",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=domain_successor_key_authentication.proof.spthy",
+        "--output-json=domain_successor_key_authentication.trace.json",
+        "--output-dot=domain_successor_key_authentication.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/obligations",
+      "artifacts": {
+        "stdout": "domain_successor_key_authentication.stdout.log",
+        "stderr": "domain_successor_key_authentication.stderr.log",
+        "time": "domain_successor_key_authentication.time.txt",
+        "proof": "domain_successor_key_authentication.proof.spthy",
+        "trace_json": "domain_successor_key_authentication.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "obligations",
+      "lemma": "epoch_successor_origin",
+      "trace": "all-traces",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (8 steps)",
+      "steps": 8,
+      "wall_seconds": 1.218,
+      "tamarin_processing_seconds": 1.13,
+      "started_utc": "2026-09-28T15:20:33.977644+00:00",
+      "finished_utc": "2026-09-28T15:20:35.195368+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=epoch_successor_origin",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=epoch_successor_origin.proof.spthy",
+        "--output-json=epoch_successor_origin.trace.json",
+        "--output-dot=epoch_successor_origin.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/obligations",
+      "artifacts": {
+        "stdout": "epoch_successor_origin.stdout.log",
+        "stderr": "epoch_successor_origin.stderr.log",
+        "time": "epoch_successor_origin.time.txt",
+        "proof": "epoch_successor_origin.proof.spthy",
+        "trace_json": "epoch_successor_origin.trace.json"
+      },
+      "rendered_graphs": {},
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "reachability",
+      "lemma": "reachable_honest_update",
+      "trace": "exists-trace",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (12 steps)",
+      "steps": 12,
+      "wall_seconds": 1.822,
+      "tamarin_processing_seconds": 1.68,
+      "started_utc": "2026-09-28T15:20:28.737291+00:00",
+      "finished_utc": "2026-09-28T15:20:30.559237+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_honest_update",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_honest_update.proof.spthy",
+        "--output-json=reachable_honest_update.trace.json",
+        "--output-dot=reachable_honest_update.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/reachability",
+      "artifacts": {
+        "stdout": "reachable_honest_update.stdout.log",
+        "stderr": "reachable_honest_update.stderr.log",
+        "time": "reachable_honest_update.time.txt",
+        "proof": "reachable_honest_update.proof.spthy",
+        "trace_json": "reachable_honest_update.trace.json",
+        "trace_dot": "reachable_honest_update.trace.dot",
+        "trace_pdf": "reachable_honest_update.trace.pdf",
+        "trace_png": "reachable_honest_update.trace.png",
+        "trace_svg": "reachable_honest_update.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_honest_update.trace.pdf",
+        "svg": "reachable_honest_update.trace.svg",
+        "png": "reachable_honest_update.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    },
+    {
+      "profile": "two_updates",
+      "case": "reachability",
+      "lemma": "reachable_repeated_acceptance",
+      "trace": "exists-trace",
+      "defines": [
+        "SECOND_UPDATE"
+      ],
+      "model_sha256": "9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2",
+      "status": "verified",
+      "raw_summary": "verified (13 steps)",
+      "steps": 13,
+      "wall_seconds": 2.12,
+      "tamarin_processing_seconds": 2.04,
+      "started_utc": "2026-09-28T15:20:31.108008+00:00",
+      "finished_utc": "2026-09-28T15:20:33.228187+00:00",
+      "timed_out": false,
+      "exit_code": 0,
+      "command": [
+        "tamarin-prover",
+        "epoch_successor.spthy",
+        "--quit-on-warning",
+        "--derivcheck-timeout=300",
+        "--prove=reachable_repeated_acceptance",
+        "-DSECOND_UPDATE",
+        "+RTS",
+        "-N2",
+        "-RTS",
+        "--output=reachable_repeated_acceptance.proof.spthy",
+        "--output-json=reachable_repeated_acceptance.trace.json",
+        "--output-dot=reachable_repeated_acceptance.trace.dot"
+      ],
+      "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/reachability",
+      "artifacts": {
+        "stdout": "reachable_repeated_acceptance.stdout.log",
+        "stderr": "reachable_repeated_acceptance.stderr.log",
+        "time": "reachable_repeated_acceptance.time.txt",
+        "proof": "reachable_repeated_acceptance.proof.spthy",
+        "trace_json": "reachable_repeated_acceptance.trace.json",
+        "trace_dot": "reachable_repeated_acceptance.trace.dot",
+        "trace_pdf": "reachable_repeated_acceptance.trace.pdf",
+        "trace_png": "reachable_repeated_acceptance.trace.png",
+        "trace_svg": "reachable_repeated_acceptance.trace.svg"
+      },
+      "rendered_graphs": {
+        "pdf": "reachable_repeated_acceptance.trace.pdf",
+        "svg": "reachable_repeated_acceptance.trace.svg",
+        "png": "reachable_repeated_acceptance.trace.png"
+      },
+      "stderr_tail": [
+        "[Theory W5_Epoch_Successor] Derivation checks started",
+        "[Theory W5_Epoch_Successor] Derivation checks ended",
+        "[Theory W5_Epoch_Successor] Theory closed",
+        "[Saturating Sources] Step 1 (Max 5)",
+        "[Saturating Sources] Done"
+      ]
+    }
+  ]
+}

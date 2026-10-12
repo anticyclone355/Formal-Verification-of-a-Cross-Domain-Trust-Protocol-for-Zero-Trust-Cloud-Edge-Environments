@@ -1,0 +1,9 @@
+started_utc=2026-09-28T14:36:07.393366+00:00
+finished_utc=2026-09-28T14:36:57.224119+00:00
+wall_seconds=49.831
+timeout=False
+exit_code=0
+profile=ablated_unbounded
+model=repaired_ablated_unbounded.spthy
+command=tamarin-prover repaired_ablated_unbounded.spthy --quit-on-warning --derivcheck-timeout=300 --prove=responder_weak_agreement --output=responder_weak_agreement.proof.spthy --output-json=responder_weak_agreement.trace.json --output-dot=responder_weak_agreement.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/ablated_unbounded

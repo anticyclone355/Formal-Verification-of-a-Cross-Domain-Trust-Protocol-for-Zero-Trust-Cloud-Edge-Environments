@@ -1,0 +1,52 @@
+{
+  "profile": "alternative_context_restricted",
+  "case": "compromise",
+  "lemma": "reachable_owner_identity_compromise",
+  "trace": "exists-trace",
+  "defines": [
+    "MULTI_CONTEXT",
+    "KEEP_POLICY_RESTRICTIONS"
+  ],
+  "model_sha256": "938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06",
+  "status": "verified",
+  "raw_summary": "verified (27 steps)",
+  "steps": 27,
+  "wall_seconds": 16.492,
+  "tamarin_processing_seconds": 16.42,
+  "started_utc": "2026-09-28T14:21:57.598433+00:00",
+  "finished_utc": "2026-09-28T14:22:14.090083+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "policy_decomposition.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_owner_identity_compromise",
+    "-DMULTI_CONTEXT",
+    "-DKEEP_POLICY_RESTRICTIONS",
+    "+RTS",
+    "-N2",
+    "-RTS",
+    "--output=reachable_owner_identity_compromise.proof.spthy",
+    "--output-json=reachable_owner_identity_compromise.trace.json",
+    "--output-dot=reachable_owner_identity_compromise.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/alternative_context_restricted/compromise",
+  "artifacts": {
+    "stdout": "reachable_owner_identity_compromise.stdout.log",
+    "stderr": "reachable_owner_identity_compromise.stderr.log",
+    "time": "reachable_owner_identity_compromise.time.txt",
+    "proof": "reachable_owner_identity_compromise.proof.spthy",
+    "trace_json": "reachable_owner_identity_compromise.trace.json",
+    "trace_dot": "reachable_owner_identity_compromise.trace.dot"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W4_Policy_Decomposition] Derivation checks started",
+    "[Theory W4_Policy_Decomposition] Derivation checks ended",
+    "[Theory W4_Policy_Decomposition] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

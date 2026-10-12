@@ -1,0 +1,26 @@
+
+==============================================================================
+summary of summaries:
+
+analyzed: original_reveal_matrix.spthy
+
+  output:          w1_o_combined_record_decrypt.proof.spthy
+  processing time: 30.33s
+  
+  w1_o_baseline_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_baseline_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_baseline_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_identity_only_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_identity_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_identity_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_pce_only_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_pce_only_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_pce_only_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_pce_only_record_decrypt (exists-trace): analysis incomplete (1 steps)
+  w1_o_combined_reachable (exists-trace): analysis incomplete (1 steps)
+  w1_o_combined_plaintext_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_combined_key_secrecy (all-traces): analysis incomplete (1 steps)
+  w1_o_combined_record_decrypt (exists-trace): verified (26 steps)
+  w1_o_session_key_disclosure_reachable (exists-trace): analysis incomplete (1 steps)
+
+==============================================================================

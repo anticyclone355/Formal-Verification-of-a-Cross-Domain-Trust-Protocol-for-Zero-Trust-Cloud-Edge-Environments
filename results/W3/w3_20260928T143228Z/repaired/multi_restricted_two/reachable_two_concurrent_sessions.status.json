@@ -1,0 +1,50 @@
+{
+  "protocol": "repaired",
+  "profile": "multi_restricted_two",
+  "case": "concurrency",
+  "lemma": "reachable_two_concurrent_sessions",
+  "trace": "exists-trace",
+  "defines": [
+    "MULTI_PARTY",
+    "KEEP_REQUEST",
+    "KEEP_GRANT",
+    "KEEP_SEND",
+    "KEEP_RECEIVE"
+  ],
+  "model_sha256": "8E215453CB006B1932002067ED6EB9BF0F489015AFEDE6E1183DBB4970550F9B",
+  "status": "falsified",
+  "raw_summary": "falsified - no trace found (172 steps)",
+  "steps": 172,
+  "wall_seconds": 267.135,
+  "tamarin_processing_seconds": 266.29,
+  "started_utc": "2026-09-28T15:06:22.462423+00:00",
+  "finished_utc": "2026-09-28T15:10:49.597756+00:00",
+  "timed_out": false,
+  "exit_code": 0,
+  "command": [
+    "tamarin-prover",
+    "repaired_multi_restricted_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--prove=reachable_two_concurrent_sessions",
+    "--output=reachable_two_concurrent_sessions.proof.spthy",
+    "--output-json=reachable_two_concurrent_sessions.trace.json",
+    "--output-dot=reachable_two_concurrent_sessions.trace.dot"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/W3_concurrent_agreement/w3_20260928T143228Z/repaired/multi_restricted_two",
+  "artifacts": {
+    "stdout": "reachable_two_concurrent_sessions.stdout.log",
+    "stderr": "reachable_two_concurrent_sessions.stderr.log",
+    "time": "reachable_two_concurrent_sessions.time.txt",
+    "proof": "reachable_two_concurrent_sessions.proof.spthy",
+    "trace_json": "reachable_two_concurrent_sessions.trace.json"
+  },
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

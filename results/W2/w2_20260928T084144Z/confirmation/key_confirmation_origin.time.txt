@@ -1,0 +1,7 @@
+started_utc=2026-09-28T17:16:32.148218+00:00
+finished_utc=2026-09-28T18:16:34.063577+00:00
+wall_seconds=3601.915
+timeout=True
+exit_code=-9
+command=tamarin-prover repaired_state_lifecycle.spthy --quit-on-warning --derivcheck-timeout=300 --prove=key_confirmation_origin +RTS -N4 -RTS --output=key_confirmation_origin.proof.spthy --output-json=key_confirmation_origin.trace.json --output-dot=key_confirmation_origin.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W2_confirmation_lifecycle/runs/w2_20260928T084144Z/confirmation

@@ -1,0 +1,7 @@
+started_utc=2026-09-28T15:20:42.412809+00:00
+finished_utc=2026-09-28T15:20:44.585534+00:00
+wall_seconds=2.173
+timeout=False
+exit_code=0
+command=tamarin-prover epoch_successor.spthy --quit-on-warning --derivcheck-timeout=300 --prove=successor_acceptance_injective_candidate -DSECOND_UPDATE +RTS -N2 -RTS --output=successor_acceptance_injective_candidate.proof.spthy --output-json=successor_acceptance_injective_candidate.trace.json --output-dot=successor_acceptance_injective_candidate.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W5_epoch_successor/runs/w5_20260928T151942Z/two_updates/diagnostics

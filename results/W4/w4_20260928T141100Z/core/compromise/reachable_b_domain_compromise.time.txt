@@ -1,0 +1,7 @@
+started_utc=2026-09-28T14:12:52.735324+00:00
+finished_utc=2026-09-28T14:13:08.778800+00:00
+wall_seconds=16.043
+timeout=False
+exit_code=0
+command=tamarin-prover policy_decomposition.spthy --quit-on-warning --derivcheck-timeout=300 --prove=reachable_b_domain_compromise +RTS -N2 -RTS --output=reachable_b_domain_compromise.proof.spthy --output-json=reachable_b_domain_compromise.trace.json --output-dot=reachable_b_domain_compromise.trace.dot
+cwd=/home/lab701/qzy/CDDS补充实验/code/v1_auxiliary/W4_policy_decomposition/runs/w4_20260928T141100Z/core/compromise
