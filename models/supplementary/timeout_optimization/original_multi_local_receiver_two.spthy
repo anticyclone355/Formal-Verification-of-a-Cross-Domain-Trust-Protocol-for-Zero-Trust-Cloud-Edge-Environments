@@ -1,7 +1,3 @@
-/* Timeout optimization candidate, 2026-09-29. NOT Tamarin-verified.
-   Derived from executed snapshot; see README.md and provenance.json. */
-
-
 theory W3_original_Concurrent_Agreement
 
 begin

@@ -273,8 +273,8 @@ timeout 1800 tamarin-prover models/original/CDDS_PCE_original_full.spthy \
 | `repaired_multi_restricted_two.spthy` | — | — | 16 | `authorization_before_send`, `initiator_aliveness`, `initiator_injective_agreement`, `initiator_noninjective_agreement`, `initiator_weak_agreement`, `reachable_session`, `reachable_two_concurrent_sessions`, `reachable_two_distinct_contexts`, `repaired_data_origin_authentication`, `replay_acceptance_exclusion`, `responder_aliveness`, `responder_injective_request_agreement`, `responder_noninjective_request_agreement`, `responder_request_replay_exclusion`, `responder_weak_agreement`, `unknown_key_share_exclusion` |
 | `repaired_restricted_two.spthy` | — | — | 14 | `authorization_before_send`, `initiator_aliveness`, `initiator_injective_agreement`, `initiator_noninjective_agreement`, `initiator_weak_agreement`, `reachable_session`, `reachable_two_concurrent_sessions`, `repaired_data_origin_authentication`, `replay_acceptance_exclusion`, `responder_aliveness`, `responder_injective_request_agreement`, `responder_noninjective_request_agreement`, `responder_request_replay_exclusion`, `responder_weak_agreement` |
 
-> W3 的模型用 `#ifdef` 表达配置，但 `LOCAL_RECEIVER × UNBOUNDED` 的组合
-> `LOCAL_RECEIVER × UNBOUNDED` 的组合需要 `#ifndef`／`#elif`，或让 `#ifdef` 落在
+> W3 的模型用 `#ifdef` 表达配置，但 `LOCAL_RECEIVER × UNBOUNDED` 的组合需要
+> `#ifndef`／`#elif`，或让 `#ifdef` 落在
 > `#else` 分支内，而 Tamarin 预处理器支持的是更简单的条件展开。因此这里给出
 > **按配置展开后的具体模型**：它们就是当时的运行输入，归档 `model_sha256` 与这 13 份一一对应。
 
@@ -566,6 +566,7 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | W5 | `AUTHORED: NOT TAMARIN PARSED OR PROVED.` |
 | S1 | `AUTHORED, NOT TAMARIN PARSED OR PROVED.` |
 | W3（13 份） | `AUTHORED, NOT TAMARIN PARSED OR PROVED. See ../README.md.` |
+| timeout_optimization（6 份） | `/* Timeout optimization candidate, 2026-09-29. NOT Tamarin-verified. */` 及续行（另删去其后的空行，空行数见下表「头空行」列） |
 
 > 注：W3 的 13 份模型在归档换行转换后每行之后多出一个空行；核对 W3 哈希时，
 > 需先把相邻空行坍缩回单倍行距，再补回上表所列行并转成 CRCRLF。
@@ -594,23 +595,31 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | `W4_policy_decomposition/policy_decomposition.spthy` | CRLF | `883ae8c3a124f7a775dc9dd7f8d98f0c9bd70891820ac6b453310c691a17af62` | `938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06` | CRLF ✅ |
 | `W5_epoch_successor/epoch_successor.spthy` | CRLF | `7270f738253b9b314025f978305a7f2da45236b5aeafe79884cc4d7a9c0d8f93` | `9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2` | CRLF ✅ |
 
-`timeout_optimization/` 下的 5 份优化重跑模型与上表同名配置模型**仅差事实命名**
-（事实名内编码一次性泄露权限），是重跑批次 `opt_20260928T175925Z` 的实际运行输入。
-它们**未删除任何状态注释行**（文件头本无起草期戳），核对哈希只需 LF→CRLF 换行转换；
-注意该批次 `status.json` 的 `model_sha256` 以**小写**十六进制存储：
+`timeout_optimization/` 下的 6 份优化重跑模型与上表同名配置模型**仅差事实命名**
+（事实名内编码一次性泄露权限），是重跑批次 `opt_20260928T175925Z` 与 `w2all_20260928T225601Z`
+的实际运行输入。2026-10-13 整理发布时，删除了各文件头部的两行起草期状态注释
+（`/* Timeout optimization candidate, 2026-09-29. NOT Tamarin-verified. */` 及其续行）
+及其后的空行。核对哈希时先补回该两行注释，再按「头空行」列补上空行，
+转成 CRLF 计算 SHA-256，即可与归档 `model_sha256` 对上。
+该两批次 `status.json` 的 `model_sha256` 以**小写**十六进制存储：
 
-| 模型文件 | 归档原始换行 | SHA-256（本仓库 LF 字节） | 归档 `model_sha256` | 匹配 |
-|---|---|---|---|---|
-| `timeout_optimization/repaired_ablated_two.spthy` | CRLF | `7a65316a7c3444f9814356c65ee3d804d2f27de7f2a67fc047f2711831f785b5` | `f17cc98f281a455bd5d5099ea45dfacbd1852482f01aed9ccddaf366c6c9491c` | CRLF ✅ |
-| `timeout_optimization/repaired_multi_ablated_two.spthy` | CRLF | `980265a2db409a4f84b2ffc3e417521a851423ac8a9f8602dcd8256136fdeb58` | `d61606dd5fec5ba0b7c1c11295198533630b9a40c97c8860d40b8d7d6b8bc112` | CRLF ✅ |
-| `timeout_optimization/repaired_multi_restricted_two.spthy` | CRLF | `8da9d873b751253f1e05ab5e2cff86e0c747f41a9d665e5eb5a4eb181a5e107e` | `78f971ca026ba9f62fae946f3ae37805c6e1c1b32580ffa1be991c3e42049337` | CRLF ✅ |
-| `timeout_optimization/original_multi_local_receiver_two.spthy` | CRLF | `940e266a2f614ef2e92d1440093c968d35a648b7338a519f2e55bfc384dc06c7` | `2e5f97231d82f8d188c0825b997b0b9c82ad5d2f23c128aea7523f5a677088e5` | CRLF ✅ |
-| `timeout_optimization/repaired_reveal_matrix.spthy` | CRLF | `06bb40f59fcaf0d03f7341db879e102d23e630aae5f6fdf0c5995f9e863c1899` | `92ca718daef77a0be2c06825cbb3cc19718d318311034cd36662c656975b6966` | CRLF ✅ |
-| `timeout_optimization/repaired_state_lifecycle.spthy` | CRLF | `81768f8da08f2815e0a6e9f7584fab070b3f6e2a31390f1df10b2703453f8b18` | `c0666964506c83cce6f016740ab007732518891a27631332fa6954cda73cf2f0` | CRLF ✅ |
+| 模型文件 | 头空行 | SHA-256（本仓库 LF 字节） | 归档 `model_sha256` | 匹配 |
+|---|---:|---|---|---|
+| `timeout_optimization/repaired_ablated_two.spthy` | 2 | `157003dabfad9a7128c1a917a4c6f398d97ffc89a82ba732f249847611272893` | `f17cc98f281a455bd5d5099ea45dfacbd1852482f01aed9ccddaf366c6c9491c` | CRLF ✅ |
+| `timeout_optimization/repaired_multi_ablated_two.spthy` | 2 | `1916e2834aa79e2620910957a83c79af630a8efe6d4a650a2fe47e1b243cccf8` | `d61606dd5fec5ba0b7c1c11295198533630b9a40c97c8860d40b8d7d6b8bc112` | CRLF ✅ |
+| `timeout_optimization/repaired_multi_restricted_two.spthy` | 2 | `8b84084b435ce8d52a61c5b3c0f2aed4ab10d4cd89188c5b94327c9f1a2e6996` | `78f971ca026ba9f62fae946f3ae37805c6e1c1b32580ffa1be991c3e42049337` | CRLF ✅ |
+| `timeout_optimization/original_multi_local_receiver_two.spthy` | 2 | `96c5580b4f392d4d023b48e8588cc499e93774dbadc928918b574339044c321a` | `2e5f97231d82f8d188c0825b997b0b9c82ad5d2f23c128aea7523f5a677088e5` | CRLF ✅ |
+| `timeout_optimization/repaired_reveal_matrix.spthy` | 1 | `f3ff3a1705067928bf698480ed6b03635df6097b67c9ddc9709887cc0b2fff9f` | `92ca718daef77a0be2c06825cbb3cc19718d318311034cd36662c656975b6966` | CRLF ✅ |
+| `timeout_optimization/repaired_state_lifecycle.spthy` | 1 | `eac7671c598df9f25c6fa66391b92d1362038242a71f83b99817cab34f32ddc0` | `c0666964506c83cce6f016740ab007732518891a27631332fa6954cda73cf2f0` | CRLF ✅ |
 
 结果文件（`status.json`、日志、trace 产物与逐条模型快照）未做任何内容改写，
 仓库按 §5 口径统一以 LF 存储；重跑批次内的 `.spthy` 快照在暂存盘为 CRLF，
 其归档哈希对应 CRLF 字节（§5 表）。
+
+仓库根目录的 **`SHA256SUMS`** 提供全部 2336 个文件（模型＋结果＋本 README）的
+逐文件 SHA-256（按本仓库 LF 存档字节计算），在仓库根目录执行
+`sha256sum -c SHA256SUMS`（Windows 下可用 `certutil` 或 Git Bash 的 `sha256sum`）
+即可整包校验工件身份。
 
 > **文件命名**：模型文件名不带版本号，便于长期引用与稳定链接。原协议模型对应归档中的
 > `CDDS_PCE_original_full_v4.spthy`，修复模型对应 `CDDS_AECDHE_repaired_optimized_v8.spthy`；
@@ -626,10 +635,10 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | # | 事项 | 口径 |
 |---|---|---|
 | 1 | W2 批次 | 以本仓库归档的逐条记录为准：27 条 `status.json`（verified 12／timeout 15）。同批次 `run_manifest.json` 记 finished 28，作者《实验总账》记性质数 30、已结算 25（成立 19／反例 2／未判定 4）；三套口径并列可查 |
-| 2 | W1 范围 | W1 声明 66 条性质，本仓库收录归档中已结算的 58 条（verified 52／falsified 6）；作者《实验总账》另记 8 条未结算，其 `unsettled` 清单见该批次 `包索引.json` |
+| 2 | W1 范围 | W1 声明 66 条性质，本仓库收录归档中已结算的 58 条（verified 52／falsified 6）；作者《实验总账》另记 8 条未结算（作者侧记录，未随本仓库归档） |
 | 3 | 原协议 lemma 名 | 以本仓库 `CDDS_PCE_original_full.spthy` 中的声明为准（含 `forward_secrecy_x`）；更早的 `v0/proof_logs/v4验证结果汇总.md` 使用过不同的命名 |
 | 4 | W1 长预算 | 驱动中的预算覆盖值为 7200 s（`historical_pce_after_epoch`、`successor_only`）与 10800 s（`key_lifecycle`）；每条归档条目的完整墙钟时间与命令行见对应 `time.txt` |
-| 5 | W2 批次身份 | 收录批次为 `w2_20260928T084144Z`，批次内的暂停与恢复过程完整保留在该组的 `pause_record.md` |
+| 5 | W2 批次身份 | 收录批次为 `w2_20260928T084144Z`；该批次运行期的暂停与恢复记录保留在作者侧，未随本仓库归档 |
 | 6 | 证明文件覆盖 | W1 58、W4 58、W5 54、W3 133、S1 26、W2 12 条附 `proof.spthy`；超预算条目按设计不产出证明文件，其未判定状态记录在 `status.json` 的 `timeout` 字段 |
 | 7 | W3 合并口径 | 回复信的并发研究汇总合并原批次与重跑批次：144（120 verified／12 falsified／12 timeout）＋重跑结算 4（2 verified／2 falsified）＝ **136 条有结论（122／14），8 条未判定**。另有 2 条重跑目标（`multi_ablated_two`、`multi_restricted_two` 的 `reachable_two_distinct_contexts`）stdout 已打印 verified 但进程在渲染阶段超预算，按 `status.json` 保守口径未计入，证据未改写（见 §3.4 重跑小节注） |
 | 8 | W2 合并口径 | 回复信所称 "W2 batch `w2_20260928T084144Z` and its optimized rerun" 的重跑即 `w2all_20260928T225601Z`（结算 3 条：`key_confirmation_agreement`／`key_confirmation_origin` 各 11 步、`erased_secrets_have_prior_creation` 55 步）。合并视图见 `results/timeout_optimization/W2合并结果.{json,md}`：30 条引理中 15 verified、15 未结算；§6 第 1 项所列三套历史口径不因此改变 |
