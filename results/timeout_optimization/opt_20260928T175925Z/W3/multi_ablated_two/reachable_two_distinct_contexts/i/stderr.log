@@ -1,0 +1,11 @@
+maude tool: 'maude'
+ checking version: 3.1. OK.
+ checking installation: OK.
+[Theory W3_repaired_Concurrent_Agreement] Theory loaded
+[Theory W3_repaired_Concurrent_Agreement] Theory translated
+[Theory W3_repaired_Concurrent_Agreement] Derivation checks started
+[Theory W3_original_Concurrent_Agreement] Derivation checks ended
+[Theory W3_original_Concurrent_Agreement] Theory closed
+[Saturating Sources] Step 1 (Max 5)
+[Saturating Sources] Step 2 (Max 5)
+[Saturating Sources] Done

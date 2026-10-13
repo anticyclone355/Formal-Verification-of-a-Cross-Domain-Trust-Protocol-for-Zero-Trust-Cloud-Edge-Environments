@@ -1,0 +1,57 @@
+{
+  "group": "W3",
+  "protocol": "original",
+  "profile": "multi_local_receiver_two",
+  "lemma": "reachable_two_distinct_contexts",
+  "trace": "exists-trace",
+  "previous_status": "timeout",
+  "model": "models/W3/original_multi_local_receiver_two.spthy",
+  "defines": [],
+  "default_run": true,
+  "heuristics": [
+    "i",
+    "s",
+    "S"
+  ],
+  "status": "verified",
+  "steps": 26,
+  "heuristic": "i",
+  "seconds": 1212.209,
+  "started_utc": "2026-09-28T17:59:25.331689+00:00",
+  "exit_code": 0,
+  "timed_out": false,
+  "model_sha256": "2e5f97231d82f8d188c0825b997b0b9c82ad5d2f23c128aea7523f5a677088e5",
+  "command": [
+    "tamarin-prover",
+    "original_multi_local_receiver_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--heuristic=i",
+    "--prove=reachable_two_distinct_contexts",
+    "--output=result.proof.spthy",
+    "--output-json=result.trace.json",
+    "--output-dot=result.trace.dot",
+    "+RTS",
+    "-N2",
+    "-M16G",
+    "-RTS"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/timeout_optimization/opt_20260928T175925Z/W3/multi_local_receiver_two/reachable_two_distinct_contexts/i",
+  "rendered_graphs": {
+    "png": "result.trace.png",
+    "svg": "result.trace.svg",
+    "pdf": "result.trace.pdf"
+  },
+  "stderr_tail": [
+    "maude tool: 'maude'",
+    " checking version: 3.1. OK.",
+    " checking installation: OK.",
+    "[Theory W3_original_Concurrent_Agreement] Theory loaded",
+    "[Theory W3_original_Concurrent_Agreement] Theory translated",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_original_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_original_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

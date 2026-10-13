@@ -1,0 +1,53 @@
+{
+  "group": "W3",
+  "protocol": "repaired",
+  "profile": "multi_ablated_two",
+  "lemma": "reachable_two_concurrent_sessions",
+  "trace": "exists-trace",
+  "previous_status": "timeout",
+  "model": "models/W3/repaired_multi_ablated_two.spthy",
+  "defines": [],
+  "default_run": true,
+  "heuristics": [
+    "i",
+    "s",
+    "S"
+  ],
+  "status": "timeout",
+  "steps": null,
+  "heuristic": "S",
+  "seconds": 1800.14,
+  "started_utc": "2026-09-28T18:59:25.830132+00:00",
+  "exit_code": -9,
+  "timed_out": true,
+  "model_sha256": "d61606dd5fec5ba0b7c1c11295198533630b9a40c97c8860d40b8d7d6b8bc112",
+  "command": [
+    "tamarin-prover",
+    "repaired_multi_ablated_two.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--heuristic=S",
+    "--prove=reachable_two_concurrent_sessions",
+    "--output=result.proof.spthy",
+    "--output-json=result.trace.json",
+    "--output-dot=result.trace.dot",
+    "+RTS",
+    "-N2",
+    "-M16G",
+    "-RTS"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/timeout_optimization/opt_20260928T175925Z/W3/multi_ablated_two/reachable_two_concurrent_sessions/S",
+  "rendered_graphs": {},
+  "stderr_tail": [
+    " checking version: 3.1. OK.",
+    " checking installation: OK.",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory loaded",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory translated",
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks started",
+    "[Theory W3_repaired_Concurrent_Agreement] Derivation checks ended",
+    "[Theory W3_repaired_Concurrent_Agreement] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Step 2 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

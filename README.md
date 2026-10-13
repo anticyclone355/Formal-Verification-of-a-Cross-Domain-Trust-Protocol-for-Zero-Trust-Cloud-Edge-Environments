@@ -13,8 +13,8 @@
 |---|---|---:|
 | `models/original/` | 原协议完整模型（PCE 数据路径）——论文漏洞结论所依据的对照模型 | 1 |
 | `models/repaired/` | AECDHE 修复模型当前最新版，供复现与二次分析 | 1 |
-| `models/supplementary/` | 六组补充实验模型（W1–W5、S1） | 19 |
-| `results/` | 六组补充实验的逐条运行结果：结论、证明、原始日志与计时 | 1856 |
+| `models/supplementary/` | 六组补充实验模型（W1–W5、S1）＋ 5 份优化重跑模型 | 24 |
+| `results/` | 六组补充实验的逐条运行结果：结论、证明、原始日志与计时；另含 W3/W1 timeout 条目的优化重跑批次 `opt_20260928T175925Z`（原字节归档） | 2030 |
 
 三份模型都以完整源码给出。`results/` 对 W1–W5 与 S1 的每一条性质给出结论、
 证明步数、可重放证明文件、原始 stdout／stderr 与完整墙钟时间；
@@ -27,6 +27,7 @@
 | **W1** | 历史明文恢复究竟由哪把密钥造成 | `models/supplementary/W1_reveal_matrix` | 66 | 58 | falsified 6，verified 52 |
 | **W2** | 擦除后密钥是否确实不可读、确认绑定是否成立 | `models/supplementary/W2_confirmation_lifecycle` | 30 | 27 | timeout 15，verified 12 |
 | **W3** | 唯一性限制是建模假设还是协议真实条件 | `models/supplementary/W3_concurrent_agreement` | 144 | 144 | falsified 12，timeout 12，verified 120 |
+| **W3 重跑** | 原批次 timeout 条目的优化重试（改写事实名消除状态回环） | `models/supplementary/timeout_optimization` | 24 | 24 | falsified 2，timeout 20，verified 2 |
 | **W4** | 复合一致性能否分解为可验证义务 | `models/supplementary/W4_policy_decomposition` | 58 | 58 | verified 58 |
 | **W5** | 后继密钥来源与重配置一致性 | `models/supplementary/W5_epoch_successor` | 54 | 54 | falsified 16，verified 38 |
 | **S1** | 删除注册—策略顺序限制后目标条件是否仍可导出 | `models/supplementary/S1_restriction_sensitivity` | 28 | 28 | timeout 2，verified 26 |
@@ -50,14 +51,16 @@
 │       ├── W3_concurrent_agreement/   13 份按配置展开的模型
 │       ├── W4_policy_decomposition/   policy_decomposition.spthy
 │       ├── W5_epoch_successor/        epoch_successor.spthy
-│       └── S1_restriction_sensitivity/registration_policy_order.spthy
+│       ├── S1_restriction_sensitivity/registration_policy_order.spthy
+│       └── timeout_optimization/      5 份优化重跑模型（4 份 W3 配置 ＋ W1 修复矩阵）
 └── results/
     ├── W1/w1_20260928T105641Z/{original,repaired}/<场景>/<性质>.{status.json,proof.spthy,...}
     ├── W2/w2_20260928T084144Z/<场景>/…
     ├── W3/w3_20260928T143228Z/{original,repaired}/<配置>/…
     ├── W4/w4_20260928T141100Z/<profile>/<case>/…
     ├── W5/w5_20260928T151942Z/<profile>/<case>/…
-    └── S1/_run/<profile>/<case>/…
+    ├── S1/_run/<profile>/<case>/…
+    └── timeout_optimization/opt_20260928T175925Z/{W1,W2,W3}/<配置>/<性质>/<启发式>/…
 ```
 
 每组 `results/<组>/` 根下另有若干组级运行记录（`commands.json`、`summary.json`、
@@ -201,6 +204,7 @@ timeout 1800 tamarin-prover models/original/CDDS_PCE_original_full.spthy \
 | W1 | `models/supplementary/W1_reveal_matrix` | `w1_20260928T105641Z` | 1800 s（另有覆盖，见表下说明） | 16 | — |
 | W2 | `models/supplementary/W2_confirmation_lifecycle` | `w2_20260928T084144Z` | 3600 s | 4 | `+RTS -N4` |
 | W3 | `models/supplementary/W3_concurrent_agreement` | `w3_20260928T143228Z` | 3600 s | 8 | — |
+| W3 重跑 | `models/supplementary/timeout_optimization` | `opt_20260928T175925Z` | 1800 s／启发式（i/s/S 串行重试） | — | — |
 | W4 | `models/supplementary/W4_policy_decomposition` | `w4_20260928T141100Z` | 1800 s | 1 | `+RTS -N2` |
 | W5 | `models/supplementary/W5_epoch_successor` | `w5_20260928T151942Z` | 1800 s | 1 | `+RTS -N2` |
 | S1 | `models/supplementary/S1_restriction_sensitivity` | `s1_20260929T080037Z` | 600 s | — | — |
@@ -268,6 +272,35 @@ timeout 1800 tamarin-prover models/original/CDDS_PCE_original_full.spthy \
 > `LOCAL_RECEIVER × UNBOUNDED` 的组合需要 `#ifndef`／`#elif`，或让 `#ifdef` 落在
 > `#else` 分支内，而 Tamarin 预处理器支持的是更简单的条件展开。因此这里给出
 > **按配置展开后的具体模型**：它们就是当时的运行输入，归档 `model_sha256` 与这 13 份一一对应。
+
+#### W3 重跑批次（timeout 条目的优化重试）
+
+模型目录：`models/supplementary/timeout_optimization`；归档批次：`results/timeout_optimization/opt_20260928T175925Z`。
+
+原批次中 12 条 W3 条目在 3600 s 预算内未判定。重跑批次对其中 10 条 W3 目标
+（外加 8 条 W1 跨 epoch／后继凭据目标）改用**优化模型**重试：优化模型与上表同名配置模型
+仅差事实命名（在事实名内编码一次性泄露权限，消除同名状态回环），逐一对应关系见 §5 哈希表。
+每条按 `i`／`s`／`S` 启发式串行重试，单启发式预算 1800 s。
+
+下表由归档的 24 份 `status.json` 逐条还原：
+
+| 目标（配置／lemma） | trace 类型 | 结论 | 步数 |
+|---|---|---|---:|
+| `ablated_two`／`reachable_two_concurrent_sessions` | exists-trace | verified | 31 |
+| `multi_local_receiver_two`／`reachable_two_distinct_contexts` | exists-trace | verified | 26 |
+| `multi_ablated_two`／`responder_injective_request_agreement` | all-traces | falsified | 23 |
+| `multi_ablated_two`／`responder_request_replay_exclusion` | all-traces | falsified | 23 |
+| 其余 20 份重试记录（含 8 条 W1 目标） | — | timeout | — |
+
+**合并口径（与回复信一致）**：原批次 144 条＝120 verified ＋ 12 falsified ＋ 12 timeout，
+重跑结算 4 条（2 verified 见证 ＋ 2 falsified responder 候选），合并后并发研究共
+**136 条有结论（122 verified ＋ 14 falsified），8 条仍未判定**。
+
+> 注：`multi_ablated_two` 与 `multi_restricted_two` 的 `reachable_two_distinct_contexts`
+> 两条，`stdout.log` 已打印 `verified (39 steps)` 且 trace 产物完整，但进程在渲染阶段
+> 撞上 1800 s 预算被终止，`status.json` 按保守口径记 `timeout`（`summary.json` 记 verified）。
+> 按 `status.json` 口径**不计入**上述合并数；原始证据（`stdout.log`、`result.trace.json`、
+> `summary.json`）均在归档中，未做任何改写。
 
 #### W4 跨域策略一致性分解
 
@@ -434,6 +467,7 @@ dot -Tpdf <lemma>.trace.dot -o <lemma>.trace.pdf
 | W1 | 58 | 52 | 6 | 0 |
 | W2 | 27 | 12 | 0 | 15 |
 | W3 | 144 | 120 | 12 | 12 |
+| W3 重跑（`opt_20260928T175925Z`） | 24 | 2 | 2 | 20 |
 | W4 | 58 | 58 | 0 | 0 |
 | W5 | 54 | 38 | 16 | 0 |
 | S1 | 28 | 26 | 0 | 2 |
@@ -474,6 +508,7 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | W1 长期凭据泄露矩阵（11 组组合） | 修复矩阵概括分类 |
 | W2 确认对应与擦除后保密 | 确认绑定一节、擦除边界一节 |
 | W3 限制消融（144 项） | 建模限制讨论、认证性质与修复讨论 |
+| W3 重跑批次（合并口径 136 条有结论） | 回复信并发研究汇总（122 verified ＋ 14 falsified，8 条未判定） |
 | W4 六项策略一致性分解义务 | 跨域策略链一节 |
 | W5 后继密钥与重配置义务 | 后继密钥与重配置一节 |
 | S1 顺序限制消融 | 建模限制讨论 |
@@ -535,7 +570,22 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | `W4_policy_decomposition/policy_decomposition.spthy` | CRLF | `883ae8c3a124f7a775dc9dd7f8d98f0c9bd70891820ac6b453310c691a17af62` | `938E678F07C657511627B12B543235AC9FD0639E0FDA8FFBF31F7AEDA18DEE06` | CRLF ✅ |
 | `W5_epoch_successor/epoch_successor.spthy` | CRLF | `7270f738253b9b314025f978305a7f2da45236b5aeafe79884cc4d7a9c0d8f93` | `9FF5A592164B07ADD83BA67E234952C03E982393DC91E6BFF23265EBE6083BE2` | CRLF ✅ |
 
-结果文件保留了归档时的原始字节（均为 LF），未做任何改写。
+`timeout_optimization/` 下的 5 份优化重跑模型与上表同名配置模型**仅差事实命名**
+（事实名内编码一次性泄露权限），是重跑批次 `opt_20260928T175925Z` 的实际运行输入。
+它们**未删除任何状态注释行**（文件头本无起草期戳），核对哈希只需 LF→CRLF 换行转换；
+注意该批次 `status.json` 的 `model_sha256` 以**小写**十六进制存储：
+
+| 模型文件 | 归档原始换行 | SHA-256（本仓库 LF 字节） | 归档 `model_sha256` | 匹配 |
+|---|---|---|---|---|
+| `timeout_optimization/repaired_ablated_two.spthy` | CRLF | `7a65316a7c3444f9814356c65ee3d804d2f27de7f2a67fc047f2711831f785b5` | `f17cc98f281a455bd5d5099ea45dfacbd1852482f01aed9ccddaf366c6c9491c` | CRLF ✅ |
+| `timeout_optimization/repaired_multi_ablated_two.spthy` | CRLF | `980265a2db409a4f84b2ffc3e417521a851423ac8a9f8602dcd8256136fdeb58` | `d61606dd5fec5ba0b7c1c11295198533630b9a40c97c8860d40b8d7d6b8bc112` | CRLF ✅ |
+| `timeout_optimization/repaired_multi_restricted_two.spthy` | CRLF | `8da9d873b751253f1e05ab5e2cff86e0c747f41a9d665e5eb5a4eb181a5e107e` | `78f971ca026ba9f62fae946f3ae37805c6e1c1b32580ffa1be991c3e42049337` | CRLF ✅ |
+| `timeout_optimization/original_multi_local_receiver_two.spthy` | CRLF | `940e266a2f614ef2e92d1440093c968d35a648b7338a519f2e55bfc384dc06c7` | `2e5f97231d82f8d188c0825b997b0b9c82ad5d2f23c128aea7523f5a677088e5` | CRLF ✅ |
+| `timeout_optimization/repaired_reveal_matrix.spthy` | CRLF | `06bb40f59fcaf0d03f7341db879e102d23e630aae5f6fdf0c5995f9e863c1899` | `92ca718daef77a0be2c06825cbb3cc19718d318311034cd36662c656975b6966` | CRLF ✅ |
+
+结果文件（`status.json`、日志、trace 产物与逐条模型快照）未做任何内容改写，
+仓库按 §5 口径统一以 LF 存储；重跑批次内的 `.spthy` 快照在暂存盘为 CRLF，
+其归档哈希对应 CRLF 字节（§5 表）。
 
 > **文件命名**：模型文件名不带版本号，便于长期引用与稳定链接。原协议模型对应归档中的
 > `CDDS_PCE_original_full_v4.spthy`，修复模型对应 `CDDS_AECDHE_repaired_optimized_v8.spthy`；
@@ -556,6 +606,7 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | 4 | W1 长预算 | 驱动中的预算覆盖值为 7200 s（`historical_pce_after_epoch`、`successor_only`）与 10800 s（`key_lifecycle`）；每条归档条目的完整墙钟时间与命令行见对应 `time.txt` |
 | 5 | W2 批次身份 | 收录批次为 `w2_20260928T084144Z`，批次内的暂停与恢复过程完整保留在该组的 `pause_record.md` |
 | 6 | 证明文件覆盖 | W1 58、W4 58、W5 54、W3 133、S1 26、W2 12 条附 `proof.spthy`；超预算条目按设计不产出证明文件，其未判定状态记录在 `status.json` 的 `timeout` 字段 |
+| 7 | W3 合并口径 | 回复信的并发研究汇总合并原批次与重跑批次：144（120 verified／12 falsified／12 timeout）＋重跑结算 4（2 verified／2 falsified）＝ **136 条有结论（122／14），8 条未判定**。另有 2 条重跑目标（`multi_ablated_two`、`multi_restricted_two` 的 `reachable_two_distinct_contexts`）stdout 已打印 verified 但进程在渲染阶段超预算，按 `status.json` 保守口径未计入，证据未改写（见 §3.4 重跑小节注） |
 
 ---
 

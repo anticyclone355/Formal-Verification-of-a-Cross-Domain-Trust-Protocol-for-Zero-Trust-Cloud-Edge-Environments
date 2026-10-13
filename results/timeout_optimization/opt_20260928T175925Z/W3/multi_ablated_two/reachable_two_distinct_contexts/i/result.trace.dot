@@ -1,0 +1,259 @@
+digraph "trace_W3_original_Concurrent_Agreement_SL2-AS0-CL0-A1-C1-NB_reachable_two_distinct_contexts-W3_Setup_case_1-W3_Setup_case_2-case_1-case_1-W3_Setup_case_1-W3_Setup-W3_Setup-W3_Setup-W3_Setup-W3_Setup_case_3-W3_Setup-W3_Setup-W3_Setup-W3_Setup-split_case_2-Object_Data_Encryption-split_case_2-Object_Data_Encryption-Subject_Access_Request-Subject_Access_Request-Object_Data_Encryption-Object_Data_Encryption-W3_Setup-W3_Setup-Domain_Access_Verification-Domain_Access_Verification-W3_Setup_case_1-Object_Data_Encryption-Object_Data_Encryption-W3_Setup_case_1-W3_Setup_case_1-W3_Setup_case_1-W3_Setup_case_1-Domain_Access_Verification-Domain_Access_Verification_case_1-Subject_Access_Request_case_1-Domain_Access_Verification" {
+nodesep="0.8";
+ranksep="0.8";
+sep="4";
+splines="true";
+overlap="false";
+pack="true";
+packmode="cluster";
+concentrate="true";
+compound="true";
+remincross="true";
+mclimit="10";
+nslimit="20";
+nslimit1="20";
+ordering="out";
+rankdir="TB";
+showboxes="false";
+clusterrank="local";
+node[fontsize="8",fontname="Helvetica",width="0.3",height="0.2",margin="0.05,0.05",shape="ellipse"];
+edge[fontsize="8",fontname="Helvetica",penwidth="1.5",arrowsize="0.5",color="black",style="solid",weight="8"];
+n0[label="#vk : coerce[!KU( SI3 )]",shape="ellipse"];
+n1[label="#vl : irecv",shape="ellipse"];
+n37[shape="record",label="{{<n2> Fr( ~si )|<n3> Fr( ~pi )|<n4> Fr( ~sr )|<n5> Fr( ~pr )|<n6> Fr( ~da )|<n7> Fr( ~db )|<n8> Fr( ~si2 )|<n9> Fr( ~pi2 )|<n10> Fr( ~sr2 )|<n11> Fr( ~pr2 )}|{<n12> #vr : W3_Setup[W3Init( )]}|{<n13> !Subject( RE2, DO2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, ~si, ~pi,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si), ppk(~pi)\l)\l|<n14> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l|<n15> !Domain( DO2, %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~da, pk(~da)\l)\l|<n16> !Domain( DO1, %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~db, pk(~db)\l)\l|<n17> !Policy( DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, RE2, 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1'\l)\l|<n18> !W3Ready( RE2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'owner', DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\l)\l|<n19> !Subject( RE1, DO2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, ~si2, ~pi2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si2), ppk(~pi2)\l)\l|<n20> !Subject( 'owner_2',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr2, ~pr2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr2), ppk(~pr2)\l)\l|<n21> !Policy( DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, RE2, 'owner_2',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1'\l)\l|<n22> !Policy( DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, RE1, 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1'\l)\l|<n23> !Policy( DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, RE1, 'owner_2',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1'\l)\l|<n24> !W3Ready( RE2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'owner_2', DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\l)\l|<n25> !W3Ready( RE1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'owner', DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\l)\l|<n26> !W3Ready( RE1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'owner_2', DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\l)\l|<n27> Out( \<pk(~si2), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi2), %1, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Subject Pk'\>\l)\l|<n28> Out( \<pk(~sr2), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pr2), %1, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Subject Pk'\>\l)\l|<n29> Out( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<pk(~si2), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi2), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI4, pk(~da), SU1\>\l)\l|<n30> Out( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<pk(~sr2), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pr2), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign(\<pk(~sr2), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pr2), %1\>,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~db), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), SU1\>\l)\l|<n31> W3Budget( )|<n32> W3Budget( )|<n33> Out( \<pk(~si), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi), %1, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Subject Pk'\>\l)\l|<n34> Out( \<pk(~sr), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pr), %1, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Subject Pk'\>\l)\l|<n35> Out( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<pk(~si), ppk(~pi), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI5, pk(~da), SU1\>\l)\l|<n36> Out( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<pk(~sr), ppk(~pr), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign(\<pk(~sr), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pr), %1\>,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~db), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), SU1\>\l)\l}}",fillcolor="#c7d998",style="filled",fontcolor="black",role="Undefined"];
+n38[label="#vf.1 : isend",shape="ellipse"];
+n39[label="#vk.1 : coerce[!KU( SI1 )]",shape="ellipse"];
+n40[label="#vl.1 : irecv",shape="ellipse"];
+n41[label="#vk.2 : coerce[!KU( PE2 )]",shape="ellipse"];
+n42[label="#vl.2 : irecv",shape="ellipse"];
+n43[label="#vf.3 : isend",shape="ellipse"];
+n44[label="#vk.3 : coerce[!KU( PE1 )]",shape="ellipse"];
+n45[label="#vl.3 : irecv",shape="ellipse"];
+n46[label="#vf.4 : isend",shape="ellipse"];
+n47[label="#vk.4 : coerce[!KU( SI5 )]",shape="ellipse"];
+n48[label="#vl.4 : irecv",shape="ellipse"];
+n49[label="#vf.5 : isend",shape="ellipse"];
+n50[label="#vk.5 : coerce[!KU( SI4 )]",shape="ellipse"];
+n51[label="#vl.5 : irecv",shape="ellipse"];
+n52[label="#vr.5 : d_0_snd",shape="ellipse"];
+n53[label="#vk.6 : coerce[!KU( SI6 )]",shape="ellipse"];
+n54[label="#vl.6 : irecv",shape="ellipse"];
+n55[label="#vk.7 : coerce[!KU( SI7 )]",shape="ellipse"];
+n56[label="#vl.7 : irecv",shape="ellipse"];
+n57[label="#vr.7 : d_0_snd",shape="ellipse"];
+n58[label="#vk.8 : coerce[!KU( pk(~da) )]",shape="ellipse"];
+n59[label="#vl.8 : irecv",shape="ellipse"];
+n60[label="#vk.9 : coerce[!KU( SE2 )]",shape="ellipse"];
+n61[label="#vl.9 : irecv",shape="ellipse"];
+n62[label="#vk.10 : coerce[!KU( SE1 )]",shape="ellipse"];
+n63[label="#vk.11 : coerce[!KU( pk(~si) )]",shape="ellipse"];
+n64[label="#vr.11 : d_0_snd",shape="ellipse"];
+n65[label="#vk.12 : coerce[!KU( ppk(~pi) )]",shape="ellipse"];
+n66[label="#vk.13 : coerce[!KU( pk(~si2) )]",shape="ellipse"];
+n67[label="#vr.13 : d_0_snd",shape="ellipse"];
+n68[label="#vk.14 : coerce[!KU( ppk(~pi2) )]",shape="ellipse"];
+n69[label="#vk.15 : coerce[!KU( H2 )]",shape="ellipse"];
+n70[label="#vr.15 : d_0_snd",shape="ellipse"];
+n71[label="#vf.16 : isend",shape="ellipse"];
+n72[label="#vk.16 : coerce[!KU( pk(~db) )]",shape="ellipse"];
+n73[label="#vk.17 : coerce[!KU( pk(~sr) )]",shape="ellipse"];
+n74[label="#vr.17 : d_0_snd",shape="ellipse"];
+n75[label="#vk.18 : coerce[!KU( H1 )]",shape="ellipse"];
+n76[label="#vr.19 : d_0_snd",shape="ellipse"];
+n77[label="#vf.20 : isend",shape="ellipse"];
+n78[label="#vf.21 : isend",shape="ellipse"];
+n79[label="#vr.21 : d_0_snd",shape="ellipse"];
+n80[label="#vr.23 : d_0_snd",shape="ellipse"];
+n81[label="#vf.25 : isend",shape="ellipse"];
+n82[label="#vr.32 : d_0_snd",shape="ellipse"];
+n83[label="#vr.34 : d_0_fst",shape="ellipse"];
+n84[label="#vr.35 : d_0_snd",shape="ellipse"];
+subgraph cluster_Authentication_and_Data_Sharing_Session_1 {
+nodesep="0.6";
+ranksep="0.6";
+label="Authentication_and_Data_Sharing_Session_1";
+style="filled";
+color="#D3D8364C";
+penwidth="2";
+fillcolor="#D3D8364C";
+overlap="false";
+sep="4";
+n96[shape="record",label="{{<n85> !W3Ready( RE1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'owner', DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\l)\l|<n86> W3Budget( )[+]|<n87> Fr( ~rid.1 )|<n88> !Subject( RE1, DO2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, ~si2, ~pi2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si2), ppk(~pi2)\l)\l|<n89> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l|<n90> !Domain( DO2, %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~da, pk(~da)\l)\l|<n91> !Domain( DO1, %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~db, pk(~db)\l)\l|<n92> In( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<pk(~si2), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi2), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI4, pk(~da), SU1\>\l)\l}|{<n93> #b2 : Subject_Access_Request[Eq( SU1, SU1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~da), pk(~da) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~si2), pk(~si2) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( ppk(~pi2), ppk(~pi2) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( %1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3Begin( ~rid.1, RE1, 'owner', %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AccessRequest( RE1, 'owner', %1, DO2, DO1, ~si2, ~sr, ~da )]\l}|{<n94> Out( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\<pk(~si2), ppk(~pi2), %1\>, SI4, pk(~da)\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI1, pk(~si2), AC2\>\l)\l|<n95> Access_send( RE1, 'owner', %1, pk(~si2),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), DO2, DO1, ~da, ~db, pk(~da),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), ppk(~pi2), ~rid.1\l)\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+n100[shape="record",label="{{<n97> In( \<PE1, SE1, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'data'\>\l)\l|<n98> X_send( 'owner', RE1, %1, ~sr, pk(~sr), ~pr, ~si2, ~pi2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<~x.1, sign(~x.1, ~sr), pk(~sr)\>, ~x.1, ~k.1, ~rid.1\l)\l}|{<n99> #c2 : Subject_Data_Decryption[Eq( 'data', 'data' ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( ~k.1, ~k.1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( \<~x.1, sign(~x.1, ~sr), pk(~sr)\>, \<~x.1, sign(~x.1, ~sr), pk(~sr)\> ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~sr), pk(~sr) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( ~x.1, ~x.1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3End( ~rid.1, RE1, 'owner', %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3Commit( RE1, 'owner', %1, ~x.1, ~k.1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3DataAccepted( RE1, 'owner', %1, ~x.1, PE1, SE1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataReceive( 'owner', RE1, %1, PE1, SE1, ~pi2, pk(~sr), ~k.1, ~x.1 )]\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+n111[shape="record",label="{{<n101> In( \<H1, SI7, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), AC1\>\l)\l|<n102> AccessCert_send( RE1, 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, pk(~si2), pk(~sr), ~sr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi2), DO2, DO1, pk(~da),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), ~rid.1\l)[+]\l|<n103> !Subject( RE1, DO2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, ~si2, ~pi2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si2), ppk(~pi2)\l)\l|<n104> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l|<n105> Fr( ~x.1 )|<n106> Fr( ~k.1 )|<n107> Fr( ~v.1 )}|{<n108> #vr.3 : Object_Data_Encryption[Eq( AC1, AC1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~db), pk(~db) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( H1, H1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3Running( RE1, 'owner', %1, ~x.1, ~k.1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3DataSent( RE1, 'owner', %1, ~x.1, PE1, SE1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataSent( 'owner', RE1, %1, ~sr, ppk(~pi2), pk(~si2), ~x.1, ~k.1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secret( ~x.1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SessionKey( ~k.1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honest( RE1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honest( 'owner', %1 )]\l}|{<n109> Out( \<PE1, SE1, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'data'\>\l)\l|<n110> X_send( 'owner', RE1, %1, ~sr, pk(~sr), ~pr, ~si2, ~pi2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<~x.1, sign(~x.1, ~sr), pk(~sr)\>, ~x.1, ~k.1, ~rid.1\l)\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+n119[shape="record",label="{{<n112> In( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\<pk(~si2), ppk(~pi2), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI4, pk(~da)\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI1, pk(~si2), AC2\>\l)\l|<n113> Access_send( RE1, 'owner', %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si2), pk(~sr), DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~da, ~db, pk(~da), pk(~db),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi2), ~rid.1\l)[+]\l|<n114> !Policy( DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, RE1, 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1'\l)\l|<n115> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l}|{<n116> #vr.4 : Domain_Access_Verification[Eq( AC2, AC2 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~si2), pk(~si2) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~sr), pk(~sr) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( %1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( '1', '1' ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AccessGranted( RE1, 'owner', %1, pk(~si2), pk(~sr), '1' )]\l}|{<n117> Out( \<H1, SI7, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), AC1\>\l)\l|<n118> AccessCert_send( RE1, 'owner', %1, pk(~si2), pk(~sr), ~sr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi2), DO2, DO1, pk(~da), pk(~db), ~rid.1\l)\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+
+}
+subgraph cluster_Authentication_and_Data_Sharing_Session_2 {
+nodesep="0.6";
+ranksep="0.6";
+label="Authentication_and_Data_Sharing_Session_2";
+style="filled";
+color="#D3D8364C";
+penwidth="2";
+fillcolor="#D3D8364C";
+overlap="false";
+sep="4";
+n131[shape="record",label="{{<n120> !W3Ready( RE2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'owner', DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\l)\l|<n121> W3Budget( )[+]|<n122> Fr( ~rid )|<n123> !Subject( RE2, DO2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, ~si, ~pi,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si), ppk(~pi)\l)\l|<n124> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l|<n125> !Domain( DO2, %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~da, pk(~da)\l)\l|<n126> !Domain( DO1, %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~db, pk(~db)\l)\l|<n127> In( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<pk(~si), ppk(~pi), \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI5, pk(~da), SU1\>\l)\l}|{<n128> #b1 : Subject_Access_Request[Eq( SU1, SU1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~da), pk(~da) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~si), pk(~si) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( ppk(~pi), ppk(~pi) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( %1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3Begin( ~rid, RE2, 'owner', %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AccessRequest( RE2, 'owner', %1, DO2, DO1, ~si, ~sr, ~da )]\l}|{<n129> Out( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\<\<pk(~si), ppk(~pi), %1\>, SI5, pk(~da)\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI3, pk(~si), AC2\>\l)\l|<n130> Access_send( RE2, 'owner', %1, pk(~si),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), DO2, DO1, ~da, ~db, pk(~da),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), ppk(~pi), ~rid\l)\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+n135[shape="record",label="{{<n132> In( \<PE2, SE2, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'data'\>\l)\l|<n133> X_send( 'owner', RE2, %1, ~sr, pk(~sr), ~pr, ~si, ~pi,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<~x, sign(~x, ~sr), pk(~sr)\>, ~x, ~k, ~rid\l)\l}|{<n134> #c1 : Subject_Data_Decryption[Eq( 'data', 'data' ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( ~k, ~k ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( \<~x, sign(~x, ~sr), pk(~sr)\>, \<~x, sign(~x, ~sr), pk(~sr)\> ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~sr), pk(~sr) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( ~x, ~x ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3End( ~rid, RE2, 'owner', %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3Commit( RE2, 'owner', %1, ~x, ~k ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3DataAccepted( RE2, 'owner', %1, ~x, PE2, SE2 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataReceive( 'owner', RE2, %1, PE2, SE2, ~pi, pk(~sr), ~k, ~x )]\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+n146[shape="record",label="{{<n136> In( \<H2, SI6, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), AC1\>\l)\l|<n137> AccessCert_send( RE2, 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, pk(~si), pk(~sr), ~sr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi), DO2, DO1, pk(~da),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), ~rid\l)[+]\l|<n138> !Subject( RE2, DO2,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, ~si, ~pi,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si), ppk(~pi)\l)\l|<n139> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l|<n140> Fr( ~x )|<n141> Fr( ~k )|<n142> Fr( ~v )}|{<n143> #vr.1 : Object_Data_Encryption[Eq( AC1, AC1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~db), pk(~db) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( H2, H2 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3Running( RE2, 'owner', %1, ~x, ~k ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W3DataSent( RE2, 'owner', %1, ~x, PE2, SE2 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataSent( 'owner', RE2, %1, ~sr, ppk(~pi), pk(~si), ~x, ~k ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Secret( ~x, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SessionKey( ~k, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honest( RE2, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honest( 'owner', %1 )]\l}|{<n144> Out( \<PE2, SE2, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'data'\>\l)\l|<n145> X_send( 'owner', RE2, %1, ~sr, pk(~sr), ~pr, ~si, ~pi,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<~x, sign(~x, ~sr), pk(~sr)\>, ~x, ~k, ~rid\l)\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+n154[shape="record",label="{{<n147> In( \<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<\<pk(~si), ppk(~pi), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI5, pk(~da)\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), %1\>, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SI3, pk(~si), AC2\>\l)\l|<n148> Access_send( RE2, 'owner', %1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~si), pk(~sr), DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~da, ~db, pk(~da), pk(~db),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi), ~rid\l)[+]\l|<n149> !Policy( DO2, DO1,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%1, RE2, 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'1'\l)\l|<n150> !Subject( 'owner',\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DO1, %1, ~sr, ~pr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~sr), ppk(~pr)\l)\l}|{<n151> #vr.2 : Domain_Access_Verification[Eq( AC2, AC2 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~si), pk(~si) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( true, true ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( pk(~sr), pk(~sr) ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( %1, %1 ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eq( '1', '1' ),\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AccessGranted( RE2, 'owner', %1, pk(~si), pk(~sr), '1' )]\l}|{<n152> Out( \<H2, SI6, \l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk(~db), AC1\>\l)\l|<n153> AccessCert_send( RE2, 'owner', %1, pk(~si), pk(~sr), ~sr,\l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ppk(~pi), DO2, DO1, pk(~da), pk(~db), ~rid\l)\l}}",fillcolor="#D3D8364C",style="filled",fontcolor="black",role="Authentication_and_Data_Sharing"];
+
+}
+n131:n129 -> n1[color="gray30"];
+n96:n94 -> n40[color="gray30"];
+n1 -> n52[color="orangered2"];
+n1 -> n83[color="orangered2"];
+n37:n13 -> n131:n123[style="bold",weight="10.0",color="gray50"];
+n37:n13 -> n146:n138[style="bold",weight="10.0",color="gray50"];
+n37:n14 -> n131:n124[style="bold",weight="10.0",color="gray50"];
+n37:n14 -> n96:n89[style="bold",weight="10.0",color="gray50"];
+n37:n14 -> n146:n139[style="bold",weight="10.0",color="gray50"];
+n37:n14 -> n154:n150[style="bold",weight="10.0",color="gray50"];
+n37:n14 -> n111:n104[style="bold",weight="10.0",color="gray50"];
+n37:n14 -> n119:n115[style="bold",weight="10.0",color="gray50"];
+n37:n15 -> n131:n125[style="bold",weight="10.0",color="gray50"];
+n37:n15 -> n96:n90[style="bold",weight="10.0",color="gray50"];
+n37:n16 -> n131:n126[style="bold",weight="10.0",color="gray50"];
+n37:n16 -> n96:n91[style="bold",weight="10.0",color="gray50"];
+n37:n17 -> n154:n149[style="bold",weight="10.0",color="gray50"];
+n37:n18 -> n131:n120[style="bold",weight="10.0",color="gray50"];
+n37:n19 -> n96:n88[style="bold",weight="10.0",color="gray50"];
+n37:n19 -> n111:n103[style="bold",weight="10.0",color="gray50"];
+n37:n22 -> n119:n114[style="bold",weight="10.0",color="gray50"];
+n37:n25 -> n96:n85[style="bold",weight="10.0",color="gray50"];
+n37:n27 -> n61[color="gray30"];
+n37:n29 -> n51[color="gray30"];
+n37:n31 -> n131:n121[style="bold",weight="10.0"];
+n37:n32 -> n96:n86[style="bold",weight="10.0"];
+n37:n33 -> n59[color="gray30"];
+n37:n35 -> n48[color="gray30"];
+n38 -> n131:n127[color="gray30"];
+n40 -> n57[color="orangered2"];
+n146:n144 -> n42[color="gray30"];
+n42 -> n41[color="orangered2"];
+n42 -> n79[color="orangered2"];
+n154:n152 -> n54[color="gray30"];
+n43 -> n96:n92[color="gray30"];
+n45 -> n44[color="orangered2"];
+n45 -> n80[color="orangered2"];
+n111:n109 -> n45[color="gray30"];
+n46 -> n135:n132[color="gray30"];
+n48 -> n64[color="orangered2"];
+n119:n117 -> n56[color="gray30"];
+n49 -> n100:n97[color="gray30"];
+n51 -> n67[color="orangered2"];
+n52 -> n0[color="orangered2"];
+n54 -> n69[color="orangered2"];
+n54 -> n70[color="orangered2"];
+n56 -> n74[color="orangered2"];
+n56 -> n75[color="orangered2"];
+n57 -> n39[color="orangered2"];
+n59 -> n63[color="orangered2"];
+n59 -> n65[color="orangered2"];
+n61 -> n66[color="orangered2"];
+n61 -> n68[color="orangered2"];
+n64 -> n47[color="orangered2"];
+n67 -> n50[color="orangered2"];
+n67 -> n76[color="orangered2"];
+n70 -> n53[color="orangered2"];
+n70 -> n82[color="orangered2"];
+n71 -> n146:n136[color="gray30"];
+n74 -> n55[color="orangered2"];
+n76 -> n58[color="orangered2"];
+n77 -> n154:n147[color="gray30"];
+n78 -> n111:n101[color="gray30"];
+n79 -> n60[color="orangered2"];
+n80 -> n62[color="orangered2"];
+n81 -> n119:n112[color="gray30"];
+n82 -> n72[color="orangered2"];
+n83 -> n84[color="orangered2"];
+n84 -> n73[color="orangered2"];
+n131:n128 -> n96:n93[color="black",style="dashed"];
+n96:n93 -> n135:n134[color="black",style="dashed"];
+n135:n134 -> n100:n99[color="black",style="dashed"];
+n0 -> n77[color="red",style="dashed"];
+n1 -> n77[color="red",style="dashed"];
+n39 -> n81[color="red",style="dashed"];
+n40 -> n81[color="red",style="dashed"];
+n41 -> n46[color="red",style="dashed"];
+n42 -> n46[color="red",style="dashed"];
+n44 -> n49[color="red",style="dashed"];
+n45 -> n49[color="red",style="dashed"];
+n47 -> n38[color="red",style="dashed"];
+n47 -> n77[color="red",style="dashed"];
+n48 -> n38[color="red",style="dashed"];
+n50 -> n43[color="red",style="dashed"];
+n50 -> n81[color="red",style="dashed"];
+n51 -> n43[color="red",style="dashed"];
+n52 -> n77[color="red",style="dashed"];
+n53 -> n71[color="red",style="dashed"];
+n54 -> n71[color="red",style="dashed"];
+n55 -> n78[color="red",style="dashed"];
+n56 -> n78[color="red",style="dashed"];
+n57 -> n81[color="red",style="dashed"];
+n58 -> n38[color="red",style="dashed"];
+n58 -> n43[color="red",style="dashed"];
+n58 -> n77[color="red",style="dashed"];
+n58 -> n81[color="red",style="dashed"];
+n60 -> n46[color="red",style="dashed"];
+n62 -> n49[color="red",style="dashed"];
+n63 -> n38[color="red",style="dashed"];
+n63 -> n77[color="red",style="dashed"];
+n64 -> n38[color="red",style="dashed"];
+n65 -> n38[color="red",style="dashed"];
+n65 -> n77[color="red",style="dashed"];
+n66 -> n43[color="red",style="dashed"];
+n66 -> n81[color="red",style="dashed"];
+n67 -> n43[color="red",style="dashed"];
+n68 -> n43[color="red",style="dashed"];
+n68 -> n81[color="red",style="dashed"];
+n69 -> n71[color="red",style="dashed"];
+n70 -> n71[color="red",style="dashed"];
+n72 -> n71[color="red",style="dashed"];
+n72 -> n78[color="red",style="dashed"];
+n73 -> n77[color="red",style="dashed"];
+n73 -> n81[color="red",style="dashed"];
+n74 -> n78[color="red",style="dashed"];
+n75 -> n78[color="red",style="dashed"];
+n76 -> n38[color="red",style="dashed"];
+n76 -> n43[color="red",style="dashed"];
+n79 -> n46[color="red",style="dashed"];
+n80 -> n49[color="red",style="dashed"];
+n82 -> n71[color="red",style="dashed"];
+n82 -> n78[color="red",style="dashed"];
+n83 -> n77[color="red",style="dashed"];
+n84 -> n77[color="red",style="dashed"];
+n84 -> n81[color="red",style="dashed"];
+n96:n95 -> n119:n113[style="bold",weight="10.0"];
+n111:n110 -> n100:n98[style="bold",weight="10.0"];
+n119:n118 -> n111:n102[style="bold",weight="10.0"];
+n131:n130 -> n154:n148[style="bold",weight="10.0"];
+n146:n145 -> n135:n133[style="bold",weight="10.0"];
+n154:n153 -> n146:n137[style="bold",weight="10.0"];
+{
+rank="sink";
+n155[shape="plain",label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="3" CELLPADDING="1"><TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">AC1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'AccessCert_ab'</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">AC2</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'AccessR_a'</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">DO1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'domain_B'</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">DO2</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'domain_A'</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">H1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">h(&lt;pk(~si2), pk(~sr), %1&gt;)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">H2</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">h(&lt;pk(~si), pk(~sr), %1&gt;)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">PE1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">PEnc(ppk(~pi2), ~k.1, ~v.1)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">PE2</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">PEnc(ppk(~pi), ~k, ~v)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">RE1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'requester_2'</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">RE2</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'requester'</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SE1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">senc(&lt;~x.1, sign(~x.1, ~sr), pk(~sr)&gt;, ~k.1)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SE2</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">senc(&lt;~x, sign(~x, ~sr), pk(~sr)&gt;, ~k)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SI4</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">sign(&lt;pk(~si2), ppk(~pi2), %1&gt;, ~da)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SI1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">sign(&lt;&lt;&lt;pk(~si2), ppk(~pi2), %1&gt;, SI4, pk(~da)&gt;, pk(~sr), %1&gt;,<BR ALIGN="LEFT"/> &#32;&#32;&#32;&#32;~si2)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SI5</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">sign(&lt;pk(~si), ppk(~pi), %1&gt;, ~da)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SI3</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">sign(&lt;&lt;&lt;pk(~si), ppk(~pi), %1&gt;, SI5, pk(~da)&gt;, pk(~sr), %1&gt;, ~si)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SI6</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">sign(H2, ~db)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SI7</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">sign(H1, ~db)</TD></TR>
+                                                                 <TR><TD ALIGN="LEFT" VALIGN="TOP"><FONT COLOR="#000000">SU1</FONT></TD> <TD ALIGN="LEFT" VALIGN="TOP">=</TD> <TD ALIGN="LEFT" VALIGN="TOP">'SubjectCert'</TD></TR></TABLE>>];
+
+}
+n100:n99 -> n155[style="invis"];
+
+}
