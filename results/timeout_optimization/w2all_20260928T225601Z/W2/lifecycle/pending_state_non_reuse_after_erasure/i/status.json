@@ -1,0 +1,53 @@
+{
+  "group": "W2",
+  "protocol": "repaired",
+  "profile": "lifecycle",
+  "lemma": "pending_state_non_reuse_after_erasure",
+  "trace": "all-traces",
+  "previous_status": "not_started",
+  "model": "models/W2/repaired_state_lifecycle.spthy",
+  "defines": [],
+  "default_run": false,
+  "heuristics": [
+    "s",
+    "i",
+    "S"
+  ],
+  "status": "timeout",
+  "steps": null,
+  "heuristic": "i",
+  "seconds": 900.196,
+  "started_utc": "2026-09-28T23:11:01.544869+00:00",
+  "exit_code": -9,
+  "timed_out": true,
+  "model_sha256": "c0666964506c83cce6f016740ab007732518891a27631332fa6954cda73cf2f0",
+  "command": [
+    "tamarin-prover",
+    "repaired_state_lifecycle.spthy",
+    "--quit-on-warning",
+    "--derivcheck-timeout=300",
+    "--heuristic=i",
+    "--prove=pending_state_non_reuse_after_erasure",
+    "--output=result.proof.spthy",
+    "--output-json=result.trace.json",
+    "--output-dot=result.trace.dot",
+    "+RTS",
+    "-N2",
+    "-M16G",
+    "-RTS"
+  ],
+  "workdir": "/home/lab701/qzy/CDDS补充实验_results/timeout_optimization/w2all_20260928T225601Z/W2/lifecycle/pending_state_non_reuse_after_erasure/i",
+  "rendered_graphs": {},
+  "stderr_tail": [
+    "maude tool: 'maude'",
+    " checking version: 3.1. OK.",
+    " checking installation: OK.",
+    "[Theory W2_AECDHE_State_Lifecycle] Theory loaded",
+    "[Theory W2_AECDHE_State_Lifecycle] Theory translated",
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks started",
+    "[Theory W2_AECDHE_State_Lifecycle] Derivation checks ended",
+    "[Theory W2_AECDHE_State_Lifecycle] Theory closed",
+    "[Saturating Sources] Step 1 (Max 5)",
+    "[Saturating Sources] Done"
+  ]
+}

@@ -1,0 +1,455 @@
+{
+  "started_utc": "20260928T225601Z",
+  "targets": [
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "confirmation",
+      "lemma": "key_confirmation_origin",
+      "trace": "all-traces",
+      "previous_status": "timeout",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": true,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "confirmation",
+      "lemma": "key_confirmation_agreement",
+      "trace": "all-traces",
+      "previous_status": "timeout",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": true,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "ephemeral_state_lifetime",
+      "trace": "all-traces",
+      "previous_status": "timeout",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": true,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "derived_key_lifetime",
+      "trace": "all-traces",
+      "previous_status": "tool_error",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "pre_erasure_state_non_reuse",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "pending_state_non_reuse_after_erasure",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "erased_secrets_have_prior_creation",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "session_erasure_requires_both_local_erasures",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "ephemeral_unreadable_after_local_erasure",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "data_key_unreadable_after_local_erasure",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "lifecycle",
+      "lemma": "confirmation_key_unreadable_after_local_erasure",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_initiator_ephemeral_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_initiator_data_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_initiator_confirmation_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_responder_ephemeral_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_responder_data_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_responder_confirmation_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "disclosure_controls",
+      "lemma": "w2_pending_ephemeral_disclosure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "independent_oracles",
+      "lemma": "w2_initiator_independent_oracles_forward",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "independent_oracles",
+      "lemma": "w2_initiator_independent_oracles_reverse",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "independent_oracles",
+      "lemma": "w2_responder_independent_oracles_forward",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "independent_oracles",
+      "lemma": "w2_responder_independent_oracles_reverse",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "post_erasure",
+      "lemma": "w2_post_erasure_all_longterm_disclosures_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "post_erasure",
+      "lemma": "w2_post_erasure_plaintext_secrecy",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "post_erasure",
+      "lemma": "w2_post_erasure_data_key_secrecy",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "key_separation",
+      "lemma": "w2_confirmation_key_exposure_reachable",
+      "trace": "exists-trace",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "i",
+        "s",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "key_separation",
+      "lemma": "w2_confirmation_key_exposure_plaintext_secrecy",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    },
+    {
+      "group": "W2",
+      "protocol": "repaired",
+      "profile": "key_separation",
+      "lemma": "w2_confirmation_key_exposure_data_key_secrecy",
+      "trace": "all-traces",
+      "previous_status": "not_started",
+      "model": "models/W2/repaired_state_lifecycle.spthy",
+      "defines": [],
+      "default_run": false,
+      "heuristics": [
+        "s",
+        "i",
+        "S"
+      ]
+    }
+  ],
+  "jobs": 8,
+  "timeout_per_heuristic": 900
+}

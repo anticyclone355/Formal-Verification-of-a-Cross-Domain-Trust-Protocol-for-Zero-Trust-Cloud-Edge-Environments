@@ -1,0 +1,1232 @@
+/* Timeout optimization candidate, 2026-09-29. NOT Tamarin-verified.
+   Derived from executed snapshot; see README.md and provenance.json. */
+
+theory W2_AECDHE_State_Lifecycle
+begin
+
+builtins: hashing, signing, symmetric-encryption, diffie-hellman, natural-numbers
+functions: PEnc/3, PDec/2, ppk/1, kdf_data/2, kdf_conf/2
+equations: PDec(psk,PEnc(ppk(psk),k,r)) = k
+
+restriction Equality:
+  "All x y #i. Eq(x,y) @i ==> x = y"
+
+
+restriction W2_OneSetup:
+  "All #i #j. W2Init() @i & W2Init() @j ==> #i = #j"
+
+
+
+rule W2_Setup:
+  [ Fr(~si), Fr(~pi), Fr(~sr), Fr(~pr), Fr(~da), Fr(~db) ]
+--[ W2Init() ]->
+[ !Subject('requester','domain_A',%1,~si,~pi,pk(~si),ppk(~pi))
+  , !Subject('owner','domain_B',%1,~sr,~pr,pk(~sr),ppk(~pr))
+  , !Domain('domain_A',%1,~da,pk(~da))
+  , !Domain('domain_B',%1,~db,pk(~db))
+  , !Policy('domain_A','domain_B',%1,'requester','owner','1')
+  , W2_RequestReady('requester','owner','domain_A','domain_B',%1)
+  , W2_IdAvailable('requester',%1), W2_PceAvailable('requester',%1)
+  , W2_IdAvailable('owner',%1), W2_PceAvailable('owner',%1)
+  , W2_DomainAvailable('domain_A',%1), W2_DomainAvailable('domain_B',%1)
+  , W2_ProbeReady()
+  , Out(<pk(~si),ppk(~pi),%1,'Subject Pk'>)
+  , Out(<pk(~sr),ppk(~pr),%1,'Subject Pk'>)
+  , Out(<<pk(~si),ppk(~pi),%1>,sign(<pk(~si),ppk(~pi),%1>,~da),pk(~da),'SubjectCert'>)
+  , Out(<<pk(~sr),ppk(~pr),%1>,sign(<pk(~sr),ppk(~pr),%1>,~db),pk(~db),'SubjectCert'>)
+  ]
+
+rule W2_Probe:
+  [ W2_ProbeReady() ]
+--[ W2Probe() ]->
+[]
+
+rule Reveal_IdentityKey:
+  [ !Subject($S,$D,%1,sk,psk,pkS,ppkS), W2_IdAvailable($S,%1) ]
+--[ Reveal_IdentityKey($S,%1), W2LtkReveal('identity',$S,%1) ]->
+[ Out(sk) ]
+
+rule Reveal_PCEKey:
+  [ !Subject($S,$D,%1,sk,psk,pkS,ppkS), W2_PceAvailable($S,%1) ]
+--[ Reveal_PCEKey($S,%1), W2LtkReveal('pce',$S,%1) ]->
+[ Out(psk) ]
+
+rule Reveal_DomainKey:
+  [ !Domain($D,%1,sk,pkD), W2_DomainAvailable($D,%1) ]
+--[ Reveal_Domain($D,%1), W2LtkReveal('domain',$D,%1) ]->
+[ Out(sk) ]
+
+rule Subject_Access_Request[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = <CertA, CertaSign, SignPk>
+        X = 'g'^~ie
+        AccessRa = <CertA_Pro, pkb, %1, ~sid, X>
+    in
+    [
+        W2_RequestReady($S_a,$S_b,$A,$B,%1)
+        , !Subject($S_a, $A, %1, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %1, pskb, ppskb, pkb, ppkb)
+        , !Domain($A, %1, gskA, gpkA)
+        , !Domain($B, %1, gskB, gpkB)
+        , Fr(~sid)
+        , Fr(~ie)
+        , In(<CertA, CertaSign, SignPk, 'SubjectCert'>)
+    ]
+--[
+    EphemeralCreated('initiator',$S_a,$S_b,%1,~sid,~ie)
+    , 
+        Eq('SubjectCert', 'SubjectCert')
+        , Eq(SignPk,gpkA)
+        , Eq(verify(CertaSign,CertA,gpkA),true)
+        
+        , Eq(fst(CertA), pka)
+        , Eq(fst(snd(CertA)), ppka)
+        , Eq(snd(snd(CertA)), %1)
+        , AccessRequest($S_a, $S_b, %1, $A, $B, pska, pskb, gskA)
+        , RepairAccessRequest($S_a,$S_b,$A,$B,%1,~sid,X)
+        , W2Request($S_a,$S_b,%1,~sid)
+    ]->
+[
+
+        Out(<AccessRa,sign(AccessRa,pska),pka, 'AccessR_a_fs'>)
+        , Access_send($S_a, $S_b, %1, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)
+        , St_Initiator_DH_E0($S_a,$S_b,$A,$B,%1,~sid,~ie,X,pka,ppka,pkb,'clean')
+    ]
+
+rule Domain_Access_Verification[role="Authentication_and_Data_Sharing"]:
+    let
+        CertA_Pro = fst(AccessRa)
+        pkbIn = fst(snd(AccessRa))
+        Epoch_Access = fst(snd(snd(AccessRa)))
+        sid = fst(snd(snd(snd(AccessRa))))
+        X = snd(snd(snd(snd(AccessRa))))
+        GrantBody = <pka, pkb, %1, sid, X>
+
+    in
+    [ 
+        In(<AccessRa,AccesssSign,AccessPKa, 'AccessR_a_fs'>)
+        , Access_send($S_a, $S_b, %1, pka, pkb, $A, $B, gskA, gskB, gpkA, gpkB, ppka)[+]
+        , !Policy($A, $B, %1, $S_a, $S_b, bit)
+        , !Subject($S_b, $B, %1, pskb, ppskb, pkb, ppkb)
+    ]
+--[
+        Eq('AccessR_a_fs', 'AccessR_a_fs')
+        , Eq(pka,AccessPKa)
+        , Eq(verify(AccesssSign, AccessRa, pka), true)
+        , Eq(pkbIn,pkb)
+        , Eq(Epoch_Access, %1)
+
+        , Eq(bit, '1')
+        , AccessGranted($S_a, $S_b, %1, pka, pkb, bit)                          
+        , RepairAccessGranted($S_a,$S_b,$A,$B,%1,sid,X,h(GrantBody))
+    ]->
+[ 
+        Out(<h(GrantBody), sign(h(GrantBody), gskB), pk(gskB), sid, X,
+             'AccessCert_ab_fs'>)    
+        , AccessCert_send($S_a, $S_b, %1, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)
+    ]
+
+rule Object_Data_Encryption[role="Authentication_and_Data_Sharing"]:
+    let 
+        GrantBody = <pka, pkb, %1, sid, X>
+        Y = 'g'^~re
+        Z = X^~re
+        transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%1,
+                      sid,pka,pkb,X,Y,h(Hash1)>
+        kData = kdf_data(Z,transcript)
+        kConf = kdf_conf(Z,transcript)
+        d = <~msg, sign(<~msg,transcript>,pskb), pk(pskb)>
+        beta = senc(d,kData)
+        keyConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+    in
+    [ 
+        In(<Hash1,Hashsign,Hashpk,sid,X,'AccessCert_ab_fs'>)
+        , AccessCert_send($S_a, $S_b, %1, pka, pkb, pskb, ppka, $A, $B, gpkA, gpkB)[+]
+        , !Subject($S_a, $A, %1, pska, ppska, pka, ppka)
+        , !Subject($S_b, $B, %1, pskb, ppskb, pkb, ppkb)
+        , Fr(~msg)                                                
+        , Fr(~re)                                                
+    ]
+--[
+    EphemeralCreated('responder',$S_a,$S_b,%1,sid,~re)
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,~re)
+    , DerivedKeyCreated('responder',$S_a,$S_b,%1,sid,'data',kData)
+    , DerivedKeyCreated('responder',$S_a,$S_b,%1,sid,'confirmation',kConf)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',kData)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kConf)
+    , ConfirmationGenerated($S_a,$S_b,$A,$B,%1,sid,transcript,beta,kData,kConf,keyConfirm)
+    , 
+        Eq('AccessCert_ab_fs', 'AccessCert_ab_fs')
+        , Eq(gpkB,Hashpk)
+        , Eq(verify(Hashsign, Hash1, gpkB), true)
+        , Eq(Hash1,h(GrantBody))
+        , DataSent($S_b, $S_a, %1, pskb, ppka, pka, ~msg, kData)
+        , RepairDataSent($S_b,$S_a,$A,$B,%1,sid,~msg,kData,transcript)
+        , W2Sent($S_a,$S_b,%1,sid,~msg,kData,transcript)
+        , RunningResponder($S_b,$S_a,$A,$B,%1,sid,~msg,kData,transcript)
+        
+        , Secret(~msg, %1)
+        , SessionKey(kData, %1)
+        , Honest($S_a, %1)
+        , Honest($S_b, %1)
+
+    ]->
+[ 
+        Out(<sid,Y,beta,keyConfirm,Hash1,'data_fs'>)
+        , St_Responder_PreErase_E0_K0_C0($S_a,$S_b,$A,$B,%1,sid,~re,kData,kConf,~msg,transcript,'clean')
+        
+        
+
+    ]
+
+rule Subject_Data_Decryption_E0[role="Authentication_and_Data_Sharing"]:
+let 
+    transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%1,
+                  sid,pka,pkb,X,Y,h(Hash1)>
+    Z = Y^ie
+    k_in = kdf_data(Z,transcript)
+    kConf = kdf_conf(Z,transcript)
+    d_in = sdec(beta, k_in)
+    x_in = fst(d_in)
+    pk_in = snd(snd(d_in))
+    sign_x = fst(snd(d_in))
+    expectedConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+in
+[
+    In(<sid,Y,beta,keyConfirm,Hash1,'data_fs'>)
+    , St_Initiator_DH_E0($S_a,$S_b,$A,$B,%1,sid,ie,X,pka,ppka,pkb,'clean')[+]
+
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'pending')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyCreated('initiator',$S_a,$S_b,%1,sid,'data',k_in)
+    , DerivedKeyCreated('initiator',$S_a,$S_b,%1,sid,'confirmation',kConf)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k_in)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kConf)
+    , ConfirmationAccepted($S_a,$S_b,$A,$B,%1,sid,transcript,beta,k_in,kConf,keyConfirm)
+    , 
+    Eq('data_fs', 'data_fs')
+    , Eq(keyConfirm,expectedConfirm)
+    , Eq(pk_in, pkb)
+    , Eq(verify(sign_x, <x_in,transcript>, pkb), true)
+    , DataReceive($S_b, $S_a, %1, Y, beta, ppka, pkb, k_in, x_in)
+    , RepairDataAccepted($S_a,$S_b,$A,$B,%1,sid,x_in,k_in,transcript)
+    , W2Accepted($S_a,$S_b,%1,sid,x_in,k_in,transcript)
+    , CommitInitiator($S_a,$S_b,$A,$B,%1,sid,x_in,k_in,transcript)
+
+]->
+[
+    !Plaintext(x_in)
+    , St_Initiator_PreErase_E0_K0_C0($S_a,$S_b,$A,$B,%1,sid,ie,k_in,kConf,x_in,transcript,'clean')
+    
+        
+]
+
+rule Subject_Data_Decryption_E1[role="Authentication_and_Data_Sharing"]:
+let 
+    transcript = <'CDDS-AECDHE-full-v4',$S_a,$A,$S_b,$B,%1,
+                  sid,pka,pkb,X,Y,h(Hash1)>
+    Z = Y^ie
+    k_in = kdf_data(Z,transcript)
+    kConf = kdf_conf(Z,transcript)
+    d_in = sdec(beta, k_in)
+    x_in = fst(d_in)
+    pk_in = snd(snd(d_in))
+    sign_x = fst(snd(d_in))
+    expectedConfirm = h(<'key-confirm',kConf,transcript,h(beta)>)
+in
+[
+    In(<sid,Y,beta,keyConfirm,Hash1,'data_fs'>)
+    , St_Initiator_DH_E1($S_a,$S_b,$A,$B,%1,sid,ie,X,pka,ppka,pkb,'revealed')[+]
+
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'pending')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyCreated('initiator',$S_a,$S_b,%1,sid,'data',k_in)
+    , DerivedKeyCreated('initiator',$S_a,$S_b,%1,sid,'confirmation',kConf)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k_in)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kConf)
+    , ConfirmationAccepted($S_a,$S_b,$A,$B,%1,sid,transcript,beta,k_in,kConf,keyConfirm)
+    , 
+    Eq('data_fs', 'data_fs')
+    , Eq(keyConfirm,expectedConfirm)
+    , Eq(pk_in, pkb)
+    , Eq(verify(sign_x, <x_in,transcript>, pkb), true)
+    , DataReceive($S_b, $S_a, %1, Y, beta, ppka, pkb, k_in, x_in)
+    , RepairDataAccepted($S_a,$S_b,$A,$B,%1,sid,x_in,k_in,transcript)
+    , W2Accepted($S_a,$S_b,%1,sid,x_in,k_in,transcript)
+    , CommitInitiator($S_a,$S_b,$A,$B,%1,sid,x_in,k_in,transcript)
+
+]->
+[
+    !Plaintext(x_in)
+    , St_Initiator_PreErase_E1_K0_C0($S_a,$S_b,$A,$B,%1,sid,ie,k_in,kConf,x_in,transcript,'revealed')
+    
+        
+]
+
+rule Initiator_Erase_Ephemeral_E0_K0_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E0_K0_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E0_K0_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E0_K0_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E0_K1_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E0_K1_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E0_K1_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E0_K1_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E1_K0_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E1_K0_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E1_K0_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E1_K0_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E1_K1_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E1_K1_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Initiator_Erase_Ephemeral_E1_K1_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Initiator_PreErase_E1_K1_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('initiator',$S_a,$S_b,%1,sid)
+    , SecretsErased('initiator',$S_a,$S_b,%1,sid,ie,k,kc)
+    , 
+    InitiatorErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    InitErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E0_K0_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E0_K0_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E0_K0_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E0_K0_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E0_K1_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E0_K1_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E0_K1_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E0_K1_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E1_K0_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E1_K0_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E1_K0_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E1_K0_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E1_K1_C0[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E1_K1_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Responder_Erase_Ephemeral_E1_K1_C1[role="Authentication_and_Data_Sharing"]:
+[
+    St_Responder_PreErase_E1_K1_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , LocalErased('responder',$S_a,$S_b,%1,sid)
+    , SecretsErased('responder',$S_a,$S_b,%1,sid,re,k,kc)
+    , 
+    ResponderErased($S_a,$S_b,$A,$B,%1,sid)
+]->
+[
+    RespErased($S_a,$S_b,%1,sid)
+]
+
+rule Close_Repair_Session_After_Erasure[role="Authentication_and_Data_Sharing"]:
+[
+    InitErased($S_a,$S_b,%1,sid)[+]
+    , RespErased($S_a,$S_b,%1,sid)[+]
+]
+--[
+    SessionErased($S_a,$S_b,%1,sid)
+]->
+[]
+
+rule Reveal_Initiator_Ephemeral_Pending_E0[role="adversary"]:
+[
+    St_Initiator_DH_E0($S_a,$S_b,$A,$B,%1,sid,ie,X,pka,ppka,pkb,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'pending')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , 
+    RevealEphemeralI($S_a,$S_b,%1,sid,ie)
+    , W2EphemeralReveal('initiator',sid)
+]->
+[
+    St_Initiator_DH_E1($S_a,$S_b,$A,$B,%1,sid,ie,X,pka,ppka,pkb,'revealed')
+    , Out(ie)
+]
+
+rule Reveal_Initiator_Ephemeral_Accepted_E0_K0_C0[role="adversary"]:
+[
+    St_Initiator_PreErase_E0_K0_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralI($S_a,$S_b,%1,sid,ie)
+    , W2EphemeralReveal('initiator',sid)
+]->
+[
+    St_Initiator_PreErase_E1_K0_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')
+    , Out(ie)
+]
+
+rule Reveal_Initiator_Ephemeral_Accepted_E0_K0_C1[role="adversary"]:
+[
+    St_Initiator_PreErase_E0_K0_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralI($S_a,$S_b,%1,sid,ie)
+    , W2EphemeralReveal('initiator',sid)
+]->
+[
+    St_Initiator_PreErase_E1_K0_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')
+    , Out(ie)
+]
+
+rule Reveal_Initiator_Ephemeral_Accepted_E0_K1_C0[role="adversary"]:
+[
+    St_Initiator_PreErase_E0_K1_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralI($S_a,$S_b,%1,sid,ie)
+    , W2EphemeralReveal('initiator',sid)
+]->
+[
+    St_Initiator_PreErase_E1_K1_C0($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')
+    , Out(ie)
+]
+
+rule Reveal_Initiator_Ephemeral_Accepted_E0_K1_C1[role="adversary"]:
+[
+    St_Initiator_PreErase_E0_K1_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('initiator',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('initiator',$S_a,$S_b,%1,sid,ie)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralI($S_a,$S_b,%1,sid,ie)
+    , W2EphemeralReveal('initiator',sid)
+]->
+[
+    St_Initiator_PreErase_E1_K1_C1($S_a,$S_b,$A,$B,%1,sid,ie,k,kc,msg,transcript,'revealed')
+    , Out(ie)
+]
+
+rule Reveal_Responder_Ephemeral_E0_K0_C0[role="adversary"]:
+[
+    St_Responder_PreErase_E0_K0_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralR($S_a,$S_b,%1,sid,re)
+    , W2EphemeralReveal('responder',sid)
+]->
+[
+    St_Responder_PreErase_E1_K0_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')
+    , Out(re)
+]
+
+rule Reveal_Responder_Ephemeral_E0_K0_C1[role="adversary"]:
+[
+    St_Responder_PreErase_E0_K0_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralR($S_a,$S_b,%1,sid,re)
+    , W2EphemeralReveal('responder',sid)
+]->
+[
+    St_Responder_PreErase_E1_K0_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')
+    , Out(re)
+]
+
+rule Reveal_Responder_Ephemeral_E0_K1_C0[role="adversary"]:
+[
+    St_Responder_PreErase_E0_K1_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralR($S_a,$S_b,%1,sid,re)
+    , W2EphemeralReveal('responder',sid)
+]->
+[
+    St_Responder_PreErase_E1_K1_C0($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')
+    , Out(re)
+]
+
+rule Reveal_Responder_Ephemeral_E0_K1_C1[role="adversary"]:
+[
+    St_Responder_PreErase_E0_K1_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'clean')[+]
+]
+--[
+    W2StateUse('responder',$S_a,$S_b,%1,sid,'preerase')
+    , EphemeralUse('responder',$S_a,$S_b,%1,sid,re)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$S_a,$S_b,%1,sid,'confirmation',kc)
+    , 
+    RevealEphemeralR($S_a,$S_b,%1,sid,re)
+    , W2EphemeralReveal('responder',sid)
+]->
+[
+    St_Responder_PreErase_E1_K1_C1($S_a,$S_b,$A,$B,%1,sid,re,k,kc,msg,transcript,'revealed')
+    , Out(re)
+]
+
+rule Reveal_Initiator_SessionKey_E0_K0_C0:
+  [ St_Initiator_PreErase_E0_K0_C0($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'clean')[+]
+   ]
+--[
+    W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ie)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('initiator',sid,k) ]->
+[ St_Initiator_PreErase_E0_K1_C0($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'clean'), Out(k) ]
+
+rule Reveal_Initiator_SessionKey_E0_K0_C1:
+  [ St_Initiator_PreErase_E0_K0_C1($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'clean')[+]
+   ]
+--[
+    W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ie)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('initiator',sid,k) ]->
+[ St_Initiator_PreErase_E0_K1_C1($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'clean'), Out(k) ]
+
+rule Reveal_Initiator_SessionKey_E1_K0_C0:
+  [ St_Initiator_PreErase_E1_K0_C0($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'revealed')[+]
+   ]
+--[
+    W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ie)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('initiator',sid,k) ]->
+[ St_Initiator_PreErase_E1_K1_C0($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'revealed'), Out(k) ]
+
+rule Reveal_Initiator_SessionKey_E1_K0_C1:
+  [ St_Initiator_PreErase_E1_K0_C1($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'revealed')[+]
+   ]
+--[
+    W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ie)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('initiator',sid,k) ]->
+[ St_Initiator_PreErase_E1_K1_C1($I,$R,$A,$B,%1,sid,ie,k,kc,msg,T,'revealed'), Out(k) ]
+
+rule Reveal_Responder_SessionKey_E0_K0_C0:
+  [ St_Responder_PreErase_E0_K0_C0($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'clean')[+]
+   ]
+--[
+    W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,re)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('responder',sid,k) ]->
+[ St_Responder_PreErase_E0_K1_C0($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'clean'), Out(k) ]
+
+rule Reveal_Responder_SessionKey_E0_K0_C1:
+  [ St_Responder_PreErase_E0_K0_C1($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'clean')[+]
+   ]
+--[
+    W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,re)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('responder',sid,k) ]->
+[ St_Responder_PreErase_E0_K1_C1($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'clean'), Out(k) ]
+
+rule Reveal_Responder_SessionKey_E1_K0_C0:
+  [ St_Responder_PreErase_E1_K0_C0($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'revealed')[+]
+   ]
+--[
+    W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,re)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('responder',sid,k) ]->
+[ St_Responder_PreErase_E1_K1_C0($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'revealed'), Out(k) ]
+
+rule Reveal_Responder_SessionKey_E1_K0_C1:
+  [ St_Responder_PreErase_E1_K0_C1($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'revealed')[+]
+   ]
+--[
+    W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,re)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc)
+    ,  W2SessionKeyReveal('responder',sid,k) ]->
+[ St_Responder_PreErase_E1_K1_C1($I,$R,$A,$B,%1,sid,re,k,kc,msg,T,'revealed'), Out(k) ]
+
+rule Reveal_Initiator_ConfirmationKey_E0_K0_C0:
+  [ St_Initiator_PreErase_E0_K0_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean')[+]
+   ]
+--[ RevealConfirmationKey('initiator',$I,$R,%1,sid,kc)
+    , W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Initiator_PreErase_E0_K0_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean'), Out(kc) ]
+
+rule Reveal_Initiator_ConfirmationKey_E0_K1_C0:
+  [ St_Initiator_PreErase_E0_K1_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean')[+]
+   ]
+--[ RevealConfirmationKey('initiator',$I,$R,%1,sid,kc)
+    , W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Initiator_PreErase_E0_K1_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean'), Out(kc) ]
+
+rule Reveal_Initiator_ConfirmationKey_E1_K0_C0:
+  [ St_Initiator_PreErase_E1_K0_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed')[+]
+   ]
+--[ RevealConfirmationKey('initiator',$I,$R,%1,sid,kc)
+    , W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Initiator_PreErase_E1_K0_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed'), Out(kc) ]
+
+rule Reveal_Initiator_ConfirmationKey_E1_K1_C0:
+  [ St_Initiator_PreErase_E1_K1_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed')[+]
+   ]
+--[ RevealConfirmationKey('initiator',$I,$R,%1,sid,kc)
+    , W2StateUse('initiator',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('initiator',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('initiator',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Initiator_PreErase_E1_K1_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed'), Out(kc) ]
+
+rule Reveal_Responder_ConfirmationKey_E0_K0_C0:
+  [ St_Responder_PreErase_E0_K0_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean')[+]
+   ]
+--[ RevealConfirmationKey('responder',$I,$R,%1,sid,kc)
+    , W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Responder_PreErase_E0_K0_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean'), Out(kc) ]
+
+rule Reveal_Responder_ConfirmationKey_E0_K1_C0:
+  [ St_Responder_PreErase_E0_K1_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean')[+]
+   ]
+--[ RevealConfirmationKey('responder',$I,$R,%1,sid,kc)
+    , W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Responder_PreErase_E0_K1_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'clean'), Out(kc) ]
+
+rule Reveal_Responder_ConfirmationKey_E1_K0_C0:
+  [ St_Responder_PreErase_E1_K0_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed')[+]
+   ]
+--[ RevealConfirmationKey('responder',$I,$R,%1,sid,kc)
+    , W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Responder_PreErase_E1_K0_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed'), Out(kc) ]
+
+rule Reveal_Responder_ConfirmationKey_E1_K1_C0:
+  [ St_Responder_PreErase_E1_K1_C0($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed')[+]
+   ]
+--[ RevealConfirmationKey('responder',$I,$R,%1,sid,kc)
+    , W2StateUse('responder',$I,$R,%1,sid,'preerase')
+    , EphemeralUse('responder',$I,$R,%1,sid,ep)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'data',k)
+    , DerivedKeyUse('responder',$I,$R,%1,sid,'confirmation',kc) ]->
+[ St_Responder_PreErase_E1_K1_C1($I,$R,$A,$B,%1,sid,ep,k,kc,msg,T,'revealed'), Out(kc) ]
+
+lemma w2_normal_confirmation_and_erasure:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag #generate #accept #erase.
+     ConfirmationGenerated(I,R,A,B,e,sid,T,beta,kd,kc,tag) @generate
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & SessionErased(I,R,e,sid) @erase
+   & #generate < #accept & #accept < #erase
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk)
+   & not (Ex role p q epoch handle secret #ck. RevealConfirmationKey(role,p,q,epoch,handle,secret) @ck)"
+
+lemma key_confirmation_origin:
+  all-traces
+  "All I R A B e sid T beta kd kc tag #accept.
+     ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & not (Ex kind p epoch #lt.
+       W2LtkReveal(kind,p,epoch) @lt & #lt < #accept
+       & ((kind = 'identity' & (p = I | p = R) & epoch = e)
+          | (kind = 'domain' & (p = A | p = B) & epoch = e)))
+   & not (Ex role #ep. W2EphemeralReveal(role,sid) @ep & #ep < #accept)
+   & not (Ex role secret #dk. W2SessionKeyReveal(role,sid,secret) @dk & #dk < #accept)
+   & not (Ex role secret #ck. RevealConfirmationKey(role,I,R,e,sid,secret) @ck & #ck < #accept)
+   ==> (Ex A0 B0 T0 beta0 kd0 #generate.
+       ConfirmationGenerated(I,R,A0,B0,e,sid,T0,beta0,kd0,kc,tag) @generate
+       & #generate < #accept)"
+
+lemma key_confirmation_agreement:
+  all-traces
+  "All I R A B e sid T beta kd kc tag #accept.
+     ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & not (Ex kind p epoch #lt.
+       W2LtkReveal(kind,p,epoch) @lt & #lt < #accept
+       & ((kind = 'identity' & (p = I | p = R) & epoch = e)
+          | (kind = 'domain' & (p = A | p = B) & epoch = e)))
+   & not (Ex role #ep. W2EphemeralReveal(role,sid) @ep & #ep < #accept)
+   & not (Ex role secret #dk. W2SessionKeyReveal(role,sid,secret) @dk & #dk < #accept)
+   & not (Ex role secret #ck. RevealConfirmationKey(role,I,R,e,sid,secret) @ck & #ck < #accept)
+   ==> (Ex #generate. ConfirmationGenerated(I,R,A,B,e,sid,T,beta,kd,kc,tag) @generate & #generate < #accept)"
+
+lemma w2_responder_erases_before_acceptance:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag #generate #local #accept #erase.
+     ConfirmationGenerated(I,R,A,B,e,sid,T,beta,kd,kc,tag) @generate
+   & LocalErased('responder',I,R,e,sid) @local
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept & SessionErased(I,R,e,sid) @erase
+   & #generate < #local & #local < #accept & #accept < #erase
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk)
+   & not (Ex role p q epoch handle secret #ck. RevealConfirmationKey(role,p,q,epoch,handle,secret) @ck)"
+
+lemma ephemeral_state_lifetime:
+  all-traces
+  "All role I R e sid secret #use.
+     EphemeralUse(role,I,R,e,sid,secret) @use
+   ==> ((Ex #create. EphemeralCreated(role,I,R,e,sid,secret) @create
+         & (#create < #use | #create = #use))
+       & not (Ex #erase. LocalErased(role,I,R,e,sid) @erase & #erase < #use))"
+
+lemma derived_key_lifetime:
+  all-traces
+  "All role I R e sid kind key #use.
+     DerivedKeyUse(role,I,R,e,sid,kind,key) @use
+   ==> ((Ex #create. DerivedKeyCreated(role,I,R,e,sid,kind,key) @create
+         & (#create < #use | #create = #use))
+       & not (Ex #erase. LocalErased(role,I,R,e,sid) @erase & #erase < #use))"
+
+lemma pre_erasure_state_non_reuse:
+  all-traces
+  "All role I R e sid #erase #use.
+     LocalErased(role,I,R,e,sid) @erase
+   & W2StateUse(role,I,R,e,sid,'preerase') @use
+   & #erase < #use ==> F"
+
+lemma pending_state_non_reuse_after_erasure:
+  all-traces
+  "All I R e sid #erase #use.
+     LocalErased('initiator',I,R,e,sid) @erase
+   & W2StateUse('initiator',I,R,e,sid,'pending') @use
+   & #erase < #use ==> F"
+
+lemma erased_secrets_have_prior_creation:
+  all-traces
+  "All role I R e sid ep kd kc #erase.
+     SecretsErased(role,I,R,e,sid,ep,kd,kc) @erase
+   ==> (Ex #ecreate #data #conf.
+       EphemeralCreated(role,I,R,e,sid,ep) @ecreate
+       & DerivedKeyCreated(role,I,R,e,sid,'data',kd) @data
+       & DerivedKeyCreated(role,I,R,e,sid,'confirmation',kc) @conf
+       & #ecreate < #erase & #data < #erase & #conf < #erase)"
+
+lemma session_erasure_requires_both_local_erasures:
+  all-traces
+  "All I R e sid #erase.
+     SessionErased(I,R,e,sid) @erase
+   ==> (Ex #i #r.
+       LocalErased('initiator',I,R,e,sid) @i
+       & LocalErased('responder',I,R,e,sid) @r
+       & #i < #erase & #r < #erase)"
+
+lemma ephemeral_unreadable_after_local_erasure:
+  all-traces
+  "All role I R e sid #erase #reveal.
+     LocalErased(role,I,R,e,sid) @erase
+   & W2EphemeralReveal(role,sid) @reveal & #erase < #reveal ==> F"
+
+lemma data_key_unreadable_after_local_erasure:
+  all-traces
+  "All role I R e sid key #erase #reveal.
+     LocalErased(role,I,R,e,sid) @erase
+   & W2SessionKeyReveal(role,sid,key) @reveal & #erase < #reveal ==> F"
+
+lemma confirmation_key_unreadable_after_local_erasure:
+  all-traces
+  "All role I R e sid key #erase #reveal.
+     LocalErased(role,I,R,e,sid) @erase
+   & RevealConfirmationKey(role,I,R,e,sid,key) @reveal & #erase < #reveal ==> F"
+
+lemma w2_initiator_ephemeral_disclosure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #reveal #local #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & W2EphemeralReveal('initiator',sid) @reveal
+   & LocalErased('initiator',I,R,e,sid) @local
+   & SessionErased(I,R,e,sid) @erase & K(x) @learn
+   & #send < #accept & #accept < #erase
+   & #reveal < #local & #local < #erase & #erase < #learn
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex #ep. W2EphemeralReveal('responder',sid) @ep)
+   & not (Ex r handle secret #dk. W2SessionKeyReveal(r,handle,secret) @dk)
+   & not (Ex r p q epoch handle secret #ck. RevealConfirmationKey(r,p,q,epoch,handle,secret) @ck)"
+
+lemma w2_initiator_data_disclosure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #reveal #local #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & W2SessionKeyReveal('initiator',sid,kd) @reveal
+   & LocalErased('initiator',I,R,e,sid) @local
+   & SessionErased(I,R,e,sid) @erase & K(x) @learn
+   & #send < #accept & #accept < #erase
+   & #reveal < #local & #local < #erase & #erase < #learn
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex r handle #ep. W2EphemeralReveal(r,handle) @ep)
+   & not (Ex secret #dk. W2SessionKeyReveal('responder',sid,secret) @dk)
+   & not (Ex r p q epoch handle secret #ck. RevealConfirmationKey(r,p,q,epoch,handle,secret) @ck)"
+
+lemma w2_initiator_confirmation_disclosure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #reveal #local #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & RevealConfirmationKey('initiator',I,R,e,sid,kc) @reveal
+   & LocalErased('initiator',I,R,e,sid) @local
+   & SessionErased(I,R,e,sid) @erase & K(kc) @learn
+   & #send < #accept & #accept < #erase
+   & #reveal < #local & #local < #erase & #erase < #learn
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex r handle #ep. W2EphemeralReveal(r,handle) @ep)
+   & not (Ex r handle secret #dk. W2SessionKeyReveal(r,handle,secret) @dk)
+   & not (Ex secret #ck. RevealConfirmationKey('responder',I,R,e,sid,secret) @ck)"
+
+lemma w2_responder_ephemeral_disclosure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #reveal #local #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & W2EphemeralReveal('responder',sid) @reveal
+   & LocalErased('responder',I,R,e,sid) @local
+   & SessionErased(I,R,e,sid) @erase & K(x) @learn
+   & #send < #accept & #accept < #erase
+   & #reveal < #local & #local < #erase & #erase < #learn
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex #ep. W2EphemeralReveal('initiator',sid) @ep)
+   & not (Ex r handle secret #dk. W2SessionKeyReveal(r,handle,secret) @dk)
+   & not (Ex r p q epoch handle secret #ck. RevealConfirmationKey(r,p,q,epoch,handle,secret) @ck)"
+
+lemma w2_responder_data_disclosure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #reveal #local #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & W2SessionKeyReveal('responder',sid,kd) @reveal
+   & LocalErased('responder',I,R,e,sid) @local
+   & SessionErased(I,R,e,sid) @erase & K(x) @learn
+   & #send < #accept & #accept < #erase
+   & #reveal < #local & #local < #erase & #erase < #learn
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex r handle #ep. W2EphemeralReveal(r,handle) @ep)
+   & not (Ex secret #dk. W2SessionKeyReveal('initiator',sid,secret) @dk)
+   & not (Ex r p q epoch handle secret #ck. RevealConfirmationKey(r,p,q,epoch,handle,secret) @ck)"
+
+lemma w2_responder_confirmation_disclosure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #reveal #local #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & RevealConfirmationKey('responder',I,R,e,sid,kc) @reveal
+   & LocalErased('responder',I,R,e,sid) @local
+   & SessionErased(I,R,e,sid) @erase & K(kc) @learn
+   & #send < #accept & #accept < #erase
+   & #reveal < #local & #local < #erase & #erase < #learn
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex r handle #ep. W2EphemeralReveal(r,handle) @ep)
+   & not (Ex r handle secret #dk. W2SessionKeyReveal(r,handle,secret) @dk)
+   & not (Ex secret #ck. RevealConfirmationKey('initiator',I,R,e,sid,secret) @ck)"
+
+lemma w2_pending_ephemeral_disclosure_reachable:
+  exists-trace
+  "Ex I R e sid #request #reveal #accept x k T.
+     W2Request(I,R,e,sid) @request
+   & W2EphemeralReveal('initiator',sid) @reveal
+   & W2StateUse('initiator',I,R,e,sid,'pending') @reveal
+   & W2Accepted(I,R,e,sid,x,k,T) @accept
+   & #request < #reveal & #reveal < #accept
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)"
+
+lemma w2_initiator_independent_oracles_forward:
+  exists-trace
+  "Ex I R e sid kd kc #ep #data #conf #erase.
+     W2EphemeralReveal('initiator',sid) @ep
+   & W2SessionKeyReveal('initiator',sid,kd) @data
+   & RevealConfirmationKey('initiator',I,R,e,sid,kc) @conf
+   & LocalErased('initiator',I,R,e,sid) @erase
+   & #ep < #data & #data < #conf & #ep < #erase & #data < #erase & #conf < #erase"
+
+lemma w2_initiator_independent_oracles_reverse:
+  exists-trace
+  "Ex I R e sid kd kc #ep #data #conf #erase.
+     W2EphemeralReveal('initiator',sid) @ep
+   & W2SessionKeyReveal('initiator',sid,kd) @data
+   & RevealConfirmationKey('initiator',I,R,e,sid,kc) @conf
+   & LocalErased('initiator',I,R,e,sid) @erase
+   & #conf < #data & #data < #ep & #ep < #erase & #data < #erase & #conf < #erase"
+
+lemma w2_responder_independent_oracles_forward:
+  exists-trace
+  "Ex I R e sid kd kc #ep #data #conf #erase.
+     W2EphemeralReveal('responder',sid) @ep
+   & W2SessionKeyReveal('responder',sid,kd) @data
+   & RevealConfirmationKey('responder',I,R,e,sid,kc) @conf
+   & LocalErased('responder',I,R,e,sid) @erase
+   & #ep < #data & #data < #conf & #ep < #erase & #data < #erase & #conf < #erase"
+
+lemma w2_responder_independent_oracles_reverse:
+  exists-trace
+  "Ex I R e sid kd kc #ep #data #conf #erase.
+     W2EphemeralReveal('responder',sid) @ep
+   & W2SessionKeyReveal('responder',sid,kd) @data
+   & RevealConfirmationKey('responder',I,R,e,sid,kc) @conf
+   & LocalErased('responder',I,R,e,sid) @erase
+   & #conf < #data & #data < #ep & #ep < #erase & #data < #erase & #conf < #erase"
+
+lemma w2_post_erasure_plaintext_secrecy:
+  all-traces
+  "All I R A B e sid T beta kd kc tag x #send #accept #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & SessionErased(I,R,e,sid) @erase
+   & #send < #accept & #accept < #erase & #erase < #learn
+   & (All kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt & #lt < #learn ==> #erase < #lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep & #ep < #learn)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk & #dk < #learn)
+   & not (Ex role p q epoch handle secret #ck. RevealConfirmationKey(role,p,q,epoch,handle,secret) @ck & #ck < #learn)
+   & K(x) @learn ==> F"
+
+lemma w2_post_erasure_data_key_secrecy:
+  all-traces
+  "All I R A B e sid T beta kd kc tag x #send #accept #erase #learn.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & SessionErased(I,R,e,sid) @erase
+   & #send < #accept & #accept < #erase & #erase < #learn
+   & (All kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt & #lt < #learn ==> #erase < #lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep & #ep < #learn)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk & #dk < #learn)
+   & not (Ex role p q epoch handle secret #ck. RevealConfirmationKey(role,p,q,epoch,handle,secret) @ck & #ck < #learn)
+   & K(kd) @learn ==> F"
+
+lemma w2_post_erasure_all_longterm_disclosures_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #erase #learn #i #r #a #b.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & SessionErased(I,R,e,sid) @erase
+   & #send < #accept & #accept < #erase & #erase < #learn
+   & (All kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt & #lt < #learn ==> #erase < #lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep & #ep < #learn)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk & #dk < #learn)
+   & W2Probe() @learn
+   & W2LtkReveal('identity',I,e) @i & #erase < #i & #i < #learn
+   & W2LtkReveal('identity',R,e) @r & #erase < #r & #r < #learn
+   & W2LtkReveal('domain',A,e) @a & #erase < #a & #a < #learn
+   & W2LtkReveal('domain',B,e) @b & #erase < #b & #b < #learn
+   & not (Ex role p q epoch handle secret #ck. RevealConfirmationKey(role,p,q,epoch,handle,secret) @ck & #ck < #learn)"
+
+lemma w2_confirmation_key_exposure_reachable:
+  exists-trace
+  "Ex I R A B e sid T beta kd kc tag x #send #accept #erase #conf #observe.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & RevealConfirmationKey('responder',I,R,e,sid,kc) @conf
+   & SessionErased(I,R,e,sid) @erase & W2Probe() @observe
+   & #send < #accept & #accept < #erase & #conf < #erase & #erase < #observe
+   & not (Ex kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk)"
+
+lemma w2_confirmation_key_exposure_plaintext_secrecy:
+  all-traces
+  "All I R A B e sid T beta kd kc tag x #send #accept #erase #learn role #conf.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & SessionErased(I,R,e,sid) @erase
+   & #send < #accept & #accept < #erase & #erase < #learn
+   & (All kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt & #lt < #learn ==> #erase < #lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep & #ep < #learn)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk & #dk < #learn)
+   & RevealConfirmationKey(role,I,R,e,sid,kc) @conf & #conf < #erase
+   & K(x) @learn ==> F"
+
+lemma w2_confirmation_key_exposure_data_key_secrecy:
+  all-traces
+  "All I R A B e sid T beta kd kc tag x #send #accept #erase #learn role #conf.
+     W2Sent(I,R,e,sid,x,kd,T) @send
+   & ConfirmationAccepted(I,R,A,B,e,sid,T,beta,kd,kc,tag) @accept
+   & SessionErased(I,R,e,sid) @erase
+   & #send < #accept & #accept < #erase & #erase < #learn
+   & (All kind p epoch #lt. W2LtkReveal(kind,p,epoch) @lt & #lt < #learn ==> #erase < #lt)
+   & not (Ex role handle #ep. W2EphemeralReveal(role,handle) @ep & #ep < #learn)
+   & not (Ex role handle secret #dk. W2SessionKeyReveal(role,handle,secret) @dk & #dk < #learn)
+   & RevealConfirmationKey(role,I,R,e,sid,kc) @conf & #conf < #erase
+   & K(kd) @learn ==> F"
+
+end
