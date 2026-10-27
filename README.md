@@ -14,7 +14,7 @@
 | `models/original/` | 原协议完整模型（PCE 数据路径）——论文漏洞结论所依据的对照模型 | 1 |
 | `models/repaired/` | AECDHE 修复模型当前最新版，供复现与二次分析 | 1 |
 | `models/supplementary/` | 六组补充实验模型（W1–W5、S1）＋ 6 份优化重跑模型 | 25 |
-| `results/` | 六组补充实验的逐条运行结果：结论、证明、原始日志与计时；另含 W3/W1 timeout 条目的优化重跑批次 `opt_20260928T175925Z` 与 W2 全量重跑批次 `w2all_20260928T225601Z` 及 W2 合并结果 | 2307 |
+| `results/` | 六组补充实验的逐条运行结果：结论、证明、原始日志与计时；另含 W3/W1 timeout 条目的优化重跑批次 `opt_20260928T175925Z` 与 W2 全量重跑批次 `w2all_20260928T225601Z` 及 W2 合并结果；W1 批次级运行记录见 `results/W1/_run/` | 2317 |
 
 三份模型都以完整源码给出。`results/` 对 W1–W5 与 S1 的每一条性质给出结论、
 证明步数、可重放证明文件、原始 stdout／stderr 与完整墙钟时间；
@@ -56,6 +56,7 @@
 │       └── timeout_optimization/      6 份优化重跑模型（4 份 W3 配置 ＋ W1 修复矩阵 ＋ W2 状态生命周期）
 └── results/
     ├── W1/w1_20260928T105641Z/{original,repaired}/<场景>/<性质>.{status.json,proof.spthy,...}
+    ├── W1/_run/                    W1 主批次报告、驱动配置、终止记录与调度脚本（见 §3.3）
     ├── W2/w2_20260928T084144Z/<场景>/…
     ├── W3/w3_20260928T143228Z/{original,repaired}/<配置>/…
     ├── W4/w4_20260928T141100Z/<profile>/<case>/…
@@ -214,9 +215,20 @@ timeout 1800 tamarin-prover models/original/CDDS_PCE_original_full.spthy \
 | W5 | `models/supplementary/W5_epoch_successor` | `w5_20260928T151942Z` | 1800 s | 1 | `+RTS -N2` |
 | S1 | `models/supplementary/S1_restriction_sensitivity` | `s1_20260929T080037Z` | 600 s | — | — |
 
-**W1 的预算覆盖**（`historical_pce_after_epoch`／`successor_only` → 7200 s，
-`key_lifecycle` → 10800 s）在当时**并未实际生效**：补跑脚本调用了错误的驱动路径，
-这批条目实际是在 1800 s 下跑的。见 §6 第 4 项。
+**W1 的预算与批次**。驱动 `w1_driver.py` 内置逐场景预算覆盖（`TIMEOUT_OVERRIDES`：
+`historical_pce_after_epoch`／`successor_only` → 7200 s，`key_lifecycle` → 10800 s），
+每条的实际预算取 `max(--timeout, 覆盖值)`，因此 1800 s 只是其余场景的默认值。
+W1 结果由两个顺序批次形成，批次级记录归档在 `results/W1/_run/`：
+
+| 批次 | 8 条长时条目的处理 | 依据 |
+|---|---|---|
+| 主批次 `w1_20260928T083216Z`（默认 1800 s，16 并行） | 6 条跨 epoch／后继凭据条目在 7200 s 覆盖预算处超时（`timed_out=true`，墙钟约 7202 s）；2 条 `key_lifecycle` 条目在 6035 s 与 7273 s 被终止（`exit_code=-9`、`timed_out=false`），未到 10800 s 预算 | `commands.json.previous`、`summary.json.previous`、`run_report.md.previous` |
+| 归档批次 `w1_20260928T105641Z` | 沿用主批次已结算条目、补跑其余条目；6 条跨 epoch／后继凭据条目改以 21600 s 预算（`--scale-overrides 3`）单独重启，运行中由作者终止，故无 `status.json`；2 条 `key_lifecycle` 条目按作者决定暂缓，由 W2 生命周期分析覆盖 | `commands.last_driver_call.json`、`STOPPED.md`、`scripts/heavy_relaunch.py`、`scripts/stop_all.py` |
+
+两批次之间编写过一个补跑脚本 `scripts/retry_all.sh`，它引用的驱动路径
+（`code/v1_auxiliary/W1_reveal_matrix/w1_driver.py`）在服务器上不存在，执行时没有启动 Tamarin，
+也没有产生任何结果记录；上表两批次的预算均不经由该脚本。8 条未结算条目的未判定状态因此都
+出现在 7200 s 及以上的预算或作者终止的长时运行中。另见 §3.4 优化重跑批次与 §6 第 4 项。
 
 修复模型的运行方式与 lemma 清单见 §3.4；按 §3.1 模板设定预算与并发数即可。
 
@@ -616,7 +628,7 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 仓库按 §5 口径统一以 LF 存储；重跑批次内的 `.spthy` 快照在暂存盘为 CRLF，
 其归档哈希对应 CRLF 字节（§5 表）。
 
-仓库根目录的 **`SHA256SUMS`** 提供全部 2336 个文件（模型＋结果＋本 README）的
+仓库根目录的 **`SHA256SUMS`** 提供全部 2346 个文件（模型＋结果＋本 README）的
 逐文件 SHA-256（按本仓库 LF 存档字节计算），在仓库根目录执行
 `sha256sum -c SHA256SUMS`（Windows 下可用 `certutil` 或 Git Bash 的 `sha256sum`）
 即可整包校验工件身份。
@@ -635,9 +647,9 @@ W1–W5 与 S1 是从完整模型派生的**辅助切片**（固定域数、注�
 | # | 事项 | 口径 |
 |---|---|---|
 | 1 | W2 批次 | 以本仓库归档的逐条记录为准：27 条 `status.json`（verified 12／timeout 15）。同批次 `run_manifest.json` 记 finished 28，作者《实验总账》记性质数 30、已结算 25（成立 19／反例 2／未判定 4）；三套口径并列可查 |
-| 2 | W1 范围 | W1 声明 66 条性质，本仓库收录归档中已结算的 58 条（verified 52／falsified 6）；作者《实验总账》另记 8 条未结算（作者侧记录，未随本仓库归档） |
+| 2 | W1 范围 | W1 声明 66 条性质，本仓库收录归档中已结算的 58 条（verified 52／falsified 6）；另 8 条未结算，在归档批次中无 `status.json`（仅归档 `stderr.log`，其中 1 条另有 `time.txt`，见第 4 项），其主批次逐条记录见 `results/W1/_run/summary.json.previous` |
 | 3 | 原协议 lemma 名 | 以本仓库 `CDDS_PCE_original_full.spthy` 中的声明为准（含 `forward_secrecy_x`）；更早的 `v0/proof_logs/v4验证结果汇总.md` 使用过不同的命名 |
-| 4 | W1 长预算 | 驱动中的预算覆盖值为 7200 s（`historical_pce_after_epoch`、`successor_only`）与 10800 s（`key_lifecycle`）；每条归档条目的完整墙钟时间与命令行见对应 `time.txt` |
+| 4 | W1 长预算 | 驱动中的预算覆盖值为 7200 s（`historical_pce_after_epoch`、`successor_only`）与 10800 s（`key_lifecycle`），在主批次中生效；归档批次对 6 条跨 epoch／后继凭据条目使用 21600 s（见 §3.3 表下说明）。已结算 58 条的墙钟时间与命令行见对应 `time.txt`。`w1_r_historical_pce_after_epoch_reachable` 的 `time.txt`（`wall_seconds=967.8`、`exit_code=-9`、`timeout=False`）记录的是 21600 s 重启批次中的一次实例，进程在 967.8 s 时以 SIGKILL 结束，不是预算超时 |
 | 5 | W2 批次身份 | 收录批次为 `w2_20260928T084144Z`；该批次运行期的暂停与恢复记录保留在作者侧，未随本仓库归档 |
 | 6 | 证明文件覆盖 | W1 58、W4 58、W5 54、W3 133、S1 26、W2 12 条附 `proof.spthy`；超预算条目按设计不产出证明文件，其未判定状态记录在 `status.json` 的 `timeout` 字段 |
 | 7 | W3 合并口径 | 回复信的并发研究汇总合并原批次与重跑批次：144（120 verified／12 falsified／12 timeout）＋重跑结算 4（2 verified／2 falsified）＝ **136 条有结论（122／14），8 条未判定**。另有 2 条重跑目标（`multi_ablated_two`、`multi_restricted_two` 的 `reachable_two_distinct_contexts`）stdout 已打印 verified 但进程在渲染阶段超预算，按 `status.json` 保守口径未计入，证据未改写（见 §3.4 重跑小节注） |

@@ -1,0 +1,67 @@
+protocol,case,lemma,expected_trace,status,wall_seconds,raw_summary
+original,baseline,w1_o_baseline_key_secrecy,,driver_error,None,
+original,baseline,w1_o_baseline_plaintext_secrecy,all-traces,verified,19.995,verified (13 steps)
+original,baseline,w1_o_baseline_reachable,,driver_error,None,
+original,combined,w1_o_combined_key_secrecy,,driver_error,None,
+original,combined,w1_o_combined_plaintext_secrecy,all-traces,falsified,28.601,falsified - found trace (26 steps)
+original,combined,w1_o_combined_reachable,exists-trace,verified,27.261,verified (24 steps)
+original,combined,w1_o_combined_record_decrypt,,driver_error,None,
+original,historical_pce_after_epoch,w1_o_historical_pce_after_epoch_key_secrecy,all-traces,falsified,85.497,falsified - found trace (31 steps)
+original,historical_pce_after_epoch,w1_o_historical_pce_after_epoch_plaintext_secrecy,all-traces,falsified,93.323,falsified - found trace (32 steps)
+original,historical_pce_after_epoch,w1_o_historical_pce_after_epoch_reachable,,driver_error,None,
+original,historical_pce_after_epoch,w1_o_historical_pce_after_epoch_record_decrypt,,driver_error,None,
+original,identity_only,w1_o_identity_only_key_secrecy,,driver_error,None,
+original,identity_only,w1_o_identity_only_plaintext_secrecy,all-traces,verified,20.246,verified (16 steps)
+original,identity_only,w1_o_identity_only_reachable,,driver_error,None,
+original,pce_only,w1_o_pce_only_key_secrecy,,driver_error,None,
+original,pce_only,w1_o_pce_only_plaintext_secrecy,,driver_error,None,
+original,pce_only,w1_o_pce_only_reachable,exists-trace,verified,27.155,verified (21 steps)
+original,pce_only,w1_o_pce_only_record_decrypt,,driver_error,None,
+original,session_key_control,w1_o_session_key_disclosure_reachable,exists-trace,verified,36.316,verified (22 steps)
+original,successor_only,w1_o_successor_only_key_secrecy,all-traces,verified,46.869,verified (34 steps)
+original,successor_only,w1_o_successor_only_plaintext_secrecy,,driver_error,None,
+original,successor_only,w1_o_successor_only_reachable,,driver_error,None,
+repaired,all_identity_domain,w1_r_all_identity_domain_key_secrecy,all-traces,verified,771.155,verified (85 steps)
+repaired,all_identity_domain,w1_r_all_identity_domain_plaintext_secrecy,all-traces,verified,793.303,verified (92 steps)
+repaired,all_identity_domain,w1_r_all_identity_domain_reachable,exists-trace,verified,1326.877,verified (36 steps)
+repaired,baseline,w1_r_baseline_key_secrecy,all-traces,verified,656.386,verified (73 steps)
+repaired,baseline,w1_r_baseline_plaintext_secrecy,,driver_error,None,
+repaired,baseline,w1_r_baseline_reachable,,driver_error,None,
+repaired,both_domain,w1_r_both_domain_key_secrecy,all-traces,verified,719.685,verified (79 steps)
+repaired,both_domain,w1_r_both_domain_plaintext_secrecy,all-traces,verified,695.176,verified (86 steps)
+repaired,both_domain,w1_r_both_domain_reachable,exists-trace,verified,973.581,verified (30 steps)
+repaired,both_identity,w1_r_both_identity_key_secrecy,all-traces,verified,675.104,verified (79 steps)
+repaired,both_identity,w1_r_both_identity_plaintext_secrecy,all-traces,verified,686.711,verified (86 steps)
+repaired,both_identity,w1_r_both_identity_reachable,,driver_error,None,
+repaired,combined,w1_r_combined_key_secrecy,,driver_error,None,
+repaired,combined,w1_r_combined_plaintext_secrecy,all-traces,verified,671.144,verified (86 steps)
+repaired,combined,w1_r_combined_reachable,,driver_error,None,
+repaired,historical_pce_after_epoch,w1_r_historical_pce_after_epoch_key_secrecy,all-traces,timeout,7202.139,None
+repaired,historical_pce_after_epoch,w1_r_historical_pce_after_epoch_plaintext_secrecy,all-traces,timeout,7202.088,None
+repaired,historical_pce_after_epoch,w1_r_historical_pce_after_epoch_reachable,exists-trace,timeout,7202.08,None
+repaired,identity_only,w1_r_identity_only_key_secrecy,all-traces,verified,670.121,verified (76 steps)
+repaired,identity_only,w1_r_identity_only_plaintext_secrecy,,driver_error,None,
+repaired,identity_only,w1_r_identity_only_reachable,,driver_error,None,
+repaired,initiator_ephemeral_control,w1_r_initiator_ephemeral_control_reachable,exists-trace,verified,1241.892,verified (30 steps)
+repaired,initiator_session_key_control,w1_r_initiator_session_key_control_reachable,exists-trace,verified,1121.521,verified (29 steps)
+repaired,kci,w1_r_kci_reachable,exists-trace,verified,858.048,verified (26 steps)
+repaired,kci,w1_r_kci_responder_origin,all-traces,verified,548.343,verified (143 steps)
+repaired,key_lifecycle,w1_r_ephemeral_disclosure_after_erasure_unreachable,all-traces,tool_error,6035.661,None
+repaired,key_lifecycle,w1_r_key_disclosure_after_erasure_unreachable,all-traces,tool_error,7272.871,None
+repaired,pce_only,w1_r_pce_only_key_secrecy,all-traces,verified,666.243,verified (76 steps)
+repaired,pce_only,w1_r_pce_only_plaintext_secrecy,,driver_error,None,
+repaired,pce_only,w1_r_pce_only_reachable,,driver_error,None,
+repaired,requester_domain,w1_r_requester_domain_key_secrecy,all-traces,verified,653.978,verified (76 steps)
+repaired,requester_domain,w1_r_requester_domain_plaintext_secrecy,all-traces,verified,680.234,verified (83 steps)
+repaired,requester_domain,w1_r_requester_domain_reachable,exists-trace,verified,922.736,verified (27 steps)
+repaired,responder_domain,w1_r_responder_domain_key_secrecy,all-traces,verified,666.023,verified (76 steps)
+repaired,responder_domain,w1_r_responder_domain_plaintext_secrecy,all-traces,verified,689.624,verified (83 steps)
+repaired,responder_domain,w1_r_responder_domain_reachable,exists-trace,verified,917.141,verified (27 steps)
+repaired,responder_ephemeral_control,w1_r_responder_ephemeral_control_reachable,exists-trace,verified,1162.69,verified (30 steps)
+repaired,responder_identity,w1_r_responder_identity_key_secrecy,all-traces,verified,676.717,verified (76 steps)
+repaired,responder_identity,w1_r_responder_identity_plaintext_secrecy,all-traces,verified,683.047,verified (83 steps)
+repaired,responder_identity,w1_r_responder_identity_reachable,,driver_error,None,
+repaired,responder_session_key_control,w1_r_responder_session_key_control_reachable,exists-trace,verified,1080.93,verified (29 steps)
+repaired,successor_only,w1_r_successor_only_key_secrecy,all-traces,timeout,7202.225,None
+repaired,successor_only,w1_r_successor_only_plaintext_secrecy,all-traces,timeout,7202.041,None
+repaired,successor_only,w1_r_successor_only_reachable,exists-trace,timeout,7202.182,None

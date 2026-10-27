@@ -1,0 +1,27 @@
+{
+  "started_utc": "20260928T121224Z",
+  "tamarin": "tamarin-prover",
+  "tamarin_version": "tamarin-prover 1.10.0, (C) David Basin, Cas Cremers, Jannik Dreier, Simon Meier, Ralf Sasse, Benedikt Schmidt, 2010-2023\n\nThis program comes with ABSOLUTELY NO WARRANTY. It is free software, and you\nare welcome to redistribute it according to its LICENSE, see\n'https://github.com/tamarin-prover/tamarin-prover/blob/master/LICENSE'.\n\nGenerated from:\nTamarin version 1.10.0\nMaude version 3.1\nGit revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master\nCompiled at: 2024-10-30 11:11:02.432289291 UTC\nmaude tool: 'maude'\n checking version: 3.1. OK.\n checking installation: OK.\n",
+  "timeout_seconds_per_lemma": 21600,
+  "timeout_overrides": {
+    "historical_pce_after_epoch": 7200,
+    "successor_only": 7200,
+    "key_lifecycle": 10800
+  },
+  "derivcheck_timeout_seconds": 300,
+  "parallel_jobs": 1,
+  "lemma_count": 1,
+  "run_dir": "/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T105641Z",
+  "entries": [
+    {
+      "protocol": "repaired",
+      "case": "successor_only",
+      "lemma": "w1_r_successor_only_reachable",
+      "trace": "exists-trace",
+      "defines": [
+        "AFTER_EPOCH"
+      ],
+      "status": "not_run"
+    }
+  ]
+}

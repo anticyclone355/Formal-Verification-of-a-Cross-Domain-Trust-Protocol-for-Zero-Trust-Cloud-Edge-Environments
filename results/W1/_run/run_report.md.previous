@@ -1,0 +1,77 @@
+# W1 运行结果
+
+- 运行目录：`/home/lab701/qzy/CDDS补充实验_results/W1_reveal_matrix/w1_20260928T083216Z`
+- 完成时间（UTC）：2026-09-28T10:49:18.510872+00:00
+- Tamarin：tamarin-prover 1.10.0, (C) David Basin, Cas Cremers, Jannik Dreier, Simon Meier, Ralf Sasse, Benedikt Schmidt, 2010-2023
+- 每条性质预算：1800s，派生检查预算：300s，并行度：16
+- 总墙钟时间：8221.71s
+- 状态统计：`{"driver_error": 23, "verified": 32, "falsified": 3, "timeout": 6, "tool_error": 2}`
+
+| 协议 | 场景 | 性质 | 期望轨迹 | 结果 | 耗时(s) | Tamarin 计时(s) | 步骤 | 反例图 |
+|---|---|---|---|---|---|---|---|---|
+| original | baseline | `w1_o_baseline_key_secrecy` |  | driver_error | None |  |  |  |
+| original | baseline | `w1_o_baseline_plaintext_secrecy` | all-traces | verified | 19.995 | 19.75 | 13 |  |
+| original | baseline | `w1_o_baseline_reachable` |  | driver_error | None |  |  |  |
+| original | combined | `w1_o_combined_key_secrecy` |  | driver_error | None |  |  |  |
+| original | combined | `w1_o_combined_plaintext_secrecy` | all-traces | falsified | 28.601 | 28.33 | 26 | [png](original/combined/w1_o_combined_plaintext_secrecy.trace.png) |
+| original | combined | `w1_o_combined_reachable` | exists-trace | verified | 27.261 | 27.02 | 24 | [png](original/combined/w1_o_combined_reachable.trace.png) |
+| original | combined | `w1_o_combined_record_decrypt` |  | driver_error | None |  |  |  |
+| original | historical_pce_after_epoch | `w1_o_historical_pce_after_epoch_key_secrecy` | all-traces | falsified | 85.497 | 85.11 | 31 | [png](original/historical_pce_after_epoch/w1_o_historical_pce_after_epoch_key_secrecy.trace.png) |
+| original | historical_pce_after_epoch | `w1_o_historical_pce_after_epoch_plaintext_secrecy` | all-traces | falsified | 93.323 | 92.96 | 32 | [png](original/historical_pce_after_epoch/w1_o_historical_pce_after_epoch_plaintext_secrecy.trace.png) |
+| original | historical_pce_after_epoch | `w1_o_historical_pce_after_epoch_reachable` |  | driver_error | None |  |  |  |
+| original | historical_pce_after_epoch | `w1_o_historical_pce_after_epoch_record_decrypt` |  | driver_error | None |  |  |  |
+| original | identity_only | `w1_o_identity_only_key_secrecy` |  | driver_error | None |  |  |  |
+| original | identity_only | `w1_o_identity_only_plaintext_secrecy` | all-traces | verified | 20.246 | 19.95 | 16 |  |
+| original | identity_only | `w1_o_identity_only_reachable` |  | driver_error | None |  |  |  |
+| original | pce_only | `w1_o_pce_only_key_secrecy` |  | driver_error | None |  |  |  |
+| original | pce_only | `w1_o_pce_only_plaintext_secrecy` |  | driver_error | None |  |  |  |
+| original | pce_only | `w1_o_pce_only_reachable` | exists-trace | verified | 27.155 | 26.91 | 21 | [png](original/pce_only/w1_o_pce_only_reachable.trace.png) |
+| original | pce_only | `w1_o_pce_only_record_decrypt` |  | driver_error | None |  |  |  |
+| original | session_key_control | `w1_o_session_key_disclosure_reachable` | exists-trace | verified | 36.316 | 36.02 | 22 | [png](original/session_key_control/w1_o_session_key_disclosure_reachable.trace.png) |
+| original | successor_only | `w1_o_successor_only_key_secrecy` | all-traces | verified | 46.869 | 46.52 | 34 |  |
+| original | successor_only | `w1_o_successor_only_plaintext_secrecy` |  | driver_error | None |  |  |  |
+| original | successor_only | `w1_o_successor_only_reachable` |  | driver_error | None |  |  |  |
+| repaired | all_identity_domain | `w1_r_all_identity_domain_key_secrecy` | all-traces | verified | 771.155 | 770.03 | 85 |  |
+| repaired | all_identity_domain | `w1_r_all_identity_domain_plaintext_secrecy` | all-traces | verified | 793.303 | 792.21 | 92 |  |
+| repaired | all_identity_domain | `w1_r_all_identity_domain_reachable` | exists-trace | verified | 1326.877 | 1325.53 | 36 | [png](repaired/all_identity_domain/w1_r_all_identity_domain_reachable.trace.png) |
+| repaired | baseline | `w1_r_baseline_key_secrecy` | all-traces | verified | 656.386 | 655.26 | 73 |  |
+| repaired | baseline | `w1_r_baseline_plaintext_secrecy` |  | driver_error | None |  |  |  |
+| repaired | baseline | `w1_r_baseline_reachable` |  | driver_error | None |  |  |  |
+| repaired | both_domain | `w1_r_both_domain_key_secrecy` | all-traces | verified | 719.685 | 718.45 | 79 |  |
+| repaired | both_domain | `w1_r_both_domain_plaintext_secrecy` | all-traces | verified | 695.176 | 694.04 | 86 |  |
+| repaired | both_domain | `w1_r_both_domain_reachable` | exists-trace | verified | 973.581 | 972.13 | 30 | [png](repaired/both_domain/w1_r_both_domain_reachable.trace.png) |
+| repaired | both_identity | `w1_r_both_identity_key_secrecy` | all-traces | verified | 675.104 | 674.19 | 79 |  |
+| repaired | both_identity | `w1_r_both_identity_plaintext_secrecy` | all-traces | verified | 686.711 | 685.75 | 86 |  |
+| repaired | both_identity | `w1_r_both_identity_reachable` |  | driver_error | None |  |  |  |
+| repaired | combined | `w1_r_combined_key_secrecy` |  | driver_error | None |  |  |  |
+| repaired | combined | `w1_r_combined_plaintext_secrecy` | all-traces | verified | 671.144 | 670.13 | 86 |  |
+| repaired | combined | `w1_r_combined_reachable` |  | driver_error | None |  |  |  |
+| repaired | historical_pce_after_epoch | `w1_r_historical_pce_after_epoch_key_secrecy` | all-traces | timeout | 7202.139 |  |  |  |
+| repaired | historical_pce_after_epoch | `w1_r_historical_pce_after_epoch_plaintext_secrecy` | all-traces | timeout | 7202.088 |  |  |  |
+| repaired | historical_pce_after_epoch | `w1_r_historical_pce_after_epoch_reachable` | exists-trace | timeout | 7202.08 |  |  |  |
+| repaired | identity_only | `w1_r_identity_only_key_secrecy` | all-traces | verified | 670.121 | 668.97 | 76 |  |
+| repaired | identity_only | `w1_r_identity_only_plaintext_secrecy` |  | driver_error | None |  |  |  |
+| repaired | identity_only | `w1_r_identity_only_reachable` |  | driver_error | None |  |  |  |
+| repaired | initiator_ephemeral_control | `w1_r_initiator_ephemeral_control_reachable` | exists-trace | verified | 1241.892 | 1240.61 | 30 | [png](repaired/initiator_ephemeral_control/w1_r_initiator_ephemeral_control_reachable.trace.png) |
+| repaired | initiator_session_key_control | `w1_r_initiator_session_key_control_reachable` | exists-trace | verified | 1121.521 | 1120.46 | 29 | [png](repaired/initiator_session_key_control/w1_r_initiator_session_key_control_reachable.trace.png) |
+| repaired | kci | `w1_r_kci_reachable` | exists-trace | verified | 858.048 | 856.96 | 26 | [png](repaired/kci/w1_r_kci_reachable.trace.png) |
+| repaired | kci | `w1_r_kci_responder_origin` | all-traces | verified | 548.343 | 547.43 | 143 |  |
+| repaired | key_lifecycle | `w1_r_ephemeral_disclosure_after_erasure_unreachable` | all-traces | tool_error | 6035.661 |  |  |  |
+| repaired | key_lifecycle | `w1_r_key_disclosure_after_erasure_unreachable` | all-traces | tool_error | 7272.871 |  |  |  |
+| repaired | pce_only | `w1_r_pce_only_key_secrecy` | all-traces | verified | 666.243 | 665.17 | 76 |  |
+| repaired | pce_only | `w1_r_pce_only_plaintext_secrecy` |  | driver_error | None |  |  |  |
+| repaired | pce_only | `w1_r_pce_only_reachable` |  | driver_error | None |  |  |  |
+| repaired | requester_domain | `w1_r_requester_domain_key_secrecy` | all-traces | verified | 653.978 | 653.08 | 76 |  |
+| repaired | requester_domain | `w1_r_requester_domain_plaintext_secrecy` | all-traces | verified | 680.234 | 679.27 | 83 |  |
+| repaired | requester_domain | `w1_r_requester_domain_reachable` | exists-trace | verified | 922.736 | 921.08 | 27 | [png](repaired/requester_domain/w1_r_requester_domain_reachable.trace.png) |
+| repaired | responder_domain | `w1_r_responder_domain_key_secrecy` | all-traces | verified | 666.023 | 665.03 | 76 |  |
+| repaired | responder_domain | `w1_r_responder_domain_plaintext_secrecy` | all-traces | verified | 689.624 | 688.59 | 83 |  |
+| repaired | responder_domain | `w1_r_responder_domain_reachable` | exists-trace | verified | 917.141 | 915.54 | 27 | [png](repaired/responder_domain/w1_r_responder_domain_reachable.trace.png) |
+| repaired | responder_ephemeral_control | `w1_r_responder_ephemeral_control_reachable` | exists-trace | verified | 1162.69 | 1161.4 | 30 | [png](repaired/responder_ephemeral_control/w1_r_responder_ephemeral_control_reachable.trace.png) |
+| repaired | responder_identity | `w1_r_responder_identity_key_secrecy` | all-traces | verified | 676.717 | 675.67 | 76 |  |
+| repaired | responder_identity | `w1_r_responder_identity_plaintext_secrecy` | all-traces | verified | 683.047 | 681.97 | 83 |  |
+| repaired | responder_identity | `w1_r_responder_identity_reachable` |  | driver_error | None |  |  |  |
+| repaired | responder_session_key_control | `w1_r_responder_session_key_control_reachable` | exists-trace | verified | 1080.93 | 1079.78 | 29 | [png](repaired/responder_session_key_control/w1_r_responder_session_key_control_reachable.trace.png) |
+| repaired | successor_only | `w1_r_successor_only_key_secrecy` | all-traces | timeout | 7202.225 |  |  |  |
+| repaired | successor_only | `w1_r_successor_only_plaintext_secrecy` | all-traces | timeout | 7202.041 |  |  |  |
+| repaired | successor_only | `w1_r_successor_only_reachable` | exists-trace | timeout | 7202.182 |  |  |  |
